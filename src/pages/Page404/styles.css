@@ -1,0 +1,13 @@
+.imagen{
+    background-image: url('../../assest/error-404.jpg');
+    background-blend-mode: overlay;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+      background-position: center;
+      align-content: center;
+      align-items: center;
+}
+label{
+    font-size: 50;
+}

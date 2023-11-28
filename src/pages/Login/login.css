@@ -1,0 +1,82 @@
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    justify-content: space-between;
+    /* border-radius: 5px;
+    border:2px solid black;
+    align-content: center; 
+    justify-content: center; */
+}
+.container {
+    position: fixed;
+      background-image: url("../../assest/abstract-rainbow-6296890_1280.jpg"); 
+      background-color: rgba(255, 255, 255, 0.7);
+      background-blend-mode: overlay;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+      background-position: center;
+      align-content: center;
+      align-items: center;
+    }
+.logoUsuario{
+      width: 50;
+      height: 100;
+}
+.wrapper {
+  background-image: url('../../assest/abstract-rainbow-6296890_1280.jpg');
+  background-blend-mode: overlay;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+      background-position: center;
+      align-content: center;
+      align-items: center;
+}
+button{
+  border:none;
+  background-color:#D92121 ;
+  padding: 16px 30px;
+  color: #fff;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+button:hover{
+  box-shadow: 0 0 0 4px #fff,
+  0 0 0 8px #D92121;
+  /* #FE7F29 */
+}
+.input_group{
+  position: relative;
+}
+.input_group_input{
+  font: inherit;
+  color: #000;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  outline: 2px solid #000;
+  background-color: transparent;
+  transition: outline-color 500ms; 
+}
+.input_group_input:is(:focus,:valid){
+  outline-color: #D92121;
+}
+.input_group_label{
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: 10px 10px;
+  color: #000;
+  transition: translate 500ms, scale 500ms;
+}
+.input_group_input:focus + .input_group_label,
+.input_group_input:valid + .input_group_label{
+  padding-inline: 5px;
+  translate: 10px -14px;
+  scale: 0.8;
+  background-color: #D92121;
+}
