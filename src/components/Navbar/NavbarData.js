@@ -12,30 +12,75 @@ import { FaHandshake } from "react-icons/fa6";
 import { FaPeopleLine } from "react-icons/fa6";
 import { GiArchiveRegister } from "react-icons/gi";
 import { TbCircleLetterJ } from 'react-icons/tb' /*letra j*/
+import { RiPassValidLine } from "react-icons/ri";
+import { AiOutlineSelect } from "react-icons/ai";
 
 export const NavBarData = [
   {
-    title:'Inicio',
-    path:'/inicio',
-    icon:<GoHomeFill/>,
-    cName:'nav-text',
-    access:['cartera','agencias']   
-  },
-  {
-    title:'Inicio',
-    path:'/inicio/admin',
+    title:'Menu Principal',
+    path:'/menu/principal/admin',
     icon:<GoHomeFill/>,
     cName:'nav-text',
     access:['admin']   
   },
   {
-    title:'Inicio',
-    path:'/compras',
+    title:'Menu Principal',
+    path:'/menu/principal/Clientes',
     icon:<GoHomeFill/>,
     cName:'nav-text',
-    access:['compras']   
+    access:['cartera']   
+  },
+  {
+    title:'Menu Principal',
+    path:'/menu/principal/Proveedores',
+    icon:<GoHomeFill/>,
+    cName:'nav-text',
+    access:['agencias','compras']   
+  },
+  {
+    title:'Crear Cliente',
+    path:'/inicio',
+    icon:<AiOutlineSelect />,
+    cName:'nav-text',
+    access:['cartera']   
+  },
+  {
+    title:'Crear Tercero',
+    path:'/inicio/admin',
+    icon:<AiOutlineSelect/>,
+    cName:'nav-text',
+    access:['admin']   
+  },
+  {
+    title:'Crear Proveedor',
+    path:'/compras',
+    icon:<AiOutlineSelect/>,
+    cName:'nav-text',
+    access:['compras','agencias']   
   }
   ,
+  {
+    title:'Validación Existencia',
+    path:'/validacion/admin',
+    icon:<RiPassValidLine />,
+    cName:'nav-text',
+    access:['admin']
+  },
+  {
+    title:'Validación Existencia',
+    path:'/validar/tercero',
+    icon:<RiPassValidLine />,
+    cName:'nav-text',
+    access:['cartera']
+  },
+  {
+    title:'Validación Existencia',
+    path:'/validar/proveedor',
+    icon:<RiPassValidLine />,
+    cName:'nav-text',
+    access:['compras','agencias']
+  },
+  
   {title:'Persona natural - contado',
     path:'/contado/persona/natural',
     icon:<RiContactsBook2Fill/>,

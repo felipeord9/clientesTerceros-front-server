@@ -66,9 +66,9 @@ export default function Inicio2(){
                   variant="standard"
                   
                 >
-                <MenuItem value={10} onClick={(e)=>navigate('/tipo/persona')} className=""><strong><FaHandshake className="me-1"/>Proveedor Mcia y Convenios</strong></MenuItem>
-                <MenuItem value={20} onClick={(e)=>navigate('/prestador/servicios')} className="" style={{color:'blue'}}><strong><MdOutlineMiscellaneousServices className="me-1"/>Prestador de servicios</strong></MenuItem>
                 <MenuItem value={30} onClick={(e)=>navigate('/tipo/proveedor')} className="" style={{color:'red'}}><strong><FaPeopleLine className="me-1" />Proveedores varios (Agencias)</strong></MenuItem>
+                <MenuItem value={20} onClick={(e)=>navigate('/prestador/servicios')} className="" style={{color:'blue'}}><strong><MdOutlineMiscellaneousServices className="me-1"/>Prestador de servicios</strong></MenuItem>
+                <MenuItem value={10} onClick={(e)=>navigate('/tipo/persona')} className=""><strong><FaHandshake className="me-1"/>Proveedor Mcia y Convenios</strong></MenuItem>
                 </Select>
               </FormControl>
             </Box>

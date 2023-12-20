@@ -45,7 +45,7 @@ button{
   transition: 0.2s;
 }
 button:hover{
-  box-shadow: 0 0 0 4px #fff,
+  box-shadow: 0 0 0 4px #f3f3f3,
   0 0 0 8px #D92121;
   /* #FE7F29 */
 }

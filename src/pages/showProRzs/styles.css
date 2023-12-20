@@ -1,0 +1,7 @@
+.Select-text a:hover {
+    background-color: #df1414;
+    color: #f3e2c2;
+  }
+h3{
+    user-select: 'none';
+}

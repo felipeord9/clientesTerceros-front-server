@@ -18,6 +18,9 @@ import VinculacionProveedor from '../../pdfs/FORMATO  VINCULACION DE PROVEEDORES
 import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { updateBitacora } from '../../services/bitacoraService';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import { MdNoteAdd } from "react-icons/md";
 
 export default function ConvenioJuridico(){
   /* instancias de contexto */
@@ -60,7 +63,64 @@ export default function ConvenioJuridico(){
     input9: null,
     input10: null,
     input11: null,
+
+    input12: null,
+    input13: null,
+    input14: null,
+    input15: null,
   });
+  const [compare,setCompare]=useState({
+    docRefcom2:'0',
+    docRefcom3:'0',
+  })
+  const changeSearch = (e)=>{
+    const file = e.target.files[0]; 
+    const {id,value} = e.target;
+    /* value = 1; */
+    console.log(value);
+    if(file){
+      setCompare({
+        ...compare,
+        [id]:1,
+      });
+    }else{
+      setCompare({
+        ...compare,
+        [id]:0,
+      })
+    }
+  }
+
+  const [fileInputs, setFileInputs] = useState([]);
+
+  const addFileInput = () => {
+    /* setFileInputs([...fileInputs, {}]); */
+    if (fileInputs.length < 2) {
+      const newInput = { id: fileInputs.length + 1, file: null };
+      setFileInputs([...fileInputs, newInput]);
+    } else {
+      alert('Se permiten como máximo 3 referencias comerciales.');
+    }
+  };
+
+  /* remover el ultimo input de referencia comercial */
+  const [visible,setVisible]=useState(false);
+  const removeFileInput =()=> {
+    if (fileInputs.length > 0) {
+      /* setVisible=true */
+      const updatedInputs = [...fileInputs];
+      updatedInputs.pop();
+      setFileInputs(updatedInputs);
+    } /* setVisible=false; */
+    /* const updatedInputs = fileInputs.filter((input) => input.id !== id);
+    setFileInputs(updatedInputs); */
+  };
+  const actualizarFiles =(id,event)=>{
+    const updatedInputs = fileInputs.map((input) =>
+      input.id === id ? { ...input, file: event.target.files[0] } : input
+    );
+    setFileInputs(updatedInputs);
+  }
 /*   const [folderName, setFolderName] = useState('');
  */
   /* Variable para agregar los pdf */
@@ -239,6 +299,8 @@ export default function ConvenioJuridico(){
           docCrepL:docCrepL,
           docEf:docEf,
           docRefcom:docRefcom,
+          docRefcom2:compare.docRefcom2,
+          docRefcom3:compare.docRefcom3,
           docInfemp:docInfemp,
           docInfrl:docInfrl,
           docValAnt:docValAnt,
@@ -251,6 +313,8 @@ export default function ConvenioJuridico(){
         const folderName = search.cedula+'-'+search.razonSocial.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+search.razonSocial.toUpperCase();
+        formData.append('originalFolderName', originalFolderName);
         //creamos una constante con el nombre del cliente para darselo a todos los documentos
         const clientName = search.razonSocial.toUpperCase();
         formData.append('clientName',clientName)
@@ -402,7 +466,7 @@ const [colorVality,setColorVality]=useState('red');
     return(
     <div className=" wrapper d-flex justify-content-center w-100 m-auto " style={{userSelect:'none'}}>
     <div
-      className=" login-wrapper shadow rounded-4 border border-3 pt-4 mt-5 overflow-auto" style={{backgroundColor:'white',userSelect:'none'}}
+      className=" login-wrapper shadow rounded-4 border border-3 pt-4 mt-5 overflow-auto" style={{backgroundColor:'white',userSelect:'none',width:870}}
     >
     <center>
       <section className="d-flex flex-row justify-content-between align-items-center mb-2">
@@ -416,7 +480,7 @@ const [colorVality,setColorVality]=useState('red');
         </div>
       </section>
     </center>
-      <form className="" onSubmit={handleSubmit}>
+      <form className="w-100" onSubmit={handleSubmit}>
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
             <div>
@@ -792,6 +856,7 @@ const [colorVality,setColorVality]=useState('red');
             <div className="d-flex flex-row ">
                 <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 ">CERTIFICADO CAMARA Y COMERCIO: </label>
+                  <label className="ms-2 mt-1 ">(con una vigencia no mayor a 30 días.) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
@@ -818,6 +883,7 @@ const [colorVality,setColorVality]=useState('red');
                 </div>
                 <div className="ps-2 w-50">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
@@ -870,14 +936,15 @@ const [colorVality,setColorVality]=useState('red');
                 <div className="ps-2 w-50" >
                   <label className="fw-bold mt-1 me-2">REFERENCIAS COMERCIALES: </label>
                   <div className=" rounded-2 pt-1" >
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row pb-2">
+                  <IconButton  style={{backgroundColor:'#2979FF',color:'white',width:40,height:40}} className="rounded-5 d-flex justify-content-center align-items-center me-1 " onClick={addFileInput}><MdNoteAdd />{/* <img src={Mas} style={{width:18}} /> */}</IconButton>        
                   <input
-                    id="INFOLAFT"
+                    id="DocRefcom"
                     type="file"
-                    placeholder="INFOLAFT"
+                    placeholder="DocRefcom"
                     className="form-control form-control-sm  border border-5 rounded-3"
                     accept=".pdf"
-                    style={{backgroundColor:'#f3f3f3',width:338}}
+                    style={{backgroundColor:'#f3f3f3',width:290}}
                     /* onChange={(e) => (handleFileChange(e, 1),setDocInfrl(1))} */
                     onChange={(e) => (handleFileChange('Refcom',e),setDocRefcom(1),FileChange(e,6))}
                   />
@@ -889,6 +956,35 @@ const [colorVality,setColorVality]=useState('red');
                   </div>
                   )} 
                   </div>
+                  <div className="d-flex">
+                  <div >
+                  <IconButton onFocusVisible={visible} onClick={removeFileInput} className="me-1" style={{backgroundColor:'red', color:'white',height:40,width:41}} aria-label="delete"><DeleteIcon /></IconButton>
+                  </div>
+                  <div className="d-flex flex-column">
+                  {fileInputs.map((input, index) => (
+                  <div key={index} className="d-flex flex-row">
+                    <div key={input.id} className="d-flex flex-row">
+                    <input
+                      id={`docRefcom${input.id+1}`}
+                      type="file"
+                      style={{backgroundColor:'#f3f3f3',width:290}}
+                      
+                      onChange={(e)=>(handleFileChange(`Refcom${input.id+1}`,e),FileChange(e,7+index),actualizarFiles(input.id,e),changeSearch(e))}
+                      className="form-control form-control-sm border border-5 rounded-3 d-flex flex-column mb-2"
+                      accept=".pdf"                  
+                    />
+                    </div>
+                    {selectedFiles[7+index] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[7+index])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )}
+                    </div>
+                  ))}
+                  </div>
+                  </div> 
                   </div>
                 </div>
             </div>
@@ -906,11 +1002,11 @@ const [colorVality,setColorVality]=useState('red');
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Ef', e),setDocEf(1),FileChange(e,7))}
+                    onChange={(e) => (handleFileChange('Ef', e),setDocEf(1),FileChange(e,10))}
                   />
-                  {selectedFiles[7] && (
+                  {selectedFiles[10] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
-                    <a href={URL.createObjectURL(selectedFiles[7])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[10])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -930,11 +1026,11 @@ const [colorVality,setColorVality]=useState('red');
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 1),setDocInfrl(1))} */
-                    onChange={(e) => (handleFileChange('CrepL',e),setDocCrepL(1),FileChange(e,8))}
+                    onChange={(e) => (handleFileChange('CrepL',e),setDocCrepL(1),FileChange(e,11))}
                   />
-                  {selectedFiles[8] && (
+                  {selectedFiles[11] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[8])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -957,11 +1053,11 @@ const [colorVality,setColorVality]=useState('red');
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Infemp', e),setDocInfemp(1),FileChange(e,9))}
+                    onChange={(e) => (handleFileChange('Infemp', e),setDocInfemp(1),FileChange(e,12))}
                   />
-                  {selectedFiles[9] && (
+                  {selectedFiles[12] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[9])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[12])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -981,11 +1077,11 @@ const [colorVality,setColorVality]=useState('red');
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 1),setDocInfrl(1))} */
-                    onChange={(e) => (handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,10))}
+                    onChange={(e) => (handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,13))}
                   />
-                  {selectedFiles[10] && (
+                  {selectedFiles[13] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[10])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[13])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -993,6 +1089,7 @@ const [colorVality,setColorVality]=useState('red');
                   </div>
                   </div>
                 </div>
+                
             </div>
             <div className="d-flex flex-column mt-1 " >
                   <label className="fw-bold mt-1 me-2">OTROS: </label>
@@ -1002,12 +1099,12 @@ const [colorVality,setColorVality]=useState('red');
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:720}}
                     /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
-                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,11))}
+                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,14))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[11] && (
+                    {selectedFiles[14] && (
                     <div className="d-flex justify-content-start ps-4" style={{width:70}}>
-                    <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[14])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>

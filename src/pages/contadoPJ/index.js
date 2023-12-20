@@ -279,6 +279,8 @@ export default function ContadoPersonaJuridica(){
         const folderName = search.cedula+'-'+ search.razonSocial.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+ search.razonSocial.toUpperCase();
+        formData.append('originalFolderName', originalFolderName);
         const clientName = search.razonSocial.toUpperCase();
         formData.append('clientName',clientName)
         //ejecutamos nuestra funcion que creara el cliente
@@ -990,7 +992,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </input>
                 </div>
                   <div className="w-100 d-flex flex-row">
-                  <label className="me-1">Precio sugerido:</label>
+                  <label className="me-1">Lista de Precios:</label>
                   <select
                     style={{width:260}}
                     ref={selectPrecioRef}
@@ -1018,6 +1020,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
                 <div className="me-2 w-100">
                   <label className="fw-bold mt-1 ">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input

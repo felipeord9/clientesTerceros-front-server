@@ -235,6 +235,8 @@ export default function VariosJuridico(){
         const folderName = search.cedula+'-'+search.razonSocial.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+search.razonSocial.toUpperCase();
+        formData.append('originalFolderName', originalFolderName);
         //creamos una constante con el nombre del cliente para darselo a todos los documentos
         const clientName = search.razonSocial.toUpperCase();
         formData.append('clientName',clientName)
@@ -645,6 +647,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
               <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+
                   <div className=" rounded-2" >
                   <div className="d-flex flex-row">
                   <input

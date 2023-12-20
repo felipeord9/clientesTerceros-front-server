@@ -106,12 +106,15 @@ export default function Navbar() {
     }
     const handleClickInicio=(e)=>{
       e = e.target.value
-      if(user.role==='agencias' || user.role==='cartera'){
-        return navigate('/inicio')
-      }else if(user.role==='compras'){
-        return navigate('/compras')
+      if( user.role==='cartera'){
+        /* return navigate('/inicio') */
+        return navigate('/menu/principal/Clientes')
+      }else if(user.role==='compras' || user.role==='agencias'){
+        /* return navigate('/compras') */
+        return navigate('/menu/principal/Proveedores')
       }else{
-        return navigate('/inicio/admin')
+        /* return navigate('/inicio/admin') */
+        return navigate('/menu/principal/admin')
       }
     }
   return (

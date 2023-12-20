@@ -1,8 +1,63 @@
 import * as FiIcons from 'react-icons/fi';
 import DataTable from 'react-data-table-component'
+import Swal from 'sweetalert2';
+import { MdDeleteOutline } from "react-icons/md";
+import { deleteByCedula } from '../../services/proveedorService';
+import { useState } from 'react';
 
 export default function TableProveedores({ proveedores, loading }) {
   const columns = [
+    {
+      id: "delete",
+      name: "Eliminar",
+      center: true,
+      cell: (row, index, column, id) => (
+        <div className='d-flex gap-2 p-1'>
+          <button title="Eliminar proveedor" className='btn btn-sm btn-danger ' onClick={(e) => {
+            /* setSelectedTercero(row) */
+            Swal.fire({
+              title:'¿Esta segur@?',
+              icon:'question',
+              text:`Se eliminará el proveedor de nombre "${row.razonSocial}" y número de identifiación "${row.cedula}"de la base de datos`,
+              showCancelButton:true,
+              showConfirmButton:true,
+              cancelButtonColor:'grey',
+              confirmButtonColor:'#D92121',
+              confirmButtonText:'Si, eliminar'
+            }).then((result)=>{
+              if(result.isConfirmed){
+                deleteByCedula(row.cedula)
+                .then(()=>{
+                  Swal.fire({
+                    title:'Eliminado',
+                    text:`Proveedor "${row.razonSocial}" eliminado con éxito`,
+                    icon:'success',
+                    showConfirmButton:'true',
+                    confirmButtonColor:'green',
+                    timer:5000
+                  })
+                })
+                .then(()=>{
+                  window.location.reload();
+                })
+                .catch((err)=>{
+                  Swal.fire({
+                    title:'Algo salió mal',
+                    text:'Ha ocurrido un error al borrar el proveedor, intentalo de nuevo. Si el problema persiste, comunicate con el área de sistemas',
+                    icon:'error',
+                    showConfirmButton:'true',
+                    confirmButtonColor:'green'
+                  })
+                })
+              }
+            })
+          }}>
+            <MdDeleteOutline />
+          </button>
+        </div>
+      ),
+      width: '80px'
+    },
     {
       id: "tipoPersona",
       name: "TipoP",
@@ -185,6 +240,20 @@ export default function TableProveedores({ proveedores, loading }) {
         selector: (row) => row.docRefcom,
         sortable: true,
         width: '110px',
+      },
+      {
+        id: "docRefcom2",
+        name: "Refcom2",
+        selector: (row) => row.docRefcom2,
+        sortable: true,
+        width: '120px',
+      },
+      {
+        id: "docRefcom3",
+        name: "Refcom3",
+        selector: (row) => row.docRefcom3,
+        sortable: true,
+        width: '120px',
       },
       {
         id: "docInfemp",

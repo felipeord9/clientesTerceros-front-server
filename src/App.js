@@ -28,7 +28,26 @@ import CreditoPersonaNatural from './pages/creditoPN';
 import CreditoPersonaJuridica from './pages/creditoPJ';
 import Users from './pages/Users';
 import Terceros from './pages/terceros';
-
+import ValidarTercero from './pages/validarTercero';
+import ValidarProveedor from './pages/validarProveedor';
+import ValidacionAdmin from './pages/validacion';
+import MostartInfo from './pages/mostrarInfo';
+import MostrarProveedor from './pages/mostrarProveedor';
+import EditarPNC from './pages/editPNC';
+import EditarPNCR from './pages/editarPNCR';
+import EditarPJC from './pages/editarPJC';
+import EditarPJCR from './pages/editarPJCR';
+import EditPMN from './pages/editarPMN';
+import EditarPMJ from './pages/editarPMJ';
+import EditPS from './pages/editarPS';
+import EditPVN from './pages/editarPVN';
+import EditarPVJ from './pages/editarPVJ';
+import MenuPrincipalAdmin from './pages/mpAdmin';
+import MenuPrincipalClientes from './pages/mpClientes';
+import MenuPrincipalProveedores from './pages/mpProveedores';
+import ShowInfoWithRzs from './pages/showWithRzs';
+import ShowProveedorWithRzs from './pages/showProRzs';
+import MpPrueba from './pages/mpPrueba';
 
 function App() {
   return(
@@ -42,6 +61,35 @@ function App() {
 {/*         <Route path='/recovery/password' element={<RecoveryPassword/>}/>
  */}        <Route path='/send/recovery' element={<SendRecovery/>}/>
         <Route path='/recuperacion/contrasena//:token' element={<RecoveryPassword/>} />
+
+        {/* Validacion de tercero */}
+        <Route path='/validar/tercero' element={<PrivateRoute component={ValidarTercero}/>}/>
+        <Route path='/validar/Proveedor' element={<PrivateRoute component={ValidarProveedor}/>}/>
+        <Route path='/validacion/admin' element={<PrivateRoute component={ValidacionAdmin}/>}/>
+
+        {/* Mostrar validacion */}
+        <Route path='/info/validacion' element={<PrivateRoute component={MostartInfo}/>}/>
+        <Route path='/info/valid' element={<PrivateRoute component={ShowInfoWithRzs}/>}/>
+        <Route path='/informacion/validacion' element={<PrivateRoute component={MostrarProveedor}/>}/>
+        <Route path='/informacion/valid' element={<PrivateRoute component={ShowProveedorWithRzs}/>}/>
+
+
+        {/* Editar informacion validada */}
+        <Route path='/editar/info/PNC' element={<PrivateRoute component={EditarPNC}/>}/>
+        <Route path='/editar/info/PNCR' element={<PrivateRoute component={EditarPNCR}/>}/>
+        <Route path='/editar/info/PJC' element={<PrivateRoute component={EditarPJC}/>}/>
+        <Route path='/editar/info/PJCR' element={<PrivateRoute component={EditarPJCR}/>}/>
+        <Route path='/editar/info/PMN' element={<PrivateRoute component={EditPMN}/>}/>
+        <Route path='/editar/info/PMJ' element={<PrivateRoute component={EditarPMJ}/>}/>
+        <Route path='/editar/info/PS' element={<PrivateRoute component={EditPS}/>}/>
+        <Route path='/editar/info/PVN' element={<PrivateRoute component={EditPVN}/>}/>
+        <Route path='/editar/info/PVJ' element={<PrivateRoute component={EditarPVJ}/>}/>
+
+        {/* menus principales */}
+        <Route path='/menu/principal/admin' element={<PrivateRoute component={MenuPrincipalAdmin}/>}/>
+        <Route path='/menu/principal/Clientes' element={<PrivateRoute component={MenuPrincipalClientes}/>}/>
+        <Route path='/menu/principal/Proveedores' element={<PrivateRoute component={MenuPrincipalProveedores}/>}/>
+        <Route path='/menu/principal/Prueba' element={<PrivateRoute component={MpPrueba}/>}/>
 
         {/* Inicios agencias y cartera */}
         <Route path='/inicio' element={<PrivateRoute component={Inicio}/>}/>

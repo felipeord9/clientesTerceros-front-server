@@ -31,3 +31,13 @@ export const updateUser = async (id, body) => {
   })
   return data
 }
+export const deleteUserByName = (name) => {
+  return fetch(`${url}/delete/${name}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => res);
+};

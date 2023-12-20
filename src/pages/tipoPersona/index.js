@@ -45,7 +45,9 @@ export default function Inicio2(){
       e = e.target.value;
       if(user.role==='compras'){
         return navigate('/compras')
-      }else{
+      }else if(user.role==='agencias' ){
+        return navigate('/compras')
+      }else if(user.role==='admin'){
         return navigate('/inicio/admin')
       }
     }

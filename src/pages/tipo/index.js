@@ -42,7 +42,9 @@ export default function Inicio2(){
       e = e.target.value;
       if(user.role==='compras'){
         return navigate('/compras')
-      }else{
+      }else if(user.role==='agencias' ){
+        return navigate('/compras')
+      }else if(user.role==='admin'){
         return navigate('/inicio/admin')
       }
     }
@@ -73,24 +75,6 @@ export default function Inicio2(){
       
       <div className="d-flex flex-column pt-2">
               
-              {/* <Box sx={{ minWidth: 320, margin:1,color:'red' }}>
-                <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">-- Formato que desea diligenciar -- </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={tipo}
-                  label="tipo"
-                  style={{width:300}}
-                  onChange={handleTipo}
-                  variant="standard"
-                  
-                >
-                <MenuItem value={10} onClick={(e)=>navigate('/proveedor/convenio/natural')} className="d-flex justify-content-center"><strong>Persona Natural</strong></MenuItem>
-                <MenuItem value={20} onClick={(e)=>navigate('/credito/persona/natural')} className="d-flex justify-content-center" style={{color:'blue'}}><strong>Persona Jurídica</strong></MenuItem>
-                </Select>
-              </FormControl>
-            </Box> */}
             <div className="d-flex flex-row">
             
               <h4><Checkbox

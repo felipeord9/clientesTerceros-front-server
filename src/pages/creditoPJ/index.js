@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { Button, Modal } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
+import { MdNoteAdd } from "react-icons/md";
 import { getAllPrecios } from "../../services/precioService";
 import { Fade } from "react-awesome-reveal";
 import { createCliente, deleteCliente } from "../../services/clienteService";
@@ -21,6 +22,8 @@ import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOL
 import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { FaEye } from "react-icons/fa";
 import { updateBitacora } from '../../services/bitacoraService';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 export default function CreditoPersonaJuridica(){
   /* instancias de contexto */
@@ -85,9 +88,44 @@ export default function CreditoPersonaJuridica(){
     input11: null,
     input12: null,
     input13: null,
+
+    input14: null,
+    input15: null,
+    input16: null,
+    input17: null,
   });
 /*   const [folderName, setFolderName] = useState('');
  */
+const [fileInputs, setFileInputs] = useState([]);
+
+  const addFileInput = () => {
+    /* setFileInputs([...fileInputs, {}]); */
+    if (fileInputs.length < 2) {
+      const newInput = { id: fileInputs.length + 1, file: null };
+      setFileInputs([...fileInputs, newInput]);
+    } else {
+      alert('Se permiten como máximo 3 referencias comerciales.');
+    }
+  };
+
+  /* remover el ultimo input de referencia comercial */
+  const [visible,setVisible]=useState(false);
+  const removeFileInput =()=> {
+    if (fileInputs.length > 0) {
+      /* setVisible=true */
+      const updatedInputs = [...fileInputs];
+      updatedInputs.pop();
+      setFileInputs(updatedInputs);
+    } /* setVisible=false; */
+    /* const updatedInputs = fileInputs.filter((input) => input.id !== id);
+    setFileInputs(updatedInputs); */
+  };
+  const actualizarFiles =(id,event)=>{
+    const updatedInputs = fileInputs.map((input) =>
+      input.id === id ? { ...input, file: event.target.files[0] } : input
+    );
+    setFileInputs(updatedInputs);
+  }
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
     setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
@@ -129,6 +167,28 @@ export default function CreditoPersonaJuridica(){
     tipo:'N',
     valorEstimado:'',
   });
+  const [compare,setCompare]=useState({
+    docRefcom2:'0',
+    docRefcom3:'0',
+  })
+
+  const changeSearch = (e)=>{
+    const file = e.target.files[0]; 
+    const {id,value} = e.target;
+    /* value = 1; */
+    console.log(value);
+    if(file){
+      setCompare({
+        ...compare,
+        [id]:1,
+      });
+    }else{
+      setCompare({
+        ...compare,
+        [id]:0,
+      })
+    }
+  }
   const [loading, setLoading] = useState(false);
   const [invoiceType, setInvoiceType] = useState(false);
 
@@ -280,6 +340,8 @@ export default function CreditoPersonaJuridica(){
           docCrepL:docCrepL,
           docEf:docEf,
           docRefcom:docRefcom,
+          docRefcom2:compare.docRefcom2,
+          docRefcom3:compare.docRefcom3,
           docCvbo:docCvbo,
           docFirdoc:docFirdoc,
           docInfemp:docInfemp,
@@ -295,6 +357,8 @@ export default function CreditoPersonaJuridica(){
         const folderName = search.cedula+'-'+ search.razonSocial.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+search.razonSocial.toUpperCase();
+        formData.append('originalFolderName', originalFolderName);
         const clientName = search.razonSocial.toUpperCase();
         formData.append('clientName',clientName)
         //ejecutamos nuestra funcion que creara el cliente
@@ -457,6 +521,7 @@ export default function CreditoPersonaJuridica(){
     newFiles[index] = file;
     setSelectedFiles(newFiles);
   };
+  
     return(
     <div className=" wrapper d-flex justify-content-center w-100 m-auto" style={{userSelect:'none'}}>
     <div
@@ -1024,7 +1089,7 @@ export default function CreditoPersonaJuridica(){
                   </input>
                 </div>
                   <div className="w-100 d-flex flex-row">
-                  <label className="me-1">Precio sugerido:</label>
+                  <label className="me-1">Lista de Precios:</label>
                   <select
                     style={{width:260}}
                     ref={selectPrecioRef}
@@ -1155,6 +1220,7 @@ export default function CreditoPersonaJuridica(){
               <div className="d-flex flex-row">
               <div className="d-flex flex-column mt-2 w-100 me-2">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
@@ -1177,6 +1243,8 @@ export default function CreditoPersonaJuridica(){
                 </div> 
                 <div className="d-flex flex-column mt-2 w-100 ms-2">
                   <label className="fw-bold mt-1 me-2">CERTIFICADO CAMARA DE COMERCIO: </label>
+                  <label className="ms-2 mt-1 ">(Con una vigencia no mayor a 30 días) </label>
+
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
@@ -1270,11 +1338,12 @@ export default function CreditoPersonaJuridica(){
                 <div className="d-flex flex-column mt-2 w-100 ms-2">
                   <label className="fw-bold mt-1 me-2">REFERENCIAS COMERCIALES: </label>
                   <div className=" rounded-2 pt-1" >
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row mb-2">
+                  <IconButton  style={{backgroundColor:'#2979FF',color:'white',width:40,height:40}} className="rounded-5 d-flex justify-content-center align-items-center me-1 " onClick={addFileInput}><MdNoteAdd />{/* <img src={Mas} style={{width:18}} /> */}</IconButton>       
                   <input
                     id="DocRefcom"
                     type="file"
-                    style={{backgroundColor:'#f3f3f3',width:331}}
+                    style={{backgroundColor:'#f3f3f3',width:282}}
                     /* onChange={(e)=>(handleFileChange(e, 9),setDocRefcom(1))} */
                     onChange={(e)=>(handleFileChange('Refcom',e),setDocRefcom(1),FileChange(e,10))}
                     className="form-control form-control-sm border border-5 rounded-3"
@@ -1287,8 +1356,39 @@ export default function CreditoPersonaJuridica(){
                   </div>
                   )} 
                   </div>
+                  <div className="d-flex">
+                  <div >
+                  <IconButton onFocusVisible={visible} onClick={removeFileInput} className="me-1" style={{backgroundColor:'red', color:'white',height:40,width:41}} aria-label="delete"><DeleteIcon /></IconButton>
+                  </div>
+                  <div className="d-flex flex-column">
+                  {fileInputs.map((input, index) => (
+                  <div key={index} className="d-flex flex-row">
+                    <div key={input.id} className="d-flex flex-row">
+                    <input
+                      id={`docRefcom${input.id+1}`}
+                      type="file"
+                      style={{backgroundColor:'#f3f3f3',width:282}}
+                      /* onChange={(e)=>(handleFileChange(e,9),setDocRefcom(1))} */
+                      onChange={(e)=>(handleFileChange(`Refcom${input.id+1}`,e),FileChange(e,11+index),actualizarFiles(input.id,e),changeSearch(e))}
+                      className="form-control form-control-sm border border-5 rounded-3 d-flex flex-column mb-2"
+                      accept=".pdf"                  
+                    />
+                    {/* <span>`Refcom {input.id+1}`</span> */}
+                    </div>
+                    {selectedFiles[11+index] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[11+index])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )}
+                    </div>
+                  ))}
+                  </div>
+                  </div> 
                   </div>
                 </div> 
+                
               </div>
               <div className="d-flex flex-row">
               <div className="d-flex flex-column mt-2 w-100 me-2">
@@ -1300,12 +1400,12 @@ export default function CreditoPersonaJuridica(){
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:331}}
                     /* onChange={(e)=>(handleFileChange(e, 10),setDocInfemp(1))} */
-                    onChange={(e)=>(handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,11))}
+                    onChange={(e)=>(handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,14))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[11] && (
+                    {selectedFiles[14] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[14])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1322,12 +1422,12 @@ export default function CreditoPersonaJuridica(){
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:331}}
                     /* onChange={(e)=>(handleFileChange(e, 11),setDocInfrl(1))} */
-                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,12))}
+                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,15))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[12] && (
+                    {selectedFiles[15] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[12])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[15])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1346,12 +1446,12 @@ export default function CreditoPersonaJuridica(){
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:736}}
                     /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
-                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,13))}
+                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,16))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[13] && (
+                    {selectedFiles[16] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[13])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[16])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>

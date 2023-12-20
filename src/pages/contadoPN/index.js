@@ -277,6 +277,8 @@ export default function ContadoPersonaNatural(){
  */        const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
+        formData.append('originalFolderName',originalFolderName);
         //creamos una constante con el nombre del cliente para darselo a todos los documentos
         const clientName = body.razonSocial;
         /* const clientName = search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(); */
@@ -837,7 +839,7 @@ const [colorVality,setColorVality]=useState('red');
                   </input>
                 </div>
                   <div className="w-100 d-flex flex-row">
-                  <label className="me-1">Precio sugerido:</label>
+                  <label className="me-1">Lista de Precios:</label>
                   <select
                     style={{width:245}}
                     ref={selectPrecioRef}
@@ -864,6 +866,7 @@ const [colorVality,setColorVality]=useState('red');
               <div className="d-flex flex-row ">
                 <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 ">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input

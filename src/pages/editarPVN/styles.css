@@ -1,0 +1,14 @@
+/* validar campos de los input */
+  input:invalid + span:after {
+    content: "X";
+    /* content: "✖"; */
+    padding-left:1px;
+    color: red;
+  }
+  
+  input:valid + span:after {
+    content: "✓";
+    /* content:'✔'; */
+    padding-left: 0;
+    color: green;
+  }

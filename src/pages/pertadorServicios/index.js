@@ -238,6 +238,8 @@ export default function PrestadorServicios(){
         //creamos una constante la cual llevará el nombre de nuestra carpeta
         const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();        //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
+        formData.append('originalFolderName',originalFolderName);
         //creamos una constante con el nombre del cliente para darselo a todos los documentos
         const clientName = search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase();
         formData.append('clientName',clientName)
@@ -777,6 +779,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
               <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+
                   <div className=" rounded-2" >
                   <div className="d-flex flex row pt-1">
                     <div className="" style={{width:340}}>
