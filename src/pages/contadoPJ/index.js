@@ -1131,7 +1131,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="DocOtros"
+                    id="docOtros"
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:736}}
                     /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
