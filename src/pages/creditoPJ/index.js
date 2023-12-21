@@ -93,6 +93,9 @@ export default function CreditoPersonaJuridica(){
     input15: null,
     input16: null,
     input17: null,
+    input18: null,
+    input19: null,
+    input20: null,
   });
 /*   const [folderName, setFolderName] = useState('');
  */
@@ -1437,21 +1440,21 @@ const [fileInputs, setFileInputs] = useState([]);
                 </div> 
               </div>
               <div className="d-flex flex-row">
-              <div className="d-flex flex-column mt-2 w-100">
-                  <label className="fw-bold mt-1 me-2">OTROS: </label>
+              <div className="d-flex flex-column mt-2 w-100 me-2">
+                  <label className="fw-bold mt-1 me-2">FICHA RELACIÓN DOCUMENTOS: </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="DocOtros"
+                    id="docFirdoc"
                     type="file"
-                    style={{backgroundColor:'#f3f3f3',width:736}}
-                    /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
-                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,16))}
+                    style={{backgroundColor:'#f3f3f3',width:331}}
+                    /* onChange={(e)=>(handleFileChange(e,12),setDocFirdoc(1))} */
+                    onChange={(e)=>(handleFileChange('Firdoc',e),setDocFirdoc(1),FileChange(e,17))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[16] && (
+                    {selectedFiles[17] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[16])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[17])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1459,9 +1462,52 @@ const [fileInputs, setFileInputs] = useState([]);
                   </div>
                   </div>
                 </div> 
-                
+                <div className="d-flex flex-column mt-2 w-100 ">
+                  <label className="fw-bold mt-1">CERTIFICACION BANCARIA: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docCerBan"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:331}}
+                    /* onChange={(e)=>(handleFileChange(e,13),setDocOtros(1))} */
+                    onChange={(e)=>(handleFileChange('Certban',e),setDocCerBan(1),FileChange(e,18))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  
+                    />
+                    {selectedFiles[18] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[18])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div> 
               </div>
-              
+              <div className="d-flex flex-column mt-2 w-100">
+                  <label className="fw-bold mt-1 me-2">OTROS: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docOtros"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:736}}
+                    /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
+                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,19))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[19] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[19])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div> 
             </div>
 
           </div>

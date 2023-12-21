@@ -1236,26 +1236,26 @@ const [colorVality,setColorVality]=useState('red');
               <div className="d-flex flex-row ">
                 <div className="pe-2 w-50">
                 <div className="d-flex flex-column" >
-                  <label className="fw-bold mt-1 ">VALIDACIÓN DE ANTECEDENTES: </label>
+                  <label className="fw-bold mt-1 ">INFOLAFT: </label>
                   <div className="d-flex flex-column">
-                    <TextOfBinary valor={search.docInfrl}></TextOfBinary>
-                    {search.docInfrl === 1 &&(
-                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`} archivo={`Infrl-${search.razonSocial}.pdf`} />
+                    <TextOfBinary valor={search.docInfemp}></TextOfBinary>
+                    {search.docInfemp === 1 &&(
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`} archivo={`Infemp-${search.razonSocial}.pdf`} />
                     )}
                   </div>                  
                   </div>  
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="docInfrl"
+                    id="docInfemp"
                     type="file"
-                    placeholder="docInfrl"
+                    placeholder="docInfemp"
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Infrl', e),setDocInfrl(1),FileChange(e,9),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Infemp', e),setDocInfemp(1),FileChange(e,9),changeSearch(e))}
                   />
                   {selectedFiles[9] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >

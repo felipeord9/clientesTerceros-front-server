@@ -113,6 +113,19 @@ export default function ChangePassword() {
   const [see,setSee]=useState('');
   const switchSee=()=>setSee(!see);
 
+  const handleClickInicio=(e)=>{
+    e = e.target.value
+    if( user.role==='cartera'){
+      /* return navigate('/inicio') */
+      return navigate('/menu/principal/Clientes')
+    }else if(user.role==='compras' || user.role==='agencias'){
+      /* return navigate('/compras') */
+      return navigate('/menu/principal/Proveedores')
+    }else{
+      /* return navigate('/inicio/admin') */
+      return navigate('/menu/principal/admin')
+    }
+  }
   return (
     <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto " style={{userSelect:'none'}}>
       <div className='rounder-4'>
@@ -146,7 +159,7 @@ export default function ChangePassword() {
           </center>
         </div>
         <center>
-        <label><a href='/inicio' className='text-decoration-none' style={{fontSize:'medium'}}><strong>Volver al inicio</strong></a></label>
+        <label className='mt-1'><a onClick={(e)=>handleClickInicio(e)} className="gui-input" style={{fontSize:'medium',cursor:'pointer'}}><strong>Volver al inicio</strong></a></label>
         </center>
         <div style={{height:12}}>
         <span

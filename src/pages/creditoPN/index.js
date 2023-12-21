@@ -1213,15 +1213,15 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </div>
                 </div> 
                 <div className="d-flex flex-column mt-2 w-100 ms-2">
-                  <label className="fw-bold mt-1 me-2">VALIDACIÓN DE ANTECEDENTES: </label>
+                  <label className="fw-bold mt-1 me-2">INFOLAFT: </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="DocValAnt"
+                    id="docInfemp"
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:331}}
                     /* onChange={(e)=>(handleFileChange(e,11),setDocValAnt(1))} */
-                    onChange={(e)=>(handleFileChange('ValAnt',e),setDocValAnt(1),FileChange(e,16))}
+                    onChange={(e)=>(handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,16))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
                     {selectedFiles[16] && (

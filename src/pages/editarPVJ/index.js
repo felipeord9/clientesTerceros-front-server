@@ -838,7 +838,7 @@ const [colorVality,setColorVality]=useState('red');
 
                 <div className="ps-2 w-50">
                 <div className="d-flex flex-column mb-3" >
-                  <label className="fw-bold mt-1 me-2 ">VALIDACIÓN DE ANTECEDENTES: </label>
+                  <label className="fw-bold mt-1 me-2 ">INFOLAFT: </label>
                   <div className="d-flex flex-column">
                     <TextOfBinary valor={search.docInfemp}></TextOfBinary>
                     {search.docInfemp === 1 &&(

@@ -95,12 +95,13 @@ export default function MenuPrincipalClientes(){
         padding: '10px',
         cursor: 'pointer',
         height:170,width:260,
-        fontSize:21
+        fontSize:21,
+        border: hover ? 'solid #D92121': 'solid #B9B9B9',
       };
     
       return (
         <button
-          className="rounded-2 border border-4 me-3"
+          className="rounded-2  me-3"
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}

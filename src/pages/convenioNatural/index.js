@@ -1035,19 +1035,19 @@ const [colorVality,setColorVality]=useState('red');
             </div>
               <div className="d-flex flex-row ">
                 <div className="pe-2 w-50">
-                  <label className="fw-bold mt-1 ">VALIDACIÓN DE ANTECEDENTES: </label>
+                  <label className="fw-bold mt-1 ">INFOLAFT: </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="RUT"
+                    id="docInfemp"
                     type="file"
-                    placeholder="RUT"
+                    placeholder="docInfemp"
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Infrl', e),setDocInfrl(1),FileChange(e,12))}
+                    onChange={(e) => (handleFileChange('Infemp', e),setDocInfemp(1),FileChange(e,12))}
                   />
                   {selectedFiles[12] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >

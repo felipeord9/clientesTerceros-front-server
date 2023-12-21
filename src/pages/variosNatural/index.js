@@ -741,7 +741,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </div>
                 </div>
                 <div className=" w-50">
-                  <label className="fw-bold mt-1 ">VALIDACIÓN DE ANTECEDENTES: </label>
+                  <label className="fw-bold mt-1 ">INFOLAFT: </label>
                   <div className=" rounded-2" >
                     <div className="d-flex flex-row">
                   <input

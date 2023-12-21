@@ -95,12 +95,13 @@ export default function MenuPrincipalAdmin(){
         padding: '10px',
         cursor: 'pointer',
         height:120,width:220,
-        fontSize:21
+        fontSize:21,
+        border: hover ? 'solid #D92121': 'solid #B9B9B9',
       };
     
       return (
         <button
-          className="rounded-2 border border-4 me-3"
+          className="rounded-2  me-3"
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -114,23 +115,23 @@ export default function MenuPrincipalAdmin(){
       <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto "style={{userSelect:'none'}}>
       <div className='rounder-4'>
     <div style={{height:70}}></div>
-      <div className='login-wrapper p-2 mb-5 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
+      <div className='login-wrapper p-2 mb-5 shadow-lg border-light rounded-4 border border-5 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
     <div className='d-flex flex-row '>
     <Fade cascade damping={0.1} direction="down" triggerOnce='true'>
     <div className="d-flex flex-row">
         <center>        
         </center>
         <center>
-        <div className="m-3" style={{border:10 ,borderColor:'#D92121'}}>
+        <div className="m-3" style={{border:10,borderColor:'#D92121'}}>
         <div className=" mb-3">
           <a onClick={(e)=>handleClickInicio(e)}><BotonColorCambiante>Creación Tercero</BotonColorCambiante></a>
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Tercero</BotonColorCambiante></a>
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
         </div>
-        <div className="d-flex flex-row ">
+        <div className="d-flex flex-row " >
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta solicitudes</BotonColorCambiante></a>
-          <div className="d-flex justify-content-center align-items-center" style={{height:140,width:240}}>
-          <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong>Menú </strong></label>
+          <div className="d-flex justify-content-center align-items-center me-3 mb-3" style={{height:120,width:223}}>
+          <label className='text-danger' style={{color:'black' ,marginBottom:5, fontSize:70, userSelect:'none'}}><strong>Menú </strong></label>
           {/* <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong> </strong></label */}
           </div>
           <a onClick={(e)=>navigate('/bitacora')}><BotonColorCambiante>Bitácora</BotonColorCambiante></a>

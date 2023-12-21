@@ -23,6 +23,8 @@ import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import Logo_pdf from '../../assest/logo_pdf.jpg'
 import { RiArrowGoBackFill } from "react-icons/ri";
+import { FaFileDownload } from "react-icons/fa";
+import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const url = `${config.apiUrl2}/uploadMultiple/obtener-archivo/${carpeta}/${archivo}`;
@@ -160,6 +162,7 @@ export default function EditarPJC(){
     segundoApellido:'',
     primerNombre:'',
     otrosNombres:'',
+    docVinculacion:'',
     docRut:'',
     docInfemp:'',
     docInfrl:'',
@@ -326,6 +329,7 @@ export default function EditarPJC(){
           /* createdAt: new Date(),
           createdBy: user.name.toUpperCase(), */
           solicitante: search.solicitante.toUpperCase(),
+          docVinculacion:compare.docVinculacion,
           docRut:compare.docRut,
           docInfemp:compare.docInfemp,
           docInfrl:compare.docInfrl,
@@ -1208,27 +1212,29 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="me-2 w-100">
                 <div className="d-flex flex-column" /* style={{height:120}} */>
                   <div className="d-flex flex-row">
-                  <label className="fw-bold mt-1 ">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="fw-bold mt-1 ">FORMATO DE VINCULACION: </label>
+                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                   <FaFileDownload />Descargar
+                   </a>
                   </div>
                   <div className="d-flex flex-column">
-                    <TextOfBinary valor={search.docRut}></TextOfBinary>
-                    {search.docRut === 1 &&(
-                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Rut-${search.razonSocial}.pdf`} />
+                    <TextOfBinary valor={search.docVinculacion}></TextOfBinary>
+                    {search.docVinculacion === 1 &&(
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Vinculacion-${search.razonSocial}.pdf`} />
                     )}
                   </div>
                   </div>                  
-                  <div className=" rounded-2 pt-1" >
+                  <div className=" rounded-2 pt-2" >
                   <div className="d-flex flex-row">
                   <input
-                    id="docRut"
+                    id="docVinculacion"
                     /* onChange={(e)=>(handleFileChange(e, 0),setDocRut(1))} */
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:335}}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
                     /* value={'1'} */
-                    onChange={(e) => (handleFileChange('Rut', e),setDocRut(1),FileChange(e,1),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Vinculacion', e),setDocVinculacion(1),FileChange(e,1),changeSearch(e))}
                   />
                   {selectedFiles[1] && (
                     
@@ -1279,6 +1285,44 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </div>
               </div>
               <div className="d-flex flex-row">
+
+              <div className="me-2 w-100">
+                <div className="d-flex flex-column" /* style={{height:120}} */>
+                  <div className="d-flex flex-row">
+                  <label className="fw-bold mt-1 ">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  </div>
+                  <div className="d-flex flex-column">
+                    <TextOfBinary valor={search.docRut}></TextOfBinary>
+                    {search.docRut === 1 &&(
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Rut-${search.razonSocial}.pdf`} />
+                    )}
+                  </div>
+                  </div>                  
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docRut"
+                    /* onChange={(e)=>(handleFileChange(e, 0),setDocRut(1))} */
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:335}}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"
+                    /* value={'1'} */
+                    onChange={(e) => (handleFileChange('Rut', e),setDocRut(1),FileChange(e,3),changeSearch(e))}
+                  />
+                  {selectedFiles[3] && (
+                    
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[3])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div>
+
               <div className="d-flex flex-column mt-2 w-100 me-2">
                   <div className="d-flex flex-column" >
                   <label className="fw-bold mt-1 me-2">INFOLAFT REP. LEGAL: </label>
@@ -1302,14 +1346,14 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     id="docInfrl"
                     type="file"
                     /* onChange={(e)=>(handleFileChange(e, 2),setDocInfrl(1))} */
-                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,3),changeSearch(e))}
+                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,4),changeSearch(e))}
                     placeholder="RUT"
                     style={{backgroundColor:'#f3f3f3',width:335}}
                     className="form-control form-control-sm me-2 border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[3] && (
+                    {selectedFiles[4] && (
                     <div className="d-flex justify-content-start pt-1 " style={{width:50}}>
-                    <a href={URL.createObjectURL(selectedFiles[3])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1321,6 +1365,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <span>{compare.docInfemp}</span>
                   <span>{compare.docOtros}</span> */}
                 </div> 
+                </div>
               <div className="d-flex flex-column mt-2 w-100">
               <div className="d-flex flex-column" >
                   <label className="fw-bold mt-1 me-2">OTROS: </label>
@@ -1346,12 +1391,12 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     style={{backgroundColor:'#f3f3f3',width:335}}
                     type="file"
                     /* onChange={(e)=>(handleFileChange(e, 3),setDocOtros(1))} */
-                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,4),changeSearch(e))}
+                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,5),changeSearch(e))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[4] && (
+                    {selectedFiles[5] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
-                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[5])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1359,7 +1404,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </div>
                   </div>
                 </div> 
-                </div>
             </div>
           </div>
           <hr className="my-1 mt-4" />

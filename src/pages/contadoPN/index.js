@@ -19,6 +19,8 @@ import { getAllClasificaciones } from "../../services/clasificacionService";
 import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
+import { FaFileDownload } from "react-icons/fa";
+import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 
 export default function ContadoPersonaNatural(){
   /* instancias de contexto */
@@ -61,6 +63,7 @@ export default function ContadoPersonaNatural(){
     input1: null,
     input2: null,
     input3: null,
+    input4: null,
   });
 /*   const [folderName, setFolderName] = useState('');
  */
@@ -864,23 +867,24 @@ const [colorVality,setColorVality]=useState('red');
             <div className="w-100 mt-1">
               <label className="fw-bold" style={{fontSize:20}}>DOCUMENTOS OBLIGATORIOS</label>
               <div className="d-flex flex-row ">
-                <div className="pe-2 w-50">
-                  <label className="fw-bold mt-1 ">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+              <div className="me-2 w-50">
+                  <div className="d-flex flex-row w-100">
+                  <label className="fw-bold mt-1" style={{width:280}}>FORMATO DE VINCULACIÓN: </label>
+                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                  <FaFileDownload />Descargar
+                  </a>
+                  </div>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="RUT"
+                    id="DocVinculacion"
                     type="file"
-                    placeholder="RUT"
+                    style={{backgroundColor:'#f3f3f3',width:330}}
+                    /* onChange={(e)=>(handleFileChange(e, 0),setDocVinculacion(1))} */
+                    onChange={(e)=>(handleFileChange('Vinculacion',e),setDocVinculacion(1),FileChange(e,1))}
                     className="form-control form-control-sm border border-5 rounded-3"
-                    accept=".pdf"
-                    style={{backgroundColor:'#f3f3f3',width:338}}
-                    /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
-                    /* second form */
-                    onChange={(e) => (handleFileChange('Rut', e),setDocRut(1),FileChange(e,1))}
-                  />
-                  {selectedFiles[1] && (
+                    accept=".pdf"                  />
+                    {selectedFiles[1] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
                     <a href={URL.createObjectURL(selectedFiles[1])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
@@ -915,19 +919,22 @@ const [colorVality,setColorVality]=useState('red');
                   </div>
                 </div>
               </div>
-              <div className="d-flex flex-column mt-2 ">
-                  <label className="fw-bold mt-1 me-2">OTROS: </label>
+              <div className="d-flex flex-row">
+              <div className="pe-2 w-50">
+                  <label className="fw-bold mt-1 ">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="otros"
+                    id="RUT"
                     type="file"
-                    placeholder="OTROS"
-                    style={{backgroundColor:'#f3f3f3',width:720}}
+                    placeholder="RUT"
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
-                    /* onChange={(e) => (handleFileChange(e, 2),setDocOtros(1))} */
-                    onChange={(e) => (handleFileChange('Otros',e),setDocOtros(1),FileChange(e,3))}
+                    style={{backgroundColor:'#f3f3f3',width:338}}
+                    /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
+                    /* second form */
+                    onChange={(e) => (handleFileChange('Rut', e),setDocRut(1),FileChange(e,3))}
                   />
                   {selectedFiles[3] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
@@ -938,7 +945,32 @@ const [colorVality,setColorVality]=useState('red');
                   )} 
                   </div>
                   </div>
+                </div>
+              <div className="d-flex flex-column ">
+                  <label className="fw-bold mt-1 me-2 ms-2">OTROS: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="otros"
+                    type="file"
+                    placeholder="OTROS"
+                    style={{backgroundColor:'#f3f3f3',width:330}}
+                    className="form-control form-control-sm border border-5 rounded-3 ms-2"
+                    accept=".pdf"
+                    /* onChange={(e) => (handleFileChange(e, 2),setDocOtros(1))} */
+                    onChange={(e) => (handleFileChange('Otros',e),setDocOtros(1),FileChange(e,4))}
+                  />
+                  {selectedFiles[4] && (
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
                 </div> 
+                </div>
             </div>
           </div>
         </div>

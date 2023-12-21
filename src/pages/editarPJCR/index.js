@@ -1633,12 +1633,12 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:331}}
                     /* onChange={(e)=>(handleFileChange(e, 10),setDocInfemp(1))} */
-                    onChange={(e)=>(handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,11),changeSearch(e))}
+                    onChange={(e)=>(handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,15),changeSearch(e))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[11] && (
+                    {selectedFiles[15] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[15])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1663,12 +1663,73 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:331}}
                     /* onChange={(e)=>(handleFileChange(e, 11),setDocInfrl(1))} */
-                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,12),changeSearch(e))}
+                    onChange={(e)=>(handleFileChange('Infrl',e),setDocInfrl(1),FileChange(e,16),changeSearch(e))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[12] && (
+                    {selectedFiles[16] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[12])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[16])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div> 
+              </div>
+              <div className="d-flex flex-row">
+              <div className="d-flex flex-column mt-2 w-100 me-2"><div className="d-flex flex-column" >
+                  <label className="fw-bold mt-1 me-2">FICHA RELACIÓN DOCUMENTOS : </label>
+                  <div className="d-flex flex-column">
+                    <TextOfBinary valor={search.docFirdoc}></TextOfBinary>
+                    {search.docFirdoc === 1 &&(
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Firdoc-${search.razonSocial}.pdf`} />
+                    )}
+                  </div>
+                  </div>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docFirdoc"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:331}}
+                    /* onChange={(e)=>(handleFileChange(e, 10),setDocInfemp(1))} */
+                    onChange={(e)=>(handleFileChange('Firdoc',e),setDocFirdoc(1),FileChange(e,17),changeSearch(e))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[17] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[17])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div> 
+                <div className="d-flex flex-column mt-2 w-100 ms-2">
+                <div className="d-flex flex-column" >
+                  <label className="fw-bold mt-1 me-2">CERTIFICACION BANCARIA : </label>
+                  <div className="d-flex flex-column">
+                    <TextOfBinary valor={search.docCerBan}></TextOfBinary>
+                    {search.docCerBan === 1 &&(
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Certban-${search.razonSocial}.pdf`} />
+                    )}
+                  </div>
+                  </div>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docCerBan"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:331}}
+                    /* onChange={(e)=>(handleFileChange(e, 11),setDocInfrl(1))} */
+                    onChange={(e)=>(handleFileChange('Certban',e),setDocCerBan(1),FileChange(e,18),changeSearch(e))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[18] && (
+                    <div className=" pt-1 ps-2" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[18])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -1695,12 +1756,12 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     type="file"
                     style={{backgroundColor:'#f3f3f3',width:736}}
                     /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
-                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,13),changeSearch(e))}
+                    onChange={(e)=>(handleFileChange('Otros',e),setDocOtros(1),FileChange(e,19),changeSearch(e))}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"                  />
-                    {selectedFiles[13] && (
+                    {selectedFiles[19] && (
                     <div className=" pt-1 ps-2" style={{width:50}} >
-                    <a href={URL.createObjectURL(selectedFiles[13])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[19])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>

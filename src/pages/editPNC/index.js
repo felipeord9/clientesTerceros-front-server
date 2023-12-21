@@ -23,6 +23,8 @@ import { updateBitacora } from '../../services/bitacoraService';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Logo_pdf from '../../assest/logo_pdf.jpg'
 import { config } from "../../config";
+import { FaFileDownload } from "react-icons/fa";
+import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const url = `${config.apiUrl2}/uploadMultiple/obtener-archivo/${carpeta}/${archivo}`;
@@ -1015,12 +1017,14 @@ const [colorVality,setColorVality]=useState('red');
                   <div className="d-flex flex-column" >
                   <div className="d-flex flex-row">
                   
-                  <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="fw-bold mt-1 me-2">FORMATO DE VINCULACION: </label>
+                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                   <FaFileDownload />Descargar
+                   </a>
                   </div>   
                   <div className="d-flex flex-column">               
-                  <TextOfBinary valor={search.docRut}></TextOfBinary>
-                  {search.docRut === 1 && (
+                  <TextOfBinary valor={search.docVinculacion}></TextOfBinary>
+                  {search.docVinculacion === 1 && (
                     <CarpetaArchivoLink carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`} archivo={`Rut-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}/>
                   )}
                   </div>
@@ -1028,15 +1032,15 @@ const [colorVality,setColorVality]=useState('red');
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
-                    id="docRut"
+                    id="docVinculacion"
                     type="file"
-                    placeholder="docRut"
+                    placeholder="docVinculacion"
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Rut', e),/* setSearch({docRut:1}) */setDocRut(1),FileChange(e,1),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Vinculacion', e),/* setSearch({docRut:1}) */setDocVinculacion(1),FileChange(e,1),changeSearch(e))}
                   />
                   {selectedFiles[1] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
@@ -1082,13 +1086,51 @@ const [colorVality,setColorVality]=useState('red');
                   </div>
                 </div>
               </div>
-              <div className="ps-2 w-50" >
+              <div className=" w-100 d-flex flex-row" >
+              <div className=" w-50">
                   <div className="d-flex flex-column" >
+                  <div className="d-flex flex-row">
+                  
+                  <label className="fw-bold mt-1 me-2">RUT: </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  </div>   
+                  <div className="d-flex flex-column">               
+                  <TextOfBinary valor={search.docRut}></TextOfBinary>
+                  {search.docRut === 1 && (
+                    <CarpetaArchivoLink carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`} archivo={`Rut-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}/>
+                  )}
+                  </div>
+                  </div>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docRut"
+                    type="file"
+                    placeholder="docRut"
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"
+                    style={{backgroundColor:'#f3f3f3',width:338}}
+                    /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
+                    /* second form */
+                    onChange={(e) => (handleFileChange('Rut', e),/* setSearch({docRut:1}) */setDocRut(1),FileChange(e,3),changeSearch(e))}
+                  />
+                  {selectedFiles[3] && (
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[3])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                </div>
+                <div className="d-flex flex-column">
+                  <div className="d-flex flex-column w-50" >
                   <label className="fw-bold mt-1 me-2">OTROS: </label>
-                  <div className="d-flex flex-column">
+                  <div className="d-flex flex-column" style={{width:330}}>
                     <TextOfBinary valor={search.docOtros}></TextOfBinary>
                     {search.docOtros === 1 &&(
-                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.razonSocial}`} archivo={`Otros-${search.razonSocial}.pdf`} />
+                      <CarpetaArchivoLink carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`} archivo={`Otros-${search.razonSocial}.pdf`} />
                     )}
                   </div>                  
                   </div>
@@ -1099,19 +1141,20 @@ const [colorVality,setColorVality]=useState('red');
                     type="file"
                     placeholder="docOtros"
                     /* value={search.docOtros} */
-                    style={{backgroundColor:'#f3f3f3',width:720}}
+                    style={{backgroundColor:'#f3f3f3',width:338}}
                     className="form-control form-control-sm border border-5 rounded-3"
                     accept=".pdf"
                     /* onChange={(e) => (handleFileChange(e, 2),setDocOtros(1))} */
-                    onChange={(e) => (handleFileChange('Otros',e),setDocOtros(1),FileChange(e,3),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Otros',e),setDocOtros(1),FileChange(e,4),changeSearch(e))}
                   />
-                  {selectedFiles[3] && (
+                  {selectedFiles[4] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
-                    <a href={URL.createObjectURL(selectedFiles[3])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
                   )} 
+                  </div>
                   </div>
                   </div>
                 </div> 
