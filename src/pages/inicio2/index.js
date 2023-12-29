@@ -14,6 +14,7 @@ import { FaPeopleLine } from "react-icons/fa6";
 import { MdOutlineMiscellaneousServices } from "react-icons/md"
 import { Fade } from "react-awesome-reveal";
 import AuthContext from "../../context/authContext";
+import { FaCar } from "react-icons/fa";
 
 export default function Inicio2(){
     const { user, setUser } = useContext(AuthContext);
@@ -69,6 +70,9 @@ export default function Inicio2(){
                 <MenuItem value={30} onClick={(e)=>navigate('/tipo/proveedor')} className="" style={{color:'red'}}><strong><FaPeopleLine className="me-1" />Proveedores varios (Agencias)</strong></MenuItem>
                 <MenuItem value={20} onClick={(e)=>navigate('/prestador/servicios')} className="" style={{color:'blue'}}><strong><MdOutlineMiscellaneousServices className="me-1"/>Prestador de servicios</strong></MenuItem>
                 <MenuItem value={10} onClick={(e)=>navigate('/tipo/persona')} className=""><strong><FaHandshake className="me-1"/>Proveedor Mcia y Convenios</strong></MenuItem>
+                <center>
+                <hr style={{width:300, color:'black'}}/></center>
+                <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><FaCar /><strong className="ps-2 ">C.Comerciales Ó parqueaderos</strong></MenuItem>
                 </Select>
               </FormControl>
             </Box>

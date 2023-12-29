@@ -14,6 +14,7 @@ import { GiArchiveRegister } from "react-icons/gi";
 import { TbCircleLetterJ } from 'react-icons/tb' /*letra j*/
 import { RiPassValidLine } from "react-icons/ri";
 import { AiOutlineSelect } from "react-icons/ai";
+import { FaCar } from "react-icons/fa";
 
 export const NavBarData = [
   {
@@ -80,8 +81,8 @@ export const NavBarData = [
     cName:'nav-text',
     access:['compras','agencias']
   },
-  
-  {title:'Persona natural - contado',
+  {
+    title:'Persona natural - contado',
     path:'/contado/persona/natural',
     icon:<RiContactsBook2Fill/>,
     cName:'nav-text',
@@ -106,9 +107,16 @@ export const NavBarData = [
     access:['admin','cartera','agencias']
   },
   {
-    title: "Proveedor Mcia y Convenios",
-    path: "tipo/persona",
-    icon: <FaHandshake />,
+    title: "C.Comerciales ó Parqueaderos",
+    path: "/Parqueaderos",
+    icon: <FaCar />,
+    cName: "nav-text",
+    access: ['admin','compras','cartera','agencias']
+  },
+  {
+    title: "Proveedores varios (Agencias)",
+    path: "/tipo/proveedor",
+    icon: <FaPeopleLine />,
     cName: "nav-text",
     access: ['admin','compras']
   },
@@ -120,9 +128,9 @@ export const NavBarData = [
     access: ['admin','compras']
   },
   {
-    title: "Proveedores varios (Agencias)",
-    path: "/tipo/proveedor",
-    icon: <FaPeopleLine />,
+    title: "Proveedor Mcia y Convenios",
+    path: "/tipo/persona",
+    icon: <FaHandshake />,
     cName: "nav-text",
     access: ['admin','compras']
   },
@@ -142,7 +150,8 @@ export const NavBarData = [
   },{
     title:'Proveedores',
     path: '/Proveedores',
-    icon: <PiFloppyDiskBackFill />,
+    /* icon: <PiFloppyDiskBackFill />, */
+    icon: <BsClipboardCheckFill />,
     cName: "nav-text",
     access: ['admin']
   },{

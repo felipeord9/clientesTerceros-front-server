@@ -336,7 +336,7 @@ export default function EditPVN(){
             setLoading(false)
             setFiles([])
             Swal.fire({
-              title: 'Creación exitosa!',
+              title: 'Actualización exitosa!',
               text: `El Proveedor "${body.razonSocial}" con Número 
               de documento "${search.cedula}" se ha actualizado de manera satisfactoria`,
               icon: 'success',
@@ -352,11 +352,7 @@ export default function EditPVN(){
           }) 
           .catch((err)=>{
             setLoading(false);
-            if(!data){
-              deleteFile(folderName);
-            }else{
-              deleteProveedor(data.id);
-            }
+            
             Swal.fire({
               title: "¡Ha ocurrido un error!",
               text: `
@@ -374,7 +370,7 @@ export default function EditPVN(){
       })
       .catch((err)=>{
         setLoading(false);
-        deleteFile(folderName);
+        
         Swal.fire({
           title: "¡Ha ocurrido un error!",
             text: `
@@ -677,7 +673,7 @@ const [colorVality,setColorVality]=useState('red');
                     id="cedula"
                     type="number" 
                     className="form-control form-control-sm w-100"
-                    min={10000000}
+                    min={10000}
                     name="cedula"
                     pattern="[0-9]"
                     disabled

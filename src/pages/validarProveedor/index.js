@@ -114,10 +114,16 @@ export default function ValidarProveedor(){
           docOtros:data.docOtros,
         })
         localStorage.setItem('data',JSON.stringify(data));
-        if(data.tipoFormulario==='PMN' || data.tipoFormulario==='PS' || data.tipoFormulario==='PVN'){
-          navigate('/informacion/validacion')
-        }else if(data.tipoFormulario==='PMJ' || data.tipoFormulario==='PVJ' ){
-          navigate('/informacion/valid')
+        if(data.tipoFormulario==='PMN'){
+          navigate('/informacion/PMN')
+        }else if(data.tipoFormulario==='PMJ'){
+          navigate('/informacion/PMJ')
+        }else if(data.tipoFormulario==='PS'){
+          navigate('/informacion/PS')
+        }else if(data.tipoFormulario==='PVN'){
+          navigate('/informacion/PVN')
+        }else if(data.tipoFormulario==='PVJ'){
+          navigate('/informacion/PVJ')
         }
         })
         .catch((error)=>{
@@ -147,6 +153,19 @@ export default function ValidarProveedor(){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
+      }
+    }
+    const handleClickImagen=(e)=>{
+      e = e.target.value
+      if( user.role==='cartera'){
+        /* return navigate('/inicio') */
+        return navigate('/menu/principal/Clientes')
+      }else if(user.role==='compras' || user.role==='agencias'){
+        /* return navigate('/compras') */
+        return navigate('/menu/principal/Proveedores')
+      }else{
+        /* return navigate('/inicio/admin') */
+        return navigate('/menu/principal/admin')
       }
     }
 
@@ -183,7 +202,7 @@ export default function ValidarProveedor(){
         <div className="w-100" >
         <Button style={{height:35}} onClick={(e)=>handleClickInicio(e)} variant="contained" className="d-flex justify-content-start"><IoMdPersonAdd  className="me-1" />Ir a registro</Button>
         </div>
-        <img src={Logo} style={{width:450,height:200}} />
+        <img onClick={handleClickImagen} src={Logo} style={{width:450,height:200, cursor: "pointer"}} />
       </div>
       
       <div>

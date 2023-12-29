@@ -30,12 +30,9 @@ export default function Terceros() {
     const { value } = e.target
     if(value !== "") {
       const filteredTerceros = terceros.filter((elem) => {
-        if(
-          /* elem.tipoPersona.includes(value) ||   */       
-          elem.cedula === value ||
-          elem.tipoDocumento.includes(value)||
-          elem.razonSocial.includes(value) ||
-          elem.userName.includes(value)
+        if(      
+          elem.cedula.includes(value.toUpperCase()) ||
+          elem.razonSocial.includes(value.toUpperCase())
         ) {
           return elem
         }
@@ -61,19 +58,11 @@ export default function Terceros() {
           <input
             type="search"
             value={search}
-            className="form-control form-control-sm w-100"
-            placeholder="Buscar Ciente"
+            className="form-control form-control-sm w-100 rounded-2"
+            placeholder="Buscar Cliente por 'ID' o 'Nombre'"
             onChange={searchTerceros}
             style={{width:500, fontSize:20}}
           />
-          {/* <button
-            title="Nuevo usuario"
-            className="d-flex  text-nowrap btn btn-sm btn-danger text-light gap-1" 
-            style={{fontSize:18}}
-            onClick={(e) => setShowModalUsers(!showModalUsers)}>
-              Nuevo usuario
-              <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />
-          </button> */}
         </div>
         <TableTerceros terceros={suggestions} loading={loading} style={{fontSize:20}}/>
       </div>

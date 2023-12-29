@@ -126,7 +126,7 @@ export default function MenuPrincipalAdmin(){
         <div className=" mb-3">
           <a onClick={(e)=>handleClickInicio(e)}><BotonColorCambiante>Creación Tercero</BotonColorCambiante></a>
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Tercero</BotonColorCambiante></a>
-          <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
+          <a onClick={(e)=>navigate('/sucursales')}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
         </div>
         <div className="d-flex flex-row " >
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta solicitudes</BotonColorCambiante></a>

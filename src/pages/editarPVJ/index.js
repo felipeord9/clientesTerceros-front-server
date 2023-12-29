@@ -340,7 +340,7 @@ export default function EditarPVJ(){
             setLoading(false)
             setFiles([])
             Swal.fire({
-              title: 'Creación exitosa!',
+              title: 'Actualización exitosa!',
               text: `El Proveedor "${search.razonSocial}" con Número 
               de documento "${search.cedula}" se ha actualizado de manera satisfactoria`,
               icon: 'success',
@@ -356,11 +356,7 @@ export default function EditarPVJ(){
           }) 
           .catch((err)=>{
             setLoading(false);
-            if(!data){
-              deleteFile(folderName);
-            }else{
-              deleteProveedor(data.id);
-            }
+            
             Swal.fire({
               title: "¡Ha ocurrido un error!",
               text: `
@@ -378,7 +374,7 @@ export default function EditarPVJ(){
       })
       .catch((err)=>{
         setLoading(false);
-        deleteFile(folderName);
+        
         Swal.fire({
           title: "¡Ha ocurrido un error!",
             text: `
@@ -612,7 +608,7 @@ const [colorVality,setColorVality]=useState('red');
                     type="number"
                     disabled
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     max={999999999}
                     required
                     style={{backgroundColor:'grey'}}
@@ -823,11 +819,11 @@ const [colorVality,setColorVality]=useState('red');
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 1),setDocInfrl(1))} */
-                    onChange={(e) => (handleFileChange('Rut',e),setDocRut(1),FileChange(e,4),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Rut',e),setDocRut(1),FileChange(e,1),changeSearch(e))}
                   />
-                  {selectedFiles[4] && (
+                  {selectedFiles[1] && (
                     <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
-                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[1])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
@@ -857,11 +853,11 @@ const [colorVality,setColorVality]=useState('red');
                     accept=".pdf"
                     style={{backgroundColor:'#f3f3f3'}}
                     /* onChange={(e) => (handleFileChange(e, 1),setDocInfrl(1))} */
-                    onChange={(e) => (handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,4),changeSearch(e))}
+                    onChange={(e) => (handleFileChange('Infemp',e),setDocInfemp(1),FileChange(e,2),changeSearch(e))}
                   /></div>
-                  {selectedFiles[4] && (
+                  {selectedFiles[2] && (
                     <div className="d-flex justify-content-start ps-1 pt-1" style={{width:70}}>
-                    <a href={URL.createObjectURL(selectedFiles[4])} target="_blank" rel="noopener noreferrer">
+                    <a href={URL.createObjectURL(selectedFiles[2])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>

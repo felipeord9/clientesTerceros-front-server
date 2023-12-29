@@ -32,7 +32,8 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 
 };
 
-export default function MostartInfo(){
+
+export default function MostrarPVN(){
   const { user, setUser } = useContext(AuthContext);
   const navigate =useNavigate()
     const [cedula,setCedula] = useState('');
@@ -50,6 +51,7 @@ export default function MostartInfo(){
     const [info,setInfo]=useState({
       cedula:'',
       razonSocial:'',
+      
       ciudad:'',
       direccion:'',
       celular:'',
@@ -78,6 +80,7 @@ export default function MostartInfo(){
       docCerBan:'',
       docValAnt:'',
       docOtros:'',
+
     })
     useEffect(()=>{
       const datosTercero = localStorage.getItem('data');
@@ -178,21 +181,23 @@ export default function MostartInfo(){
           tipoFormulario:data.tipoFormulario,
           solicitante:data.solicitante,
           docVinculacion:data.docVinculacion,
-          docComprAntc:data.docComprAntc,
-          docCtalnst:data.docCtalnst,
-          docPagare:data.docPagare,
-          docRut:data.docRut,
-          docCcio:data.docCcio,
-          docCrepL:data.docCrepL,
-          docEf:data.docEf,
-          docRefcom:data.docRefcom,
-          docCvbo:data.docCvbo,
-          docFirdoc:data.docFirdoc,
-          docInfemp:data.docInfemp,
-          docInfrl:data.docInfrl,
-          docCerBan:data.docCerBan,
-          docValAnt:data.docValAnt,
-          docOtros:data.docOtros,
+            docComprAntc:data.docComprAntc,
+            docCtalnst:data.docCtalnst,
+            docPagare:data.docPagare,
+            docRut:data.docRut,
+            docCcio:data.docCcio,
+            docCrepL:data.docCrepL,
+            docEf:data.docEf,
+            docRefcom:data.docRefcom,
+            docRefcom2:data.docRefcom2,
+            docRefcom3:data.docRefcom3,
+            docCvbo:data.docCvbo,
+            docFirdoc:data.docFirdoc,
+            docInfemp:data.docInfemp,
+            docInfrl:data.docInfrl,
+            docCerBan:data.docCerBan,
+            docValAnt:data.docValAnt,
+            docOtros:data.docOtros,
         })
         })
         .catch((error)=>{
@@ -234,6 +239,7 @@ export default function MostartInfo(){
       }else{
         return navigate('/validacion/admin')
       }
+      /* return navigate('/validacion/admin') */
     }
 
     const TextOfBinary =({valor})=>{
@@ -246,8 +252,7 @@ export default function MostartInfo(){
         if(valor=== 1){
           setLabelColor('#008F39')
           setNuevoTexto('Cargado')
-          setLogo({Logo_pdf})
-          
+          setLogo(({Logo_pdf}))
         }else if(valor===0){
           setLabelColor('#CB3234')
           setNuevoTexto('No fue cargado')
@@ -258,7 +263,7 @@ export default function MostartInfo(){
         }
       },[valor]);
       return (
-        <label className=" mb-2" style={{color:labelColor, height:18}}><strong className="">{nuevoTexto} {/* {mostrarImagen(valor)} */} {/* <img src={LogoPdf} style={{width:100}}></img> */}</strong></label>
+        <label className="mb-2" style={{color:labelColor, height:18}}><strong>{nuevoTexto} {/* {mostrarImagen(valor)} */}</strong></label>
       )
     }
     const mostrarImagen=(valor)=>{
@@ -266,33 +271,32 @@ export default function MostartInfo(){
         return <img src={Logo_pdf} style={{width:100}}></img>
       }
     }
-
     const [tipoForm,setTipoForm]=useState();
     const handleEditClient=(e)=>{
-      if(data.tipoFormulario==='PNC'){
-        return navigate('/editar/info/PNC')
-      }else if(data.tipoFormulario==='PNCR'){
-        return navigate('/editar/info/PNCR')
-      }else if(data.tipoFormulario==='PJC'){
-        return navigate('/editar/info/PJC')
-      }else if(data.tipoFormulario==='PJCR'){
-        return navigate('/editar/info/PJCR')
+      if(data.tipoFormulario==='PMN'){
+        return navigate('/editar/info/PMN')
+      }else if(data.tipoFormulario==='PMJ'){
+        return navigate('/editar/info/PMJ')
+      }else if(data.tipoFormulario==='PS'){
+        return navigate('/editar/info/PS')
+      }else if(data.tipoFormulario==='PVJ'){
+        return navigate('/editar/info/PVJ')
+      }else if(data.tipoFormulario==='PVN'){
+        return navigate('/editar/info/PVN')
+      }else if(data.tipoFormulario==='CCP'){
+        return navigate('/editar/info/CCP')
       }
     }
-
     return(
-      <div className=" wrapper d-flex justify-content-center w-100 h-auto m-auto" style={{userSelect:'none'}}>
-
-      <div
-        className=" login-wrapper shadow rounded-4 border border-3 p-3 pt-4 mt-5 pb-3 mb-5 overflow-auto" style={{backgroundColor:'white',width:1000}}
-      >
+      <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto " style={{userSelect:'none'}}>
+      <div className='rounder-4'>
+      <div className='login-wrapper p-2 mt-5 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
         <div className="w-100 d-flex flex-row" >
           <Button style={{height:35}} onClick={(e)=>handleClickBack(e)} variant="contained" className="d-flex justify-content-start"><RiArrowGoBackFill className="me-1" />back</Button>
-          <div style={{width:160}}></div>
-          <h1 className="mb-3"><strong>Información Del Cliente</strong></h1>
-          <div style={{width:110}}></div>
-          <button onClick={(e)=>handleEditClient(e)} style={{height:55,width:150}}><CiEdit />Actualizar</button>
-          {/* <span>{data.tipoFormulario}</span> */}
+          <div style={{width:120}}></div>
+          <h1 className="mb-3"><strong>Información Del Proveedor</strong></h1>
+          <div style={{width:90}}></div>
+          <button onClick={(e)=>navigate('/editar/info/PVN')} style={{height:55,width:150}}><CiEdit />Actualizar</button>
         </div>
       <div className="w-100 rounded-4 p-2" style={{backgroundColor:'#C7C8CA'}}>
       <div className="d-flex flex-row mt-2 mb-2">
@@ -390,13 +394,13 @@ export default function MostartInfo(){
                   )}
                 </div>
                 <div className="d-flex flex-column align-items-start w-25">
-                  <label className="me-1 fw-bold">Correo Notificaciones:</label>
+                  <label className="me-1 fw-bold">Correo Electrónico:</label>
                   {data ? (
                       <input
-                      id="correoNotificaciones"   
+                      id="correoElectronico"   
                       className="form-control form-control-sm"                   
                       disabled
-                      value={data.correoNotificaciones}
+                      value={data.correoElectronico}
                     ></input>
                   ):(
                     <p>no hay nada</p>
@@ -419,156 +423,19 @@ export default function MostartInfo(){
             <p>no hay nada</p>
           )}
         </div>
-      <div className="d-flex flex-row mt-2 mb-2">
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Vinculacion:</label>
-                  {/* <input
-                  id="docVinculacion"     
-                  value={info.docVinculacion}              
-                  className="form-control form-control-sm"                   
-                  disabled
-                  /> */}
-                  {data ? (
-
-                    <TextOfBinary valor={data.docVinculacion}>{info.docVinculacion}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docVinculacion === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Vinculacion-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  {/* <img className="pt-1" src={Logo_pdf} style={{width:100}}></img> */}
-                </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_ComprAntc:</label>
-                  {/* <input
-                  id="docComprAntc"     
-                  value={info.docComprAntc}              
-                  className="form-control form-control-sm"                   
-                  disabled
-                  >
-                  </input> */}
-                  {data ? (
-                  <TextOfBinary valor={data.docComprAntc}>{info.docComprAntc}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docComprAntc === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`ComprAntc-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_CtaInst:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docCtalnst}>{info.docCtalnst}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docCtalnst === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`CtaInst-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25">
-                  <label className="me-1 fw-bold">Doc_Pagare:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docPagare}>{info.docPagare}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docPagare === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Pagare-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-      </div>
-      
-      
-      <div className="d-flex flex-row mt-2 mb-2">
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
+      <div className="d-flex flex-row mt-2">
+                  <div className="d-flex flex-column align-items-start w-75 me-4" >
                   <label className="me-1 fw-bold">Doc_Rut:</label>
                   {data ? (
-                  <TextOfBinary valor={data.docRut}></TextOfBinary>
+                  <TextOfBinary valor={data.docRut}>{info.docRut}</TextOfBinary>
                   ):(
                     <p>no hay nada</p>
                   )}
                   {info.docRut === 1 && (
                     <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Rut-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
+                    )}
                   </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Ccio:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docCcio}>{info.docCcio}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docCcio === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Ccio-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_CrepL:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docCrepL}>{info.docCrepL}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docCrepL === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`CrepL-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25" >
-                  <label className="me-1 fw-bold">Doc_Ef:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docEf}>{info.docEf}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docEf === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Ef-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-      </div>
-      <div className="d-flex flex-row mt-2 mb-2">
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Refcom:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docRefcom}>{info.docRefcom}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docRefcom === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Refcom-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  {info.docRefcom2 === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Refcom2-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  {info.docRefcom3 === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Refcom3-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Cvbo:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docCvbo}>{info.docCvbo}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docCvbo === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Cvbo-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Firdoc:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docFirdoc}>{info.docFirdoc}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docFirdoc === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Firdoc-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25" >
+                <div className="d-flex flex-column align-items-start w-75" >
                   <label className="me-1 fw-bold">Doc_Infemp:</label>
                   {data ? (
                   <TextOfBinary valor={data.docInfemp}>{info.docInfemp}</TextOfBinary>
@@ -577,44 +444,10 @@ export default function MostartInfo(){
                   )}
                   {info.docInfemp === 1 && (
                     <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Infemp-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
+                    )}
                   </div>
-      </div>
-      <div className="d-flex flex-row mt-2 mb-2">
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_Infrl:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docInfrl}>{info.docInfrl}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docInfrl === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Infrl-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_CerBan:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docCerBan}>{info.docCerBan}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docCerBan === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Certban-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 me-4" >
-                  <label className="me-1 fw-bold">Doc_ValAnt:</label>
-                  {data ? (
-                  <TextOfBinary valor={data.docValAnt}>{info.docValAnt}</TextOfBinary>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
-                  {info.docValAnt === 1 && (
-                    <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`ValAnt-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
-                  </div>
-                <div className="d-flex flex-column align-items-start w-25 " >
+                
+                <div className="d-flex flex-column align-items-start w-75 " >
                   <label className="me-1 fw-bold">Doc_Otros:</label>
                   {data ? (
                   <TextOfBinary valor={data.docOtros}>{info.docOtros}</TextOfBinary>
@@ -623,12 +456,12 @@ export default function MostartInfo(){
                   )}
                   {info.docOtros === 1 && (
                     <CarpetaArchivoLink carpeta={`${info.cedula}-${info.primerApellido}-${info.segundoApellido}-${info.primerNombre}-${info.otrosNombres}`} archivo={`Otros-${info.primerApellido} ${info.segundoApellido} ${info.primerNombre} ${info.otrosNombres}.pdf`}/>
-                  )}
+                    )}
                   </div>
       </div>
       <center>
-      <div className="d-flex flex-row mt-4 mb-2">
-                <div className="d-flex flex-column align-items-start w-25 me-5" >
+      <div className="d-flex flex-row mt-2 mb-2">
+                <div className="d-flex flex-column align-items-start w-75 me-5" >
                   <label className="me-1 fw-bold">Fecha Creación:</label>
                   {data ? (
                       <input
@@ -641,7 +474,7 @@ export default function MostartInfo(){
                     <p>no hay nada</p>
                   )}
                 </div>
-                <div className="d-flex flex-column align-items-start w-25 me-5" >
+                <div className="d-flex flex-column align-items-start w-75 me-5" >
                   <label className="me-1 fw-bold">Usuario Creador:</label>
                   {data ? (
                       <input
@@ -654,7 +487,7 @@ export default function MostartInfo(){
                     <p>no hay nada</p>
                   )}
                 </div>
-                <div className="d-flex flex-column align-items-start w-25 " >
+                <div className="d-flex flex-column align-items-start w-75 ">
                   <label className="me-1 fw-bold">Tipo formato:</label>
                   {data ? (
                       <input
@@ -662,7 +495,6 @@ export default function MostartInfo(){
                       className="form-control form-control-sm"                   
                       disabled
                       value={data.tipoFormulario}
-                      onChange={(e)=>setTipoForm(e)}
                     ></input>
                   ):(
                     <p>no hay nada</p>
@@ -671,9 +503,8 @@ export default function MostartInfo(){
       </div>
       </center>
       </div>
+      </div>
     </div>
     </div>
-    
-
     )
-}
+                  }

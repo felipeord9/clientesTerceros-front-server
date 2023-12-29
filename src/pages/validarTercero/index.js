@@ -115,13 +115,15 @@ export default function ValidarTercero(){
           })
           localStorage.setItem('data',JSON.stringify(data));
           if(data.tipoFormulario==='PNC'){
-            navigate('/info/validacion')
+            navigate('/informacion/PNC')
           }else if(data.tipoFormulario==='PNCR'){
-            navigate('/info/validacion')
+            navigate('/informacion/PNCR')
           }else if(data.tipoFormulario==='PJC'){
-            navigate('/info/valid')
+            navigate('/informacion/PJC')
           }else if(data.tipoFormulario==='PJCR'){
-            navigate('/info/valid')
+            navigate('/informacion/PJCR')
+          }else if(data.tipoFormulario==='CCP'){
+            navigate('/informacion/CCP')
           }
           })
           .catch((error)=>{
@@ -239,7 +241,19 @@ export default function ValidarTercero(){
         <label className="" style={{color:labelColor, height:18}}><strong>{nuevoTexto}</strong></label>
       )
     }
-
+    const handleClickImagen=(e)=>{
+      e = e.target.value
+      if( user.role==='cartera'){
+        /* return navigate('/inicio') */
+        return navigate('/menu/principal/Clientes')
+      }else if(user.role==='compras' || user.role==='agencias'){
+        /* return navigate('/compras') */
+        return navigate('/menu/principal/Proveedores')
+      }else{
+        /* return navigate('/inicio/admin') */
+        return navigate('/menu/principal/admin')
+      }
+    }
     return(
       <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto "style={{userSelect:'none'}}>
       <div className='rounder-4'>
@@ -251,7 +265,7 @@ export default function ValidarTercero(){
         <div className="w-100" >
           <Button style={{height:35}} onClick={(e)=>handleClickInicio(e)} variant="contained" className="d-flex justify-content-start"><IoMdPersonAdd  className="me-1" />Ir a registro</Button>
         </div>
-        <img src={Logo} style={{width:450,height:200}} />
+        <img onClick={handleClickImagen} src={Logo} style={{width:450,height:200, cursor: "pointer"}} />
       </div>
       
       <div>

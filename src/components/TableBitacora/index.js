@@ -46,7 +46,7 @@ export default function TableBitacora({ bitacoras, loading }) {
       className="wrapper justify-content-center d-flex flex-column rounded" style={{userSelect:'none',fontSize:20}}
     >
     <div className='rounder-4'>
-    <div className='login-wrapper rounder-4' style={{width:1000,height:400}} >
+    <div className='login-wrapper rounder-4' style={{width:1000,height:430}} >
       <DataTable
         className="bg-light text-center border border-2 h-100 w-100"
         columns={columns}

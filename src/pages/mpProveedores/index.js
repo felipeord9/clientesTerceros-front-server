@@ -54,6 +54,7 @@ export default function MenuPrincipalProveedores(){
       }else{
         return navigate('/validacion/admin')
       }
+      /* return navigate('/validacion/admin') */
     }
 
     const TextOfBinary =({valor})=>{

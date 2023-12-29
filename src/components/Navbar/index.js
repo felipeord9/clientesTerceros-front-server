@@ -121,8 +121,8 @@ export default function Navbar() {
     <>
       {isLogged && (
         <div
-          className="position-fixed bg-light shadow w-100"
-          style={{ fontSize: 20, left: 0, height: "60px", zIndex: 2, userSelect:'none' }}
+          className="position-fixed shadow w-100"
+          style={{ fontSize: 20, left: 0, height: "60px", zIndex: 2, userSelect:'none', backgroundColor:'white' }}
         >
           <div className="d-flex flex-row justify-content-between w-100 h-100 px-4 shadow">
             <div

@@ -54,6 +54,7 @@ export default function MenuPrincipalClientes(){
       }else{
         return navigate('/validacion/admin')
       }
+      /* return navigate('/validacion/admin') */
     }
 
     const TextOfBinary =({valor})=>{
@@ -133,7 +134,7 @@ export default function MenuPrincipalClientes(){
         <div className=" mb-3">
           <a onClick={(e)=>handleClickInicio(e)}><BotonColorCambiante>Creación Cliente</BotonColorCambiante></a>
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Cliente</BotonColorCambiante></a>
-          <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
+          <a onClick={(e)=>navigate('/sucursales')}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
         </div>
         </div>
         </center>

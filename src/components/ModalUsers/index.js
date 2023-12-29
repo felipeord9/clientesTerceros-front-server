@@ -126,7 +126,18 @@ export default function ModalUsers({
   }
   const [shown,setShown]=useState("");
   const switchShown =()=>setShown(!shown);
-  
+  const [Validacion, setValidacion] = useState('');
+  const [Span,setSpan]=useState('red')
+  const manejarCambio = (event) => {
+    const nuevoValor = event.target.value;
+    if (nuevoValor.includes('@') && nuevoValor.split('@')[1].includes('.')) {   
+      setValidacion('✓');
+      setSpan('green') // Limpiar mensaje de validación si es válido
+    } else {
+      setValidacion('X');
+      setSpan('red')
+    }
+  }
   return (
     <div className="wrapper d-flex justify-content-center align-content-center" style={{userSelect:'none'}}>
     <Modal show={showModal} style={{ fontSize: 18, userSelect:'none' }} centered>
@@ -151,7 +162,7 @@ export default function ModalUsers({
                   required
                 >
                   <option selected disabled value="">
-                    -- Seleccione un rol --
+                    --- Seleccione el Rol del Usuario ---
                   </option>
                   <option value="agencias">AGENCIAS</option>
                   <option value='cartera'>CARTERA</option>
@@ -160,10 +171,10 @@ export default function ModalUsers({
                 </select>
               </div>
               <div>
-                <label className="fw-bold">Identificador</label>
+                <label className="fw-bold">Número De Identificación</label>
                 <input
                   id="rowId"
-                  type="text"
+                  type="number"
                   value={info.rowId}
                   className="form-control form-control-sm"
                   maxLength={10}
@@ -186,31 +197,39 @@ export default function ModalUsers({
               </div>
               <div>
                 <label className="fw-bold">Correo</label>
+                <div className="d-flex flex-row">
                 <input
                   id="email"
                   type="email"
-                  value={info.email}
+                  value={info.email.toLowerCase()}
                   className="form-control form-control-sm"
-                  onChange={handleChange}
+                  onChange={(e)=>(handleChange(e),manejarCambio(e))}
                   autoComplete="off"
+                  placeholder="Este correo será el usuario de entrada a la app"
                   required
                 />
+                <label className="ms-3 me-1" style={{color:Span}}><strong>{Validacion}</strong></label>
+                </div>
               </div>
               {!user && (
                 <div>
                   <label className="fw-bold" for='password'>Contraseña</label>
+                  <div className="d-flex flex-row">
                   <input
                     id="password"
-                    /* type={shown ? 'text':'password'} */
-                    type="text"
+                    type={shown ? 'text':'password'}
+                    /* type="text" */
                     value={info.password}
                     className="form-control form-control-sm"
-                    minLength={8}
+                    minLength={6}
+                    placeholder="Contraseña de entrada a la app"
                     onChange={handleChange}
                     autoComplete="off"
-                    required></input>
-{/*                   <span for='password' className='position-absolute' onClick={switchShown} style={{ right: 10, cursor: "pointer",fontSize:25 }}>{shown ? <Bs.BsEye/>:<Bs.BsEyeSlash/>}</span>
- */}                </div>
+                    required>
+                    </input>
+                    <label for='password' className='ms-2 d-flex justify-content-center' onClick={switchShown} style={{ right: 10, cursor: "pointer",fontSize:25 }}>{shown ? <Bs.BsEye/>:<Bs.BsEyeSlash/>}</label>
+                  </div>
+                </div>
                )} 
             </div>
             <div className="d-flex w-100 mt-2">
@@ -225,13 +244,13 @@ export default function ModalUsers({
               {/* <Button type="submit" variant="success">
                 {user ? "Guardar Cambios" : "Guardar"}
               </Button> */}
-              <button className="me-5" type="submit">{user ? "Guardar Cambios" : "Guardar"}</button>
+              <button className="me-5" type="submit">{user ? "Guardar Cambios" : "Registrar"}</button>
               <Button variant="secondary" onClick={(e) => {
                 setShowModal(false)
                 cleanForm()
                 setUser(null)
               }}>
-                Cancelar
+                Descartar
               </Button>
             </div>
           </form>

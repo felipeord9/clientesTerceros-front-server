@@ -31,8 +31,6 @@ import Terceros from './pages/terceros';
 import ValidarTercero from './pages/validarTercero';
 import ValidarProveedor from './pages/validarProveedor';
 import ValidacionAdmin from './pages/validacion';
-import MostartInfo from './pages/mostrarInfo';
-import MostrarProveedor from './pages/mostrarProveedor';
 import EditarPNC from './pages/editPNC';
 import EditarPNCR from './pages/editarPNCR';
 import EditarPJC from './pages/editarPJC';
@@ -45,9 +43,20 @@ import EditarPVJ from './pages/editarPVJ';
 import MenuPrincipalAdmin from './pages/mpAdmin';
 import MenuPrincipalClientes from './pages/mpClientes';
 import MenuPrincipalProveedores from './pages/mpProveedores';
-import ShowInfoWithRzs from './pages/showWithRzs';
-import ShowProveedorWithRzs from './pages/showProRzs';
 import MpPrueba from './pages/mpPrueba';
+import Parqueaderos from './pages/parqueaderos';
+import EditarCCP from './pages/editarCCP';
+import Sucursales from './pages/sucursales';
+import MostartPNCR from './pages/mostrarPNCR';
+import MostartPNC from './pages/mostrarPNC';
+import MostrarPMN from './pages/mostrarPMN';
+import MostrarPJCR from './pages/mostrarPJCR';
+import MostrarPJC from './pages/mostrarPJC';
+import MostrarCCP from './pages/mostrarCCP';
+import MostrarPS from './pages/mostrarPS';
+import MostrarPVN from './pages/mostrarPVN';
+import MostrarPMJ from './pages/mostrarPMJ';
+import MostrarPVJ from './pages/mostrarPVJ';
 
 function App() {
   return(
@@ -60,7 +69,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
 {/*         <Route path='/recovery/password' element={<RecoveryPassword/>}/>
  */}        <Route path='/send/recovery' element={<SendRecovery/>}/>
-        <Route path='/recuperacion/contrasena//:token' element={<RecoveryPassword/>} />
+        <Route path='/recuperacion/contrasena/:token' element={<RecoveryPassword/>} />
 
         {/* Validacion de tercero */}
         <Route path='/validar/tercero' element={<PrivateRoute component={ValidarTercero}/>}/>
@@ -68,11 +77,16 @@ function App() {
         <Route path='/validacion/admin' element={<PrivateRoute component={ValidacionAdmin}/>}/>
 
         {/* Mostrar validacion */}
-        <Route path='/info/validacion' element={<PrivateRoute component={MostartInfo}/>}/>
-        <Route path='/info/valid' element={<PrivateRoute component={ShowInfoWithRzs}/>}/>
-        <Route path='/informacion/validacion' element={<PrivateRoute component={MostrarProveedor}/>}/>
-        <Route path='/informacion/valid' element={<PrivateRoute component={ShowProveedorWithRzs}/>}/>
-
+        <Route path='/informacion/PNC' element={<PrivateRoute component={MostartPNC}/>}/>
+        <Route path='/informacion/PNCR' element={<PrivateRoute component={MostartPNCR}/>}/>
+        <Route path='/informacion/PJC' element={<PrivateRoute component={MostrarPJC}/>}/>
+        <Route path='/informacion/PJCR' element={<PrivateRoute component={MostrarPJCR}/>}/>
+        <Route path='/informacion/CCP' element={<PrivateRoute component={MostrarCCP}/>}/>
+        <Route path='/informacion/PMN' element={<PrivateRoute component={MostrarPMN}/>}/>
+        <Route path='/informacion/PS' element={<PrivateRoute component={MostrarPS}/>}/>
+        <Route path='/informacion/PVN' element={<PrivateRoute component={MostrarPVN}/>}/>
+        <Route path='/informacion/PMJ' element={<PrivateRoute component={MostrarPMJ}/>}/>
+        <Route path='/informacion/PVJ' element={<PrivateRoute component={MostrarPVJ}/>}/>
 
         {/* Editar informacion validada */}
         <Route path='/editar/info/PNC' element={<PrivateRoute component={EditarPNC}/>}/>
@@ -84,6 +98,7 @@ function App() {
         <Route path='/editar/info/PS' element={<PrivateRoute component={EditPS}/>}/>
         <Route path='/editar/info/PVN' element={<PrivateRoute component={EditPVN}/>}/>
         <Route path='/editar/info/PVJ' element={<PrivateRoute component={EditarPVJ}/>}/>
+        <Route path='/editar/info/CCP' element={<PrivateRoute component={EditarCCP}/>}/>
 
         {/* menus principales */}
         <Route path='/menu/principal/admin' element={<PrivateRoute component={MenuPrincipalAdmin}/>}/>
@@ -91,34 +106,32 @@ function App() {
         <Route path='/menu/principal/Proveedores' element={<PrivateRoute component={MenuPrincipalProveedores}/>}/>
         <Route path='/menu/principal/Prueba' element={<PrivateRoute component={MpPrueba}/>}/>
 
+        {/* inicio admin */}
+        <Route path='/inicio/admin' element={<PrivateRoute component={InicioAdmin}/>}/>
         {/* Inicios agencias y cartera */}
         <Route path='/inicio' element={<PrivateRoute component={Inicio}/>}/>
-
         {/* inicio compras */}
         <Route path='/compras' element={<PrivateRoute component={Inicio2}/>}/>
-        {/* ruta proveedor/convenio - natural */}
+        {/* ruta proveedor/convenio */}
         <Route path='/tipo/persona' element={<PrivateRoute component={TipoPersona}/>}/>
         <Route path='/proveedor/convenio/natural' element={<PrivateRoute component={ConvenioNatural}/>}/>
         <Route path='/proveedor/convenio/juridica' element={<PrivateRoute component={ConvenioJuridico}/>}/>
-
         {/* ruta prestador de servicios */}
         <Route path='/prestador/servicios' element={<PrivateRoute component={PrestadorServicios}/>}/>
-
         {/* ruta proveedor varios  */}
         <Route path='/tipo/proveedor' element={<PrivateRoute component={Tipo}/>}/>
         <Route path='/proveedor/varios/natural' element={<PrivateRoute component={VariosNatural}/>}/>
         <Route path='/proveedor/varios/juridico' element={<PrivateRoute component={VariosJuridico}/>}/>
 
-        {/* inicio admin */}
-        <Route path='/inicio/admin' element={<PrivateRoute component={InicioAdmin}/>}/>
-
         <Route path='/contado/persona/natural' element={<PrivateRoute component={ContadoPersonaNatural}/>}/>
         <Route path='/contado/persona/juridica' element={<PrivateRoute component={ContadoPersonaJuridica}/>}/>
         <Route path='/credito/persona/natural' element={<PrivateRoute component={CreditoPersonaNatural}/>}/>
         <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
+        <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />
         <Route path='/change/password' element={<PrivateRoute component={ChangePassword}/>}/>
         <Route path='/usuarios' element={<PrivateRoute component={Users}/>}/>
         <Route path='/terceros' element={<PrivateRoute component={Terceros}/>}/>
+        <Route path='/sucursales' element={<PrivateRoute component={Sucursales}/>}/>
         <Route path='/Proveedores' element={<PrivateRoute component={Proveedores}/>}/>
         <Route path='/bitacora' element={<PrivateRoute component={Bitacora}/>}/>
         <Route path='*' element={<Page404/>}/>

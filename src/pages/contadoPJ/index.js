@@ -17,6 +17,7 @@ import { getAllAgencies } from "../../services/agencyService";
 import { getAllClasificaciones } from "../../services/clasificacionService";
 import { getAllDocuments } from '../../services/documentService';
 import { createCliente, deleteCliente } from "../../services/clienteService";
+import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import { FaFileDownload } from "react-icons/fa";
@@ -287,6 +288,29 @@ export default function ContadoPersonaJuridica(){
         const clientName = search.razonSocial.toUpperCase();
         formData.append('clientName',clientName)
         //ejecutamos nuestra funcion que creara el cliente
+        const sucur = {
+          cedula: search.cedula,
+          codigoSucursal: 1,
+          nombreSucursal: search.razonSocial.toUpperCase()+' - '+ search.nombreSucursal.toUpperCase(),
+          direccion: search.direccionSucursal,
+          ciudad: city.description,
+          celular: search.celularSucursal,
+          correoFacturaElectronica: search.correoSucursal,
+          nombreContacto: search.razonSocial.toUpperCase(),
+          celularContacto: search.celular,
+          correoContacto: search.correoNotificaciones,
+          createdAt:new Date(),
+          userName:user.name
+        }
+        createSucursal(sucur)
+        .then(()=>{
+          console.log('sucursal creada')
+        }).catch((err)=>{
+          Swal.fire({
+            title:'¡Uops!',
+            text:'Ha ocurrido un error al momento de crear la sucursal de este cliente. Informa a el área de sistemas.'
+          })
+        })
         createCliente(body)
         .then(({data}) => {
           const info={
@@ -313,6 +337,7 @@ export default function ContadoPersonaJuridica(){
           }) 
           .catch((err)=>{
             setLoading(false);
+            deleteSucursalByName(search.nombreSucursal.toUpperCase());
             if(!data){
               deleteFile(folderName);
             }else{
@@ -534,7 +559,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     max={999999999}
                     required
                     pattern="[0-9]"

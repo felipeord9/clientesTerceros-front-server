@@ -64,6 +64,9 @@ export default function Inicio2(){
                 <hr style={{width:300, color:'black'}}/></center>
                 <MenuItem value={30} onClick={(e)=>navigate('/contado/persona/juridica')}>persona <strong className="ps-2 pe-1" style={{color:'blue'}}> JURÍDICA</strong> - pago a<strong className="ps-2 ">CONTADO</strong></MenuItem>
                 <MenuItem value={40} onClick={(e)=>navigate('/credito/persona/juridica')}>persona <strong className="ps-2 pe-1" style={{color:'blue'}}> JURÍDICA</strong> - pago a<strong className="ps-2 text-danger">CRÉDITO</strong></MenuItem>
+                <center>
+                <hr style={{width:300, color:'black'}}/></center>
+                <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><strong className="">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem>
                 </Select>
               </FormControl>
             </Box>

@@ -386,7 +386,7 @@ export default function EditPNC(){
       })
       .catch((err)=>{
         setLoading(false);
-        deleteFile(folderName);
+        
         Swal.fire({
           title: "¡Ha ocurrido un error!",
             text: `
@@ -723,7 +723,7 @@ const [colorVality,setColorVality]=useState('red');
                     id="cedula"
                     type="number" 
                     className="form-control form-control-sm w-100"
-                    min={10000000}
+                    min={10000}
                     name="cedula"
                     pattern="[0-9]"
                     value={search.cedula}

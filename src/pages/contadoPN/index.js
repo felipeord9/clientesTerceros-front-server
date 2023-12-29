@@ -6,6 +6,7 @@ import "./styles.css";
 import { FaEye } from "react-icons/fa";
 import DepartmentContext  from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
+import { createSucursal, deleteSucursalByName } from '../../services/sucursalService';
 import { createCliente, deleteCliente } from '../../services/clienteService';
 import { Navigate } from "react-router-dom";
 import { getAllPrecios } from "../../services/precioService";
@@ -287,6 +288,29 @@ export default function ContadoPersonaNatural(){
         /* const clientName = search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(); */
         formData.append('clientName',clientName)
         //ejecutamos nuestra funcion que creara el cliente
+        const sucur = {
+          cedula: search.cedula,
+          codigoSucursal: 1,
+          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(),
+          direccion: search.direccion,
+          ciudad: ciudad.description,
+          celular: search.celular,
+          correoFacturaElectronica: search.correoFacturaElectronica,
+          nombreContacto: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(),
+          celularContacto: search.celular,
+          correoContacto: search.correoNotificaciones,
+          createdAt:new Date(),
+          userName:user.name
+        }
+        createSucursal(sucur)
+        .then(()=>{
+          console.log('sucursal creada')
+        }).catch((err)=>{
+          Swal.fire({
+            title:'¡Uops!',
+            text:'Ha ocurrido un error al momento de crear la sucursal de este cliente. Informa a el área de sistemas.'
+          })
+        })
         createCliente(body)
         .then(({data}) => {
           const info={
@@ -313,6 +337,7 @@ export default function ContadoPersonaNatural(){
           }) 
           .catch((err)=>{
             setLoading(false);
+            deleteSucursalByName(search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase());
             if(!data){
               deleteFile(folderName);
             }else{
@@ -603,7 +628,7 @@ const [colorVality,setColorVality]=useState('red');
                     id="cedula"
                     type="number" 
                     className="form-control form-control-sm w-100"
-                    min={10000000}
+                    min={10000}
                     name="cedula"
                     pattern="[0-9]"
                     value={search.cedula}

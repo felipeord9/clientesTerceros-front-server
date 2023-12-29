@@ -32,10 +32,8 @@ export default function Proveedores() {
       const filteredProveedores = proveedores.filter((elem) => {
         if(
           /* elem.tipoPersona.includes(value) ||   */       
-          elem.cedula === value ||
-          elem.tipoDocumento.includes(value)||
-          elem.razonSocial.includes(value) ||
-          elem.userName.includes(value)
+          elem.cedula.includes(value.toUpperCase()) ||
+          elem.razonSocial.includes(value.toUpperCase())
         ) {
           return elem
         }
@@ -61,8 +59,8 @@ export default function Proveedores() {
           <input
             type="search"
             value={search}
-            className="form-control form-control-sm w-100"
-            placeholder="Buscar Proveedor"
+            className="form-control form-control-sm w-100 rounded-2"
+            placeholder="Buscar Proveedor por 'ID' o 'Nombre'"
             onChange={searchProveedores}
             style={{width:500, fontSize:20}}
           />

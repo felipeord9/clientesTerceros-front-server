@@ -307,10 +307,9 @@ export default function TableProveedores({ proveedores, loading }) {
   
   return (
     <div
-      className="wrapper justify-content-center d-flex flex-column rounded" style={{userSelect:'none',fontSize:20}}
+      className="wrapper justify-content-center d-flex flex-column rounded w-100 h-100" style={{userSelect:'none',fontSize:20}}
     >
-    <div className='rounder-4'>
-    <div className='login-wrapper rounder-4' style={{width:1050,height:400}} >
+    <div className='login-wrapper justify-content-center shadow border border-2 rounded-4 ' style={{width:1000,height:400,backgroundColor:'white'}} >
       <DataTable
         className="bg-light text-center border border-2 h-100 w-100"
         style={{fontSize:20}}
@@ -335,7 +334,6 @@ export default function TableProveedores({ proveedores, loading }) {
         noDataComponent={
           <div style={{padding: 24}}>Ningún resultado encontrado...</div>} 
       />
-      </div>
       </div>
     </div>
   )

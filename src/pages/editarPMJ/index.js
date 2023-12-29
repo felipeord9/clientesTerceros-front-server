@@ -373,7 +373,7 @@ export default function EditarPMJ(){
             setLoading(false)
             setFiles([])
             Swal.fire({
-              title: 'Creación exitosa!',
+              title: 'Actualización exitosa!',
               text: `El Proveedor "${search.razonSocial}" con Número 
               de documento "${search.cedula}" se ha actualizado de manera satisfactoria`,
               icon: 'success',
@@ -389,11 +389,7 @@ export default function EditarPMJ(){
           }) 
           .catch((err)=>{
             setLoading(false);
-            if(!data){
-              deleteFile(folderName);
-            }else{
-              deleteProveedor(data.id);
-            }
+            
             Swal.fire({
               title: "¡Ha ocurrido un error!",
               text: `
@@ -411,7 +407,7 @@ export default function EditarPMJ(){
       })
       .catch((err)=>{
         setLoading(false);
-        deleteFile(folderName);
+        
         Swal.fire({
           title: "¡Ha ocurrido un error!",
             text: `
@@ -656,7 +652,7 @@ const [colorVality,setColorVality]=useState('red');
                     type="number"
                     disabled
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     max={999999999}
                     required
                     style={{backgroundColor:'grey'}}

@@ -546,7 +546,7 @@ const [colorVality,setColorVality]=useState('red');
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     max={999999999}
                     required
                     pattern="[0-9]"

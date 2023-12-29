@@ -54,14 +54,14 @@ export default function Bitacora() {
       <h1 className="text-danger fw-bold">Listado Bitacora (registro de actividad)</h1>
       <div className="d-flex flex-column gap-1 h-100">
         <div className="d-flex justify-content-end mt-1 gap-3 mb-1">
-          <input
+          {/* <input
             type="search"
             value={search}
             className="form-control form-control-sm w-100"
             placeholder="Buscar Registro"
             onChange={searchBitacoras}
             style={{width:500, fontSize:20}}
-          />
+          /> */}
           {/* <button
             title="Nuevo usuario"
             className="d-flex  text-nowrap btn btn-sm btn-danger text-light gap-1" 
