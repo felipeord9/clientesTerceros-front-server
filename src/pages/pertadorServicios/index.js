@@ -18,6 +18,7 @@ import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOL
 import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { FaFileDownload } from "react-icons/fa";
 import { updateBitacora } from '../../services/bitacoraService';
+import NewFormProvee from '../../pdfs/SALF-01 FORMATO VINCULACION DE PROVEEDORES.pdf'
 
 export default function PrestadorServicios(){
   /* instancias de contexto */
@@ -726,7 +727,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="me-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:290}}>FORMATO DE VINCULACIÓN PROVEE: </label>
-                  <a className="" style={{fontSize:17}} href={VinculacionProveedor} download="VINCULACION DE PROVEEDORES.pdf">
+                  {/* <a className="" style={{fontSize:17}} href={VinculacionProveedor} download="VINCULACION DE PROVEEDORES.pdf"> */}
+                  <a className="" style={{fontSize:17}} href={NewFormProvee} download="SALF-01 FORMATO VINCULACION DE PROVEEDORES.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>

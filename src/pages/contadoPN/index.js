@@ -21,7 +21,7 @@ import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import { FaFileDownload } from "react-icons/fa";
-import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
+import NewFormCliente from '../../pdfs/SALF-11 FORMATO  VINCULACION CLIENTES.pdf';
 
 export default function ContadoPersonaNatural(){
   /* instancias de contexto */
@@ -291,7 +291,7 @@ export default function ContadoPersonaNatural(){
         const sucur = {
           cedula: search.cedula,
           codigoSucursal: 1,
-          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(),
+          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
           ciudad: ciudad.description,
           celular: search.celular,
@@ -895,7 +895,8 @@ const [colorVality,setColorVality]=useState('red');
               <div className="me-2 w-50">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:280}}>FORMATO DE VINCULACIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={NewFormCliente} download="SALF-11 FORMATO  VINCULACION CLIENTES.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>

@@ -21,7 +21,7 @@ import { createSucursal, deleteSucursalByName } from "../../services/sucursalSer
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import { FaFileDownload } from "react-icons/fa";
-import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
+import NewFormCliente from '../../pdfs/SALF-11 FORMATO  VINCULACION CLIENTES.pdf';
 
 export default function ContadoPersonaJuridica(){
   /* instancias de contexto */
@@ -559,7 +559,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000}
+                    min={100000000}
                     max={999999999}
                     required
                     pattern="[0-9]"
@@ -988,7 +988,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     onChange={handlerChangeSearch}
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     required
                     pattern="[0-9]"
                     max={9999999999} 
@@ -1049,7 +1049,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="me-2 w-50">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:280}}>FORMATO DE VINCULACIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={NewFormCliente} download="SALF-11 FORMATO  VINCULACION CLIENTES.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>

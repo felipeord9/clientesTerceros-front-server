@@ -30,6 +30,8 @@ import { FaEye } from "react-icons/fa";
 import Mas from '../../assest/Mas.png'
 import { updateBitacora } from '../../services/bitacoraService';
 import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
+import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
+import NewVinCliente from '../../pdfs/SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 
 export default function CreditoPersonaNatural(){
   /* instancias de contexto */
@@ -352,7 +354,7 @@ export default function CreditoPersonaNatural(){
         const sucur = {
           cedula: search.cedula,
           codigoSucursal: 1,
-          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase(),
+          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
           ciudad: ciudad.description,
           celular: search.celular,
@@ -640,7 +642,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="d-flex flex-row align-items-start w-100">
                   <label className="me-1">Tipo documento:</label>
                   <select
-                  style={{width:250}}
+                  style={{width:245}}
                     ref={selectDocumentoRef}
                     className="form-select form-select-sm m-100 me-3"
                     onChange={(e)=>setDocument(JSON.parse(e.target.value))}
@@ -930,7 +932,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="me-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:280}}>FORMATO DE VINCULACIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={NewVinCliente} download="SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>
@@ -957,7 +960,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="ms-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1 " style={{width:280}}>COMPROMISO ANTICORRUPCIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={ComproAntiCorrup} download="SALF-05 COMPROMISO ANTICORRUPCION.pdf">
                   <FaFileDownload />{/* <IoMdDownload /> */}Descargar
                   </a>
                   </div>

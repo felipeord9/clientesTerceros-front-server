@@ -269,7 +269,7 @@ export default function Parqueaderos(){
         const sucur = {
           cedula: search.cedula,
           codigoSucursal: 1,
-          nombreSucursal: search.razonSocial.toUpperCase(),
+          nombreSucursal: search.razonSocial.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
           ciudad: ciudad.description,
           celular: search.celular,
@@ -519,7 +519,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     type="number"
                     className="form-control form-control-sm"
                     min={10000}
-                    max={999999999}
+                    max={9999999999}
                     required
                     pattern="[0-9]"
                     value={search.cedula}

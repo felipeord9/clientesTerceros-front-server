@@ -469,7 +469,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000}
+                    min={100000000}
                     max={999999999}
                     required
                     pattern="[0-9]"

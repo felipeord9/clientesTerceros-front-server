@@ -30,8 +30,15 @@ export default function SendRecoveryPassword() {
         navigate('/login')
       })
       .catch((error) => {
-        setError(error)
-        setTimeout(() => setError(''), 2500)
+        /* setError(error)
+        setTimeout(() => setError(''), 2500) */
+        Swal.fire({
+          title:'¡Uops!',
+          text:'Ha ocurrido un error a la hora de mandar el correo electrónico. Verificalo y vuelve a intentarlo. Si el problema persiste comunicate con el área de sistemas.',
+          showConfirmButton:true,
+          confirmButtonText:'OK',
+          confirmButtonColor:'#D92121'
+        })
       })
   }
 

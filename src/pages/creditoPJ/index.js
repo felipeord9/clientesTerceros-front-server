@@ -25,6 +25,8 @@ import { updateBitacora } from '../../services/bitacoraService';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
+import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
+import NewVinCliente from '../../pdfs/SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 
 export default function CreditoPersonaJuridica(){
   /* instancias de contexto */
@@ -654,7 +656,7 @@ const [fileInputs, setFileInputs] = useState([]);
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000}
+                    min={100000000}
                     max={999999999}
                     required
                     pattern="[0-9]"
@@ -1082,7 +1084,7 @@ const [fileInputs, setFileInputs] = useState([]);
                     id="numeroDocRepLegal"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     max={9999999999}
                     pattern="[0-9]"
                     value={search.numeroDocRepLegal}
@@ -1147,7 +1149,8 @@ const [fileInputs, setFileInputs] = useState([]);
                 <div className="me-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1 w-75" /* style={{width:200}} */>FORMATO DE VINCULACIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={VinculacionCliente} download="FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={NewVinCliente} download="SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>
@@ -1174,7 +1177,8 @@ const [fileInputs, setFileInputs] = useState([]);
                 <div className="ms-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1 w-75">COMPROMISO ANTICORRUPCIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={ComproAntiCorrup} download="SALF-05 COMPROMISO ANTICORRUPCION.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>

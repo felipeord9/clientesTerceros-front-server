@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect , useRef} from "react"
 import Logo from '../../assest/logo-gran-langostino.png'
 import useUser from '../../hooks/useUser';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import Logo_pdf from '../../assest/logo_pdf.jpg'
 import { CiEdit } from "react-icons/ci";
 import { config } from "../../config";
+import { getAllCiudades } from "../../services/ciudadService";
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const url = `${config.apiUrl2}/uploadMultiple/obtener-archivo/${carpeta}/${archivo}`;
@@ -85,6 +86,19 @@ export default function MostrarPJCR(){
         setData(JSON.parse(datosTercero));
         setInfo(JSON.parse(datosTercero));
       }
+    },[]);
+    const ChangeInput = (e) => {
+      const { id, value } = e.target;
+      setInfo({
+        ...info,
+        [id]: value,
+      });
+    };
+    const [ciudades,setCiudades] = useState([]);
+
+    const selectCiudadRef=useRef();
+    useEffect(()=>{
+      getAllCiudades().then((data) => setCiudades(data));
     },[]);
     const [data,setData]=useState(null);
     const handleSearch = (e) =>{
@@ -366,7 +380,25 @@ export default function MostrarPJCR(){
                 </div>
                 <div className="d-flex flex-column align-items-start w-25 me-4">
                   <label className="me-1 fw-bold">Ciudad:</label>
-                  {data ? (
+                  <select
+                    id="ciudad"
+                    value={info.ciudad}
+                    className="form-select form-select-sm w-100"
+                    required
+                    onChange={ChangeInput}
+                    disabled
+                  >
+                  {ciudades
+                  .sort((a,b)=>a.id - b.id)
+                  .map((elem)=>(
+                    <option id={elem.id} value={elem.codigo}>
+                    {elem.description}
+                    </option>
+                    
+                  ))
+                }
+                  </select>
+                  {/* {data ? (
                       <input
                       id="ciudad"   
                       className="form-control form-control-sm"                   
@@ -375,7 +407,7 @@ export default function MostrarPJCR(){
                     ></input>
                   ):(
                     <p>no hay nada</p>
-                  )}
+                  )} */}
                 </div>
                 <div className="d-flex flex-column align-items-start w-25 me-4">
                   <label className="me-1 fw-bold">Teléfono Celular:</label>

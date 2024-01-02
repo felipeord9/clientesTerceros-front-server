@@ -21,6 +21,8 @@ import { updateBitacora } from '../../services/bitacoraService';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { MdNoteAdd } from "react-icons/md";
+import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
+import NewFormProvee from '../../pdfs/SALF-01 FORMATO VINCULACION DE PROVEEDORES.pdf'
 
 export default function ConvenioJuridico(){
   /* instancias de contexto */
@@ -546,7 +548,7 @@ const [colorVality,setColorVality]=useState('red');
                     id="cedula"
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000}
+                    min={100000000}
                     max={999999999}
                     required
                     pattern="[0-9]"
@@ -782,7 +784,7 @@ const [colorVality,setColorVality]=useState('red');
                     onChange={handlerChangeSearch}
                     type="number"
                     className="form-control form-control-sm"
-                    min={10000000}
+                    min={10000}
                     required
                     pattern="[0-9]"
                     max={9999999999} 
@@ -800,7 +802,8 @@ const [colorVality,setColorVality]=useState('red');
                 <div className="me-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:290}}>FORMATO DE VINCULACIÓN PROVEE: </label>
-                  <a className="" style={{fontSize:18}} href={VinculacionProveedor} download="VINCULACION DE PROVEEDORES.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={VinculacionProveedor} download="VINCULACION DE PROVEEDORES.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={NewFormProvee} download="SALF-01 FORMATO VINCULACION DE PROVEEDORES.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>
@@ -827,7 +830,8 @@ const [colorVality,setColorVality]=useState('red');
                 <div className="ms-2 w-100">
                   <div className="d-flex flex-row w-100">
                   <label className="fw-bold mt-1" style={{width:290}}>COMPROMISO ANTICORRUPCIÓN: </label>
-                  <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf">
+                  {/* <a className="" style={{fontSize:18}} href={Compromiso} download="COMPROMISO ANTICORRUPCION.pdf"> */}
+                  <a className="" style={{fontSize:18}} href={ComproAntiCorrup} download="SALF-05 COMPROMISO ANTICORRUPCION.pdf">
                   <FaFileDownload />Descargar
                   </a>
                   </div>
