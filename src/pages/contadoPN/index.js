@@ -22,6 +22,8 @@ import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import { FaFileDownload } from "react-icons/fa";
 import NewFormCliente from '../../pdfs/SALF-11 FORMATO  VINCULACION CLIENTES.pdf';
+import numeral from 'numeral';
+import  {  NumericFormat  }  from  'react-number-format' ;
 
 export default function ContadoPersonaNatural(){
   /* instancias de contexto */
@@ -109,6 +111,7 @@ export default function ContadoPersonaNatural(){
     solicitante:'',
     tipoFormulario:'PNC',
     valorEstimado:'',
+    nombreComercial:'',
   });
   const [loading, setLoading] = useState(false);
   const [invoiceType, setInvoiceType] = useState(false);
@@ -226,7 +229,7 @@ export default function ContadoPersonaNatural(){
           departamento: departamento.codigo,
           ciudad: ciudad.codigo,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           regimenFiscal: regimen.id,
           responsabilidadFiscal: responsabilidad.id,
           detalleTributario: detalle.id,
@@ -275,6 +278,7 @@ export default function ContadoPersonaNatural(){
           docValAnt:docValAnt,
           docCerBan:docCerBan,
           docOtros:docOtros,
+          nombreComercial:search.nombreComercial.toUpperCase(),
         };
         //creamos una constante la cual llevará el nombre de nuestra carpeta
 /*         const folderName = search.cedula;
@@ -293,6 +297,7 @@ export default function ContadoPersonaNatural(){
           codigoSucursal: 1,
           nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
+          departamento:departamento.description,
           ciudad: ciudad.description,
           celular: search.celular,
           correoFacturaElectronica: search.correoFacturaElectronica,
@@ -300,7 +305,7 @@ export default function ContadoPersonaNatural(){
           celularContacto: search.celular,
           correoContacto: search.correoNotificaciones,
           createdAt:new Date(),
-          userName:user.name
+          userName:user.rowId
         }
         createSucursal(sucur)
         .then(()=>{
@@ -456,6 +461,17 @@ const [colorVality,setColorVality]=useState('red');
     newFiles[index] = file;
     setSelectedFiles(newFiles);
   };
+  const [valorEstimado,setValorEstimado]=useState('');
+  const separadorMiles =(value)=>{
+    const numericValue = value.replace(/[^0-9]/g, '');
+    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?=(\d{6})+(?=(\d{9})+(?=\d{12}))))/g, '.');
+    return formattedValue
+    /* setValorEstimado(formattedValue); */
+  }
+  const cambiarInput=(e)=>{
+    const inputValue=e.target.value;
+    setValorEstimado(separadorMiles(inputValue))
+  }
     return(
     <div className=" wrapper d-flex justify-content-center w-100 m-auto " style={{userSelect:'none'}}>
     <div
@@ -764,6 +780,20 @@ const [colorVality,setColorVality]=useState('red');
  */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
 {/*                   <span className="validity fw-bold"></span>
  */}              </div>
+            <div className="d-flex flex-row align-items-start mb-2">
+            <label className="me-1"><strong>Nombre comercial:</strong></label>
+                <input
+                  value={search.nombreComercial.toLowerCase()}
+                  onChange={handlerChangeSearch}
+                  placeholder="(Campo Opcional)"
+                  type="text"
+                  id="nombreComercial"
+                  style={{width:610 ,textTransform:"uppercase"}}
+                  className="form-control form-control-sm"
+                  min={0}
+                >
+                  </input>
+            </div>
               <hr className="my-1" />
               <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
               <div className="d-flex flex-row align-items-start mt-2 ">
@@ -852,10 +882,12 @@ const [colorVality,setColorVality]=useState('red');
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
+                    value={valorEstimado}
+                    onChange={cambiarInput}
                     style={{width:225}}
-                    value={search.valorEstimado}
+                    value={((search.valorEstimado))}
                     onChange={handlerChangeSearch}
                     type="number"
                     className="form-control form-control-sm "
@@ -864,8 +896,22 @@ const [colorVality,setColorVality]=useState('red');
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
+                {/* <span>{search.valorEstimado}</span> */}
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>
                   <select

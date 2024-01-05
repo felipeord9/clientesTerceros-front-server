@@ -214,7 +214,7 @@ export default function VariosJuridico(){
           apellidoRepLegal:search.razonSocial.toUpperCase(),
           observations:search.observations,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           solicitante:search.solicitante.toUpperCase(),
           docVinculacion:docVinculacion,
           docComprAntc:docComprAntc,

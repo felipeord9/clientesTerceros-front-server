@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import Swal from "sweetalert2";
-import { Button, Modal } from "react-bootstrap";
+import { Button/* , Modal */ } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
 import { getAllPrecios } from "../../services/precioService";
@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { MdNoteAdd } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
+import Modal from '@mui/material/Modal';
 import { getAllResponsabilidad } from '../../services/responsabilidadService'
 import { getAllDetalles } from "../../services/detalleService";
 import { getAllRegimen } from "../../services/regimenService";
@@ -27,11 +28,30 @@ import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOL
 import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { FaFileDownload } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import TextField from '@mui/material/TextField';
 import Mas from '../../assest/Mas.png'
+import Logo from '../../assest/logo-gran-langostino.png'
 import { updateBitacora } from '../../services/bitacoraService';
 import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
 import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
 import NewVinCliente from '../../pdfs/SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
+import  {  NumericFormat  }  from  'react-number-format' ;
+import { Box } from "@mui/material";
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 900,
+  height:600,
+  overflow:'auto',
+  bgcolor: 'background.paper',
+  justifyContent:'center',
+  boxShadow: 24,
+  p: 4,
+  /* borderRadius:5, */
+};
 
 export default function CreditoPersonaNatural(){
   /* instancias de contexto */
@@ -101,6 +121,10 @@ export default function CreditoPersonaNatural(){
     input16: null,
     input17: null,
     input18: null,
+
+    input19: null,
+    input20: null,
+    input21: null,
   });
 
   /* agregar un input de referencias comerciales */
@@ -166,7 +190,31 @@ export default function CreditoPersonaNatural(){
     solicitante:'',
     tipoFormulario:'PNCR',
     valorEstimado:'',
+    nombreComercial:'',
   });
+
+  const [docVboAg,setDocVboAg] = useState(0);
+  const [docVboDc,setDocVboDc] = useState(0);
+  const [docVboDf,setDocVboDf] = useState(0);
+  
+  const [info,setInfo]=useState({
+    fechaRenovaCcio:'',
+    puntajeDataCredito:'',
+    capitalTrabajo:'',
+    razonEndeudamiento:'',
+    IndiceSolvencia:'',
+    observations:'',
+    estadoVboAg:'',
+    estadoVboDc:'',
+    estadoVboDf:'',
+    nivelEndeudamiento:'',
+    cupoRecomendado:'',
+    plazoRecomendado:'',
+    cupoAprovado:'',
+    plazoAprovado:'',
+    fechaCreacion:'',
+  })
+
   const [compare,setCompare]=useState({
     docRefcom2:'0',
     docRefcom3:'0',
@@ -235,6 +283,14 @@ export default function CreditoPersonaNatural(){
     });
   };
 
+  const handlerChangeInfo = (e) => {
+    const { id, value } = e.target;
+    setInfo({
+      ...info,
+      [id]: value,
+    });
+  };
+
   const idParser = (id) => {
     let numeroComoTexto = id.toString();
     while (numeroComoTexto.length < 8) {
@@ -290,7 +346,7 @@ export default function CreditoPersonaNatural(){
           departamento: departamento.codigo,
           ciudad: ciudad.codigo,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           regimenFiscal: regimen.id,
           responsabilidadFiscal: responsabilidad.id,
           detalleTributario: detalle.id,
@@ -341,6 +397,7 @@ export default function CreditoPersonaNatural(){
           docValAnt:docValAnt,
           docCerBan:docCerBan,
           docOtros:docOtros,
+          nombreComercial: search.nombreComercial.toUpperCase(),
         };
         //creamos una constante la cual llevará el nombre de nuestra carpeta
         const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();        //agregamos la carpeta donde alojaremos los archivos
@@ -356,6 +413,7 @@ export default function CreditoPersonaNatural(){
           codigoSucursal: 1,
           nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
+          departamento:departamento.description,
           ciudad: ciudad.description,
           celular: search.celular,
           correoFacturaElectronica: search.correoFacturaElectronica,
@@ -363,7 +421,7 @@ export default function CreditoPersonaNatural(){
           celularContacto: search.celular,
           correoContacto: search.correoNotificaciones,
           createdAt:new Date(),
-          userName:user.name
+          userName:user.rowId
         }
         createSucursal(sucur)
         .then(()=>{
@@ -498,6 +556,80 @@ const [selectedFiles, setSelectedFiles] = useState([]);
     newFiles[index] = file;
     setSelectedFiles(newFiles);
   };
+  const [open,setOpen]=useState(false);
+  const handleOpenModal=(e)=>{
+    e.preventDefault();
+    setOpen(true)
+  }
+  const handleCloseModal=()=>{
+    setOpen(false);
+  }
+  const[colorText,setColorText] = useState('orange');
+  const cambiarColorSelect=(e)=>{
+    const opcionSelect=e.target.value;
+    let nuevoColor='orange';
+    switch(opcionSelect){
+      case 'pendiente':
+        nuevoColor='orange';
+        break;
+      case 'rechazado':
+        nuevoColor='red';
+        break;
+      case 'aprobado':
+        nuevoColor='green';
+        break;
+      default:
+        nuevoColor='orange';
+    }
+    setColorText(nuevoColor);
+  };
+  const[colorTextAg,setColorTextAg] = useState('orange');
+  const cambiarColorSelectAg=(e)=>{
+    const opcionSelect=e.target.value;
+    let nuevoColor='orange';
+    switch(opcionSelect){
+      case 'pendiente':
+        nuevoColor='orange';
+        break;
+      case 'rechazado':
+        nuevoColor='red';
+        break;
+      case 'aprobado':
+        nuevoColor='green';
+        break;
+      default:
+        nuevoColor='orange';
+    }
+    setColorTextAg(nuevoColor);
+  };
+  const[colorTextDf,setColorTextDf] = useState('orange');
+  const cambiarColorSelectDf=(e)=>{
+    const opcionSelect=e.target.value;
+    let nuevoColor='orange';
+    switch(opcionSelect){
+      case 'pendiente':
+        nuevoColor='orange';
+        break;
+      case 'rechazado':
+        nuevoColor='red';
+        break;
+      case 'aprobado':
+        nuevoColor='green';
+        break;
+      default:
+        nuevoColor='orange';
+    }
+    setColorTextDf(nuevoColor);
+  };
+  const fechaActual = new Date();
+  const formatoFecha = {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  };
+
+  const fechaFormateada = fechaActual.toLocaleDateString(undefined, formatoFecha);
+
     return(
     <div className=" wrapper d-flex justify-content-center w-100 m-auto" style={{userSelect:'none'}}>
     <div className='rounder-4'>
@@ -516,7 +648,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
         </div>
       </section>
     </center>
-      <form className="" onSubmit={handleSubmit}>
+    
+      <form className="" onSubmit={handleSubmit} /* onSubmit={handleOpenModal} */>
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
             <div>
@@ -578,7 +711,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               </div>        
             </div>
             <hr className="my-1" />
-            <div className="mb-3">
+            <div className="mb-2">
               <label className="fw-bold mb-1" style={{fontSize:20}}>CLIENTE</label>
               <div className="d-flex flex-row">
                 <div className="d-flex flex-column align-items-start w-25 pe-3">
@@ -794,11 +927,22 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     placeholder="Campo obligatorio"
                   >
                   </input>
-{/*                   <validarCorreo correo={search.correoNotificaciones}/>
- */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
-{/*                    <span className="validity fw-bold"></span>
- */}              </div>
-            
+                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
+              </div>
+            <div className="d-flex flex-row align-items-start mt-2">
+            <label className="me-1"><strong>Nombre comercial:</strong></label>
+                <input
+                value={search.nombreComercial.toLowerCase()}
+                onChange={handlerChangeSearch}
+                  placeholder="(Campo Opcional)"
+                  type="text"
+                  id="nombreComercial"
+                  style={{width:610 ,textTransform:"uppercase"}}
+                  className="form-control form-control-sm"
+                  min={0}
+                >
+                </input>
+            </div>
             </div> 
             <hr className="my-1" />
               <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRONICA</label>
@@ -887,7 +1031,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
                     style={{width:225}}
                     value={search.valorEstimado}
@@ -899,12 +1043,25 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>
                   <select
-                    style={{width:255}}
+                    style={{width:250}}
                     ref={selectPrecioRef}
                     className="form-select form-select-sm m-100 me-3"
                     onChange={(e)=>setPrecio(JSON.parse(e.target.value))}
@@ -1325,7 +1482,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
           ></textarea>
         </div>
-        <Modal show={loading} centered>
+        {/* <Modal show={loading} centered>
           <Modal.Body>
             <div className="d-flex align-items-center">
               <strong className="text-danger" role="status">
@@ -1337,7 +1494,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               ></div>
             </div>
           </Modal.Body>
-        </Modal>
+        </Modal> */}
         <end>
         <div className="d-flex flex-row mb-2">
           <div className="w-75">
@@ -1348,9 +1505,347 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             type="submit"
             className="fw-bold w-100 ms-2 me-3"
             onSubmit={handleSubmit}
+            /* onSubmit={handleOpenModal} */
+            
+            /* onClick={handleOpenModal} */
           >
             REGISTRAR
           </button>
+          <Modal
+            open={open}
+            onclose={handleCloseModal}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <Box sx={style}>
+            <div>
+              <div className="w-100 d-flex flex-row">
+                <div className="w-50">
+                  <img src={Logo} style={{height:80}}/>
+                </div>
+                <div className="w-50 d-flex justify-content-end">
+                  <label className="text-danger"><strong>Yumbo, {fechaFormateada}</strong></label>
+                </div>
+              </div>
+              <div className="form-control form-control-sm rounded rounded-2 mt-3 mb-3">
+                <label style={{fontSize:15}}>Se realiza un estudio al cliente <strong>{search.primerApellido.toUpperCase()} {search.segundoApellido.toUpperCase()} {search.primerNombre.toUpperCase()} {search.otrosNombres.toUpperCase()}</strong> Con NIT: <strong>{search.cedula}</strong>, 
+                en donde nos arroja la siguiente información financiera del cliente para la aprobación de credito.
+                </label>
+              </div>
+              <center>
+              <h2 className="mb-2 text-danger"><strong>Informe Detallado de Credito</strong></h2>
+              </center>
+              <hr className="my-1 mb-2" />
+              <div className="d-flex flex-row w-100">
+              <div className="d-flex flex-column w-50 ">
+              <label><strong>Última actualización C.cio</strong></label>
+              <input  
+                id="fechaRenovaCcio" 
+                value={info.fechaRenovaCcio} 
+                label='Última actualización Ccio'
+                type="date" 
+                onChange={handlerChangeInfo} 
+                className="rounded rounded-2"
+                style={{backgroundColor:'whitesmoke', color:'black',width:192}}
+                variant="outlined" 
+                size="small"
+                color="error"
+              />
+              </div>
+              <div className="w-25 ps-3" /* style={{width:120}} */>
+                <center>
+                <label><strong>C.cio:</strong></label>
+                {selectedFiles[6] && (
+                    <div className="pt-1" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[6])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                )}
+                </center>
+              </div>
+              <div className="w-25" /* style={{width:120}} */>
+                <center>
+                <label><strong>Rut:</strong></label>
+                {selectedFiles[5] && (
+                    <div className="pt-1 " style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[5])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                </center>
+              </div>
+              <div className="w-25 ">
+                <center>
+                <label><strong>Infolaft:</strong></label>
+                {selectedFiles[16] && (
+                    <div className=" pt-1 " style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[16])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                )}
+                </center> 
+              </div>
+              <div className="w-25 ">
+                <center>
+                <label><strong>RefCom 1:</strong></label>
+                {selectedFiles[10] && (
+                    <div className=" pt-1" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[10])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )}
+                </center>
+              </div>
+              <div className="w-25 ">
+                <center>
+                <label><strong>RefCom 2:</strong></label>
+                {selectedFiles[11] && (
+                    <div className=" pt-1" style={{width:50}} >
+                    <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )}
+                </center>
+              </div>
+              </div>
+              <div className="d-flex flex-row w-100 mt-2">
+                <TextField
+                  id="puntajeDataCredito"
+                  type="number"
+                  value={info.puntajeDataCredito}
+                  className="form-control form-control-sm me-2"
+                  onChange={handlerChangeInfo}
+                  autoComplete="off"
+                  required
+                  label="Puntaje Datacredito"
+                  variant="outlined"
+                  size="small"
+                  color="error"
+                />
+                <TextField
+                  id="capitalTrabajo"
+                  type="number"
+                  value={info.capitalTrabajo}
+                  className="form-control form-control-sm me-2"
+                  onChange={handlerChangeInfo}
+                  autoComplete="off"
+                  required
+                  label="Capital trabajo"
+                  variant="outlined"
+                  size="small"
+                  color="error"
+                />
+                <TextField
+                  id="razonEndeudamiento"
+                  type="number"
+                  value={info.razonEndeudamiento}
+                  className="form-control form-control-sm me-2"
+                  onChange={handlerChangeInfo}
+                  autoComplete="off"
+                  required
+                  label="Razon Endeudamiento"
+                  variant="outlined"
+                  size="small"
+                  color="error"
+                />
+                <TextField
+                  id="IndiceSolvencia"
+                  type="number"
+                  value={info.IndiceSolvencia}
+                  className="form-control form-control-sm"
+                  onChange={handlerChangeInfo}
+                  autoComplete="off"
+                  required
+                  label="Indice Solvencia"
+                  variant="outlined"
+                  size="small"
+                  color="error"
+                />
+              </div>
+              <TextField
+                id="observations"
+                value={info.observations}
+                onChange={handlerChangeInfo}
+                label="Observaciones"
+                className="w-100 mt-2"
+                style={{width:600}}
+                multiline
+                rows={2}
+                color="error"
+                variant="filled"
+              />
+              <div className="d-flex flex-row w-100">
+              <div className="d-flex flex-column  w-50 me-2">
+                  <label className="fw-bold mt-1 me-2">VISTO BUENO ADMIN. AGENCIA: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-column">
+                  <select
+                    className="form-select form-select-sm mb-1"
+                    required
+                    id="estadoVboAg"
+                    value={info.estadoVboAg}
+                    style={{width:330,color:colorText}}
+                    onChange={(e)=>(cambiarColorSelect(e),handlerChangeInfo(e))}
+                  >
+                    <option value={'pendiente'} style={{color:'orange'}}>
+                      Pendiente Revision 
+                    </option>
+                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                  </select>
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docVboAg"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:330}}
+                    /* onChange={(e)=>(handleFileChange(e,2),setDocVboAg(1))} */
+                    onChange={(e)=>(handleFileChange('VboAg',e),setDocVboAg(1),FileChange(e,22))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[22] && (
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[22])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                  </div>
+                </div> 
+                <div className="d-flex flex-column w-50 me-2">
+                  <label className="fw-bold mt-1 me-2">VISTO BUENO DIRECCION COMERCIAL: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-column">
+                  <select
+                    className="form-select form-select-sm mb-1"
+                    required
+                    id="estadoVboDc"
+                    value={info.estadoVboDc}
+                    style={{width:330,color:colorTextAg}}
+                    onChange={(e)=>(cambiarColorSelectAg(e),handlerChangeInfo(e))}
+                  >
+                    <option value={'pendiente'} style={{color:'orange'}}>
+                      Pendiente Revision 
+                    </option>
+                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                  </select>
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docVboDc"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:330}}
+                    /* onChange={(e)=>(handleFileChange(e,2),setDocCtaInst(1))} */
+                    onChange={(e)=>(handleFileChange('VboDc',e),setDocVboDc(1),FileChange(e,20))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[20] && (
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[20])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )} 
+                  </div>
+                  </div>
+                  </div>
+                </div> 
+                </div>
+                <div className="d-flex flex-column mt-2 w-50 me-2">
+                  <label className="fw-bold mt-1 me-2">VISTO BUENO DIRECTOR FINANCIERO: </label>
+                  <div className=" rounded-2 pt-1" >
+                  <div className="d-flex flex-column">
+                  <select
+                    className="form-select form-select-sm mb-1"
+                    required
+                    id="estadoVboDf"
+                    value={info.estadoVboDf}
+                    style={{width:330,color:colorTextDf}}
+                    onChange={(e)=>(cambiarColorSelectDf(e),handlerChangeInfo(e))}
+                  >
+                    <option value={'pendiente'} style={{color:'orange'}}>
+                      Pendiente Revision 
+                    </option>
+                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                  </select>
+                  <div className="d-flex flex-row">
+                  <input
+                    id="docVboDf"
+                    type="file"
+                    style={{backgroundColor:'#f3f3f3',width:330}}
+                    /* onChange={(e)=>(handleFileChange(e,2),setDocCtaInst(1))} */
+                    onChange={(e)=>(handleFileChange('VboDf',e),setDocVboDf(1),FileChange(e,21))}
+                    className="form-control form-control-sm border border-5 rounded-3"
+                    accept=".pdf"                  />
+                    {selectedFiles[21] && (
+                    <div className="d-flex justify-content-start pt-1 ps-2" style={{width:50}}>
+                    <a href={URL.createObjectURL(selectedFiles[21])} target="_blank" rel="noopener noreferrer">
+                    <FaEye />Ver
+                    </a>
+                  </div>
+                  )}
+                  </div> 
+                  </div>
+                  </div>
+                </div> 
+                  <hr></hr>
+                <div className="form-control form-control-sm  rounded rounded-2 mt-3 d-flex flex-row">
+                <label className="">
+                  <strong>ANALISIS DE CREDITO:</strong> De acuerdo al análisis Detallado de <strong>
+                  {search.primerApellido.toUpperCase()} {search.segundoApellido.toUpperCase()} {search.primerNombre.toUpperCase()} {search.otrosNombres.toUpperCase()}</strong>,
+                   presenta un nivel de 
+                   Endeudamiento <input id="nivelEndeudamiento" 
+                   value={info.nivelEndeudamiento}
+                   onChange={(e)=>handlerChangeInfo(e)} 
+                   type="number" style={{width:150, height:25}}></input>
+                  , como parte documental se recomienda dar un cupo de <input 
+                  type="number" 
+                  id="cupoRecomendado"
+                  value={info.cupoRecomendado} onChange={handlerChangeInfo}
+                  style={{width:150, height:25}}></input> a un plazo de 
+                  <input type="number" id="plazoRecomendado"
+                  value={info.plazoRecomendado} onChange={handlerChangeInfo}
+                  style={{width:150, height:25}}></input> dias, lo recomendado por el vendedor.
+                </label>
+                </div>
+                <hr></hr>
+                <div className="form-control form-control-sm mt-2" style={{backgroundColor:'#f0f0f0'}} >
+                  <center>
+                  <h4 className="text-danger"><strong>DATOS DE APROBACIÓN FINAL</strong></h4>
+                  </center>
+                  <div className="d-flex flex-row mb-2" >
+                    <div className="d-flex flex-row w-50 ">
+                      <label style={{fontSize:20}}><strong>Cupo Aprobado:</strong></label>
+                      <input style={{width:190}}
+                      id="cupoAprovado" 
+                      value={info.cupoAprovado} onChange={handlerChangeInfo}
+                      className="form-control form-control-sm ms-2"
+                      ></input>
+                    </div>
+                    <div className="d-flex flex-row w-50">
+                      <label style={{fontSize:20}}><strong>Plazo Aprobado:</strong></label>
+                      <input style={{width:190}} id="plazoAprovado"
+                      value={info.plazoAprovado} onChange={handlerChangeInfo}
+                      className="form-control form-control-sm ms-2"></input>
+                    </div>
+                  </div>
+                </div>
+              {/* <Fade cascade direction="right"> */}
+              <div className="mt-3 d-flex flex-row justify-content-end">
+                <button /* onClick={} */ className="me-4">REGISTRAR</button>
+                <button style={{backgroundColor:'grey'}} onClick={handleCloseModal}>VOLVER</button>
+              </div>
+              {/* </Fade> */}
+            </div>
+            </Box>
+          </Modal>
           <Button variant="secondary" className="w-100 ms-2" onClick={refreshForm}>CANCELAR</Button>
           </div>
           </Fade>

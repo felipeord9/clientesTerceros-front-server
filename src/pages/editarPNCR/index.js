@@ -30,6 +30,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { config } from "../../config";
+import  {  NumericFormat  }  from  'react-number-format' ;
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const [vacio,setVacio] = useState(false);
@@ -1020,7 +1021,7 @@ const [colorVality,setColorVality]=useState('red');
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
                     style={{width:225}}
                     value={search.valorEstimado}
@@ -1032,7 +1033,20 @@ const [colorVality,setColorVality]=useState('red');
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>

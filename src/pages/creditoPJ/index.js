@@ -27,10 +27,13 @@ import IconButton from '@mui/material/IconButton';
 import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
 import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
 import NewVinCliente from '../../pdfs/SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
+import ModalPreAproNatural from "../../components/modalPreAprovNatural";
+import  {  NumericFormat  }  from  'react-number-format' ;
 
 export default function CreditoPersonaJuridica(){
   /* instancias de contexto */
   const { user, setUser } = useContext(AuthContext);
+  const [showModalUsers, setShowModalUsers] = useState(false)
 
   /* inicializar variables */
   const [agencia, setAgencia] = useState(null);
@@ -158,7 +161,7 @@ const [fileInputs, setFileInputs] = useState([]);
     celular:'',
     telefono:'',
     correoNotificaciones:'',
-    nombreSucursal:'',
+    nombreSucursal:'Principal',
     direccionSucursal:'',
     celularSucursal:'',
     telefonoSucursal:'',
@@ -317,12 +320,12 @@ const [fileInputs, setFileInputs] = useState([]);
           telefono: search.telefono,
           correoNotificaciones: search.correoNotificaciones.toLowerCase(),
           nombreSucursal:search.nombreSucursal.toUpperCase(),
-          direccionSucursal: search.direccionSucursal.toUpperCase(),
-          departamentoSucursal: depart.codigo,
-          ciudadSucursal: city.codigo,
-          celularSucursal: search.celularSucursal,
-          telefonoSucursal: search.telefonoSucursal,
-          correoSucursal: search.correoSucursal.toLowerCase(),
+          direccionSucursal: search.direccion.toUpperCase(),
+          departamentoSucursal: departamento.codigo,
+          ciudadSucursal: ciudad.codigo,
+          celularSucursal:  search.celular,
+          telefonoSucursal: search.telefono,
+          correoSucursal: search.correoNotificaciones.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
           regimenFiscal: regimen.id,
           responsabilidadFiscal: responsabilidad.id,
@@ -335,7 +338,7 @@ const [fileInputs, setFileInputs] = useState([]);
           precioSugerido: precio.description,
           observations: search.observations,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           solicitante: search.solicitante.toUpperCase(),
           docVinculacion:docVinculacion,
           docComprAntc:docComprAntc,
@@ -372,15 +375,16 @@ const [fileInputs, setFileInputs] = useState([]);
           cedula: search.cedula,
           codigoSucursal: 1,
           nombreSucursal: search.razonSocial.toUpperCase()+' - '+search.nombreSucursal.toUpperCase(),
-          direccion: search.direccionSucursal,
-          ciudad: city.description,
-          celular: search.celularSucursal,
-          correoFacturaElectronica: search.correoSucursal,
+          direccion: search.direccion,
+          departamento:departamento.description,
+          ciudad: ciudad.description,
+          celular: search.celular,
+          correoFacturaElectronica: search.correoNotificaciones,
           nombreContacto: search.razonSocial.toUpperCase(),
           celularContacto: search.celular,
           correoContacto: search.correoNotificaciones,
           createdAt:new Date(),
-          userName:user.name
+          userName:user.rowId
         }
         createSucursal(sucur)
         .then(()=>{
@@ -569,6 +573,10 @@ const [fileInputs, setFileInputs] = useState([]);
         </div>
       </section>
     </center>
+    <ModalPreAproNatural 
+      showModal={showModalUsers}
+      setShowModal={showModalUsers}
+    />
       <form className="" onSubmit={handleSubmit}>
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
@@ -807,7 +815,7 @@ const [fileInputs, setFileInputs] = useState([]);
             </div>            
             <hr className="my-1" />
             <div>
-              <label className="fw-bold" style={{fontSize:22}}>SUCURSAL</label>                  
+              {/* <label className="fw-bold" style={{fontSize:22}}>SUCURSAL</label>                  
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="me-1">Nombre sucursal:</label>
                   <input
@@ -838,7 +846,6 @@ const [fileInputs, setFileInputs] = useState([]);
                   >
                   </input>
               </div>
-
               <div className="d-flex flex-row mt-2">
                 <div className="d-flex flex-row w-100">
                 <label className="me-1">Departamento:</label>
@@ -938,10 +945,8 @@ const [fileInputs, setFileInputs] = useState([]);
                   >
                   </input>
                   <p  className="ps-3" style={{color:colorSpan}}><strong>{mensajeValidacion}</strong></p>
-                  {/* <p>{mensajeValidacion}</p> */}
-                  {/* <span className="validity fw-bold"></span> */}
               </div>
-              <hr className="my-1" />
+              <hr className="my-1" /> */}
               <label className="fw-bold mt-2" style={{fontSize:22}}>DATOS FACTURA ELECTRONICA</label>
               <div className="d-flex flex-row align-items-start mt-2 mb-2  ">
                   <label className="me-1 mb-3">Correo para la factura electrónica:</label>
@@ -1104,7 +1109,7 @@ const [fileInputs, setFileInputs] = useState([]);
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
                     style={{width:225}}
                     value={search.valorEstimado}
@@ -1116,7 +1121,20 @@ const [fileInputs, setFileInputs] = useState([]);
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>

@@ -25,6 +25,7 @@ import Logo_pdf from '../../assest/logo_pdf.jpg'
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaFileDownload } from "react-icons/fa";
 import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
+import  {  NumericFormat  }  from  'react-number-format' ;
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const url = `${config.apiUrl2}/uploadMultiple/obtener-archivo/${carpeta}/${archivo}`;
@@ -1160,7 +1161,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
                     style={{width:225}}
                     value={search.valorEstimado}
@@ -1172,7 +1173,20 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>

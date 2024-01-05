@@ -7,16 +7,11 @@ import TextField from '@mui/material/TextField';
 import { getAllCiudades } from "../../services/ciudadService";
 import AuthContext from "../../context/authContext";
 import { GrFormSubtract } from "react-icons/gr";
-import { getAllDepartamentos } from "../../services/departamentoService";
-
 /* import bcrypt from 'bcrypt';
  */
 export default function ModalSucursal({
-  user,
-  setUser,
   showModal,
   setShowModal,
-  reloadInfo,
 }) {
   const [usuario,setUsuario] = useState([]);
   const[infoSucursal,setInfoSucursal] = useState({
@@ -48,7 +43,6 @@ export default function ModalSucursal({
     codigoSucursal: '',
     nombreSucursal: "".toUpperCase(),
     direccion: "".toUpperCase(),
-    departamento:''.toUpperCase(),
     ciudad: "".toUpperCase(),
     celular: "",
     correoFacturaElectronica: "",
@@ -57,26 +51,7 @@ export default function ModalSucursal({
     correoContacto: "",
   });
   const [error, setError] = useState('')
- 
-  useEffect(() => {
-    if(user) {
-      setInfo({
-        cedula: user?.cedula,
-        /* codigoSucursal: user?.codigoSucursal, */
-        nombreSucursal: user?.nombreSucursal.toUpperCase(),
-        direccion:user?.direccion.toUpperCase(),
-        departamento:user?.departamento.toUpperCase(),
-        ciudad: user?.ciudad.toUpperCase(),
-        celular: user?.celular,
-        correoFacturaElectronica: user?.correoFacturaElectronica.toLowerCase(),
-        nombreContacto: user?.nombreContacto.toUpperCase(),
-        celularContacto:user?.celularContacto,
-        correoContacto: user?.correoContacto.toLowerCase(),
-      })
-    }
-  }, [user])
   
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setInfo({
@@ -109,11 +84,9 @@ export default function ModalSucursal({
   };
   const [ciudades,setCiudades] = useState([]);
   const [ciudad, setCiudad] = useState(null);
-  const [departamentos,setDepartamentos]=useState([]);
 
   const selectCiudadRef=useRef();
   useEffect(()=>{
-    getAllDepartamentos().then((data) => setDepartamentos(data));
     getAllCiudades().then((data) => setCiudades(data));
   },[]);
 
@@ -134,7 +107,6 @@ export default function ModalSucursal({
           codigoSucursal:  data.ultimo+1,
           nombreSucursal: infoSucursal.razonSocial.toUpperCase() + ' - ' + info.nombreSucursal.toUpperCase(),
           direccion: info.direccion.toUpperCase(),
-          departamento:info.departamento.toUpperCase(),
           ciudad: info.ciudad.toUpperCase(),
           celular: info.celular,
           correoFacturaElectronica: info.correoFacturaElectronica.toLowerCase(),
@@ -142,12 +114,12 @@ export default function ModalSucursal({
           celularContacto: info.celularContacto,
           correoContacto: info.correoContacto.toLowerCase(),
           createdAt:new Date(),
-          userName:usuario.rowId
+          userName:usuario.name
         }
         createSucursal(body)
           .then(() => {
             setShowModal(!showModal)
-            reloadInfo();
+            
             Swal.fire(
               '¡Correcto!', 'La sucursal se ha creado de manera exitosa', 'success'
               
@@ -174,41 +146,6 @@ export default function ModalSucursal({
       });
   };
 
-  const handleUpdateSucursal = (e) => {
-    e.preventDefault();
-    Swal.fire({
-      title: '¿Está segur@ de querer editar esta sucursal?',
-          showDenyButton: true,
-          confirmButtonText: 'Confirmar',
-          confirmButtonColor: '#D92121',
-          denyButtonText: `Cancelar`,
-          denyButtonColor:'blue',
-          icon:'question'
-    }).then((result)=>{
-      if(result.isConfirmed){
-        updateSucursal(user.id, info)
-          .then((data) => {           
-            setShowModal(!showModal)
-            reloadInfo();
-            Swal.fire({
-              title: '¡Correcto!',
-              text: 'El sucursal se ha actualizado correctamente',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 2500
-            })
-          })
-      }else if(result.isDenied){
-        Swal.fire('Oops', 'La información suministrada se ha descartado', 'info')
-        setShowModal(!showModal)
-      }
-      cleanForm()
-    })
-      .catch((error) => {
-        setError(error.response.data.errors.original.detail)
-        setTimeout(() => setError(''), 2500)
-      });
-  };
 
   const cleanForm = () => {
     setInfo({
@@ -233,21 +170,20 @@ export default function ModalSucursal({
       <Modal.Header>
         <center>
         <Modal.Title className="text-danger" style={{fontSize:40}}>
-          <strong>{user ? "Actualizar" : "Crear"} Sucursal</strong>
+          <strong>Informe Detallado de credito:</strong>
         </Modal.Title>
         </center>
       </Modal.Header>
       <Modal.Body className="p-2">
         <div className="m-2 h-100">
-          <form onSubmit={user ? handleUpdateSucursal : handleCreateNewSucursal}>
+          <form onSubmit={handleCreateNewSucursal}>
           <div>
-            {/* <span>{data.ultimo+1}</span> */}
-                <h4 className="mb-2">Información Sucursal</h4>
+              <h4 className="mb-2">Información sSucursal</h4>
               <div className="d-flex flex-row w-100">
               <div className="d-flex flex-column w-50 pe-4">
               <TextField  
                 id="cedula" 
-                value={user ? info.cedula : data.search} 
+                /* value={user ? info.cedula : data.search}  */
                 label="Código Siesa" 
                 type="number" 
                 onChange={handleChange} 
@@ -260,7 +196,7 @@ export default function ModalSucursal({
               />
               </div>
               </div>
-              {!user && (
+              {/* {!user && (
                 <div className="d-flex flex-row w-100 mt-2">
                 <div className="d-flex w-50">
                 <TextField
@@ -313,7 +249,7 @@ export default function ModalSucursal({
                   color="error"
                 />
               </div>
-              )}
+              )} */}
               <div className="d-flex flex-column w-100 mt-2">
                 <TextField
                   id="celular"
@@ -346,72 +282,7 @@ export default function ModalSucursal({
                 />
               </div>
               </div>
-              <div className="d-flex flex-row mb-1">
-              <div className="d-flex flex-column w-100 mt-1 me-3">
-                <label style={{fontSize:15}}><strong>Departamento</strong></label>
-                <select    
-                    id="departamento"                
-                    onChange={handlerChangeSearch}
-                    value={info.departamento}
-                    className="form-select form-select-sm m-100 me-3"
-                    required   
-                 >
-                   <option selected value='' disabled>
-                    -- Seleccione el Departamento --
-                  </option>
-                      {departamentos
-                      .sort((a,b)=>a.id - b.id)
-                      .map((elem)=>(
-                        <option key={elem.id} id={elem.id} value={elem.description}>
-                          {elem.description} 
-                        </option>
-                      ))
-                    }
-                    </select>
-              </div>
-              <div className="d-flex flex-column w-100 mt-1">
-              <label style={{fontSize:15}}><strong>Ciudad</strong></label>
-                {/* <TextField
-                  id="ciudad"
-                  type="text"
-                  value={info.ciudad.toUpperCase()}
-                  className="form-control form-control-sm"
-                  onChange={handlerChangeSearch}
-                  autoComplete="off"
-                  required
-                  label="Ciudad Sucursal"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                /> */}
-                <select
-                    id="ciudad"
-                    value={info.ciudad}
-                    onChange={handlerChangeSearch}
-                    className="form-select form-select-sm w-100"
-                    /* style={{height:40}} */
-                    required
-                  >
-                    
-                  <option selected value='' disabled>
-                    -- Seleccione la Ciudad de la Sucursal --
-                  </option>  
-                  {ciudades
-                  .sort((a,b)=>a.id - b.id)
-                  .map((elem)=>(
-                    /* elem.id === info.departamento ? */
-                    <option id={elem.id} value={elem.description}>
-                    {elem.description}
-                    </option>
-                    /* : 
-                    null */
-                  ))
-                }
-                  </select>
-              </div>
-              </div>
-              {/* <span>{info.departamento}</span>
-              <span>{info.ciudad}</span> */}
+
               <div className="d-flex flex-row w-100 mt-2">
               
               <div className="d-flex flex-column w-100">
@@ -433,7 +304,7 @@ export default function ModalSucursal({
               <hr></hr>
               <h4>Información de contacto</h4>
               <div className="d-flex flex-row w-100 mt-2">
-              <div className="d-flex flex-column w-50 pe-2">                
+              <div className="d-flex flex-column w-50 pe-4">                
               <TextField
                   id="nombreContacto"
                   type="text"
@@ -495,11 +366,10 @@ export default function ModalSucursal({
               {/* <Button type="submit" variant="success">
                 {user ? "Guardar Cambios" : "Guardar"}
               </Button> */}
-              <button className="me-5" type="submit">{user ? "Editar" : "Guardar"}</button>
+              <button className="me-5" type="submit">Done</button>
               <Button variant="secondary" onClick={(e) => {
                 setShowModal(false)
                 cleanForm()
-                setUser(null)
               }}>
                 Cancelar
               </Button>

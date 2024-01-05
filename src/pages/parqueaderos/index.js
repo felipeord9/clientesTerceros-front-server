@@ -235,7 +235,7 @@ export default function Parqueaderos(){
           apellidoRepLegal:search.razonSocial.toUpperCase(),
           observations:search.observations,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           solicitante:search.solicitante.toUpperCase(),
           docVinculacion:docVinculacion,
           docComprAntc:docComprAntc,
@@ -271,6 +271,7 @@ export default function Parqueaderos(){
           codigoSucursal: 1,
           nombreSucursal: search.razonSocial.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
+          departamento:departamento.description,
           ciudad: ciudad.description,
           celular: search.celular,
           correoFacturaElectronica: search.correoElectronico.toLowerCase(),
@@ -278,7 +279,7 @@ export default function Parqueaderos(){
           celularContacto: search.celular,
           correoContacto: search.correoFacturaElectronica,
           createdAt:new Date(),
-          userName:user.name
+          userName:user.rowId
         }
         createSucursal(sucur)
         .then(()=>{

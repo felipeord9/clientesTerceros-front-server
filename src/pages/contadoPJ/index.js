@@ -22,6 +22,7 @@ import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
 import { FaFileDownload } from "react-icons/fa";
 import NewFormCliente from '../../pdfs/SALF-11 FORMATO  VINCULACION CLIENTES.pdf';
+import  {  NumericFormat  }  from  'react-number-format' ;
 
 export default function ContadoPersonaJuridica(){
   /* instancias de contexto */
@@ -110,7 +111,7 @@ export default function ContadoPersonaJuridica(){
     celular:'',
     telefono:'',
     correoNotificaciones:'',
-    nombreSucursal:'',
+    nombreSucursal:'Principal',
     direccionSucursal:'',
     celularSucursal:'',
     telefonoSucursal:'',
@@ -239,12 +240,12 @@ export default function ContadoPersonaJuridica(){
           telefono: search.telefono,
           correoNotificaciones: search.correoNotificaciones.toLowerCase(),
           nombreSucursal:search.nombreSucursal.toUpperCase(),
-          direccionSucursal: search.direccionSucursal.toUpperCase(),
-          departamentoSucursal: depart.codigo,
-          ciudadSucursal: city.codigo,
-          celularSucursal: search.celularSucursal,
-          telefonoSucursal: search.telefonoSucursal,
-          correoSucursal: search.correoSucursal.toLowerCase(),
+          direccionSucursal: search.direccion.toUpperCase(),
+          departamentoSucursal: departamento.codigo,
+          ciudadSucursal: ciudad.codigo,
+          celularSucursal: search.celular,
+          telefonoSucursal: search.telefono,
+          correoSucursal: search.correoNotificaciones.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
           regimenFiscal: regimen.id,
           responsabilidadFiscal: responsabilidad.id,
@@ -257,7 +258,7 @@ export default function ContadoPersonaJuridica(){
           precioSugerido: precio.description,
           observations: search.observations,
           createdAt: new Date(),
-          createdBy: user.name.toUpperCase(),
+          createdBy: user.rowId.toUpperCase(),
           solicitante: search.solicitante.toUpperCase(),
           docVinculacion:docVinculacion,
           docComprAntc:docComprAntc,
@@ -292,15 +293,16 @@ export default function ContadoPersonaJuridica(){
           cedula: search.cedula,
           codigoSucursal: 1,
           nombreSucursal: search.razonSocial.toUpperCase()+' - '+ search.nombreSucursal.toUpperCase(),
-          direccion: search.direccionSucursal,
-          ciudad: city.description,
-          celular: search.celularSucursal,
-          correoFacturaElectronica: search.correoSucursal,
+          direccion: search.direccion,
+          departamento:departamento.description,
+          ciudad: ciudad.description,
+          celular: search.celular,
+          correoFacturaElectronica: search.correoNotificaciones,
           nombreContacto: search.razonSocial.toUpperCase(),
           celularContacto: search.celular,
           correoContacto: search.correoNotificaciones,
           createdAt:new Date(),
-          userName:user.name
+          userName:user.rowId
         }
         createSucursal(sucur)
         .then(()=>{
@@ -337,7 +339,7 @@ export default function ContadoPersonaJuridica(){
           }) 
           .catch((err)=>{
             setLoading(false);
-            deleteSucursalByName(search.nombreSucursal.toUpperCase());
+            deleteSucursalByName(sucur.nombreSucursal.toUpperCase());
             if(!data){
               deleteFile(folderName);
             }else{
@@ -710,7 +712,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             </div>            
             <hr className="my-1" />
             <div>
-              <label className="fw-bold" style={{fontSize:22}}>SUCURSAL</label>                  
+              {/* <label className="fw-bold" style={{fontSize:22}}>SUCURSAL</label>                  
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="me-1">Nombre sucursal:</label>
                   <input
@@ -741,7 +743,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   >
                   </input>
               </div>
-
               <div className="d-flex flex-row mt-2">
                 <div className="d-flex flex-row w-100">
                 <label className="me-1">Departamento:</label>
@@ -841,9 +842,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   >
                   </input>
                   <p  className="ps-3" style={{color:colorSpan}}><strong>{mensajeValidacion}</strong></p>
-{/*                   <span className="validity fw-bold"></span>
- */}              </div>
-              <hr className="my-1" />
+              </div>
+              <hr className="my-1" /> */}
               <label className="fw-bold mt-2" style={{fontSize:22}}>DATOS FACTURA ELECTRONICA</label>
               <div className="d-flex flex-row align-items-start mt-2 mb-2  ">
                   <label className="me-1 mb-3">Correo para la factura electrónica:</label>
@@ -1005,7 +1005,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row align-items-start w-100">
                   <label className="">Promedio Compra:</label>
                   <label className="ps-2">$</label>
-                  <input
+                  {/* <input
                     id="valorEstimado"
                     style={{width:225}}
                     value={search.valorEstimado}
@@ -1017,7 +1017,20 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     pattern="[0-9]"
                     placeholder="Campo obligatorio"
                   >
-                  </input>
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
                 </div>
                   <div className="w-100 d-flex flex-row">
                   <label className="me-1">Lista de Precios:</label>

@@ -127,6 +127,13 @@ export default function TableTerceros({ terceros, loading }) {
         width: '300px',
       },
       {
+        id:'nombreComercial',
+        name:'Nombre Comercial',
+        selector:(row)=>row.nombreComercial,
+        sortable:true,
+        width:'200px',
+      },
+      {
         id: "nombreSucursal",
         name: "Sucursal",
         selector: (row) => row.nombreSucursal,

@@ -393,7 +393,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
         <div className="d-flex flex-column">
           <center>
           <Fade cascade='true'>
-          <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>PROVEEDORES VARIOS (AGENCIAS) - persona NATURAL</strong></label>
+          <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>PRE - APROBACIÓN DE CREDITOS</strong></label>
           </Fade>
           </center>
           <hr className="my-1" />
@@ -403,53 +403,22 @@ const [selectedFiles, setSelectedFiles] = useState([]);
       <form className="" onSubmit={handleSubmit}>
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
-            <div>
-              <div className="d-flex flex-row">
-              <div className="d-flex flex-column me-4 " style={{width:450}}>
-              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
-              <select
-                ref={selectBranchRef}
-                className="form-select form-select-sm w-100"
-                required
-                
-                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
-              >
-                <option selected value='' disabled>
-                  -- Seleccione la Agencia --
-                </option>
-                {agencias
-                  .sort((a, b) => a.id - b.id)
-                  .map((elem) => (
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                      {elem.id + " - " + elem.description}
-                    </option>
-                  ))}
-              </select>
-              </div>
-              <div className="d-flex flex-column mb-2  w-100">
-              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
-              <input
-                  id="solicitante"
-                  type="text"
-                  placeholder="Nombre Solicitante"
-                  value={search.solicitante}
-                  onChange={handlerChangeSearch}
-                  className="form-control form-control-sm"
-                  style={{textTransform:"uppercase"}}
-                  required
-              />
-              </div>        
-              </div>
+            <center>
+            <div className="d-flex flex-column">
+              <label>Se realiza un estudio del cliente, <strong>{}</strong> Con NIT: <strong>{}</strong>,</label>
+              <label>en donde nos arroja la siguiente información financiera</label>
+              <label>del cliente para la aprobación de credito</label>
             </div>
+            </center>
             <hr className="my-1" />
             <div>
-              <label className="fw-bold" style={{fontSize:20}}>PROVEEDOR</label>
+              <label className="fw-bold" style={{fontSize:20}}>INFORME DETALLADO DE CREDITO</label>
               <div className="d-flex flex-row">
-                <div className="d-flex flex-column align-items-start w-25 pe-3">
-                  <label className="me-1 w-25">1er.Apellido:</label>
+                <div className="d-flex flex-column align-items-start w-50 pe-3">
+                  <label className="">Última renovación cámara y comercio:</label>
                   <input
                     id="primerApellido"
-                    type="text"
+                    type="date"
                     className="form-control form-control-sm "                     
                     min={0}
                     style={{textTransform:"uppercase"}}
@@ -460,7 +429,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   />
                 </div>   
                 <div className="d-flex flex-column w-25 pe-3">
-                <label className="me-1 w-25">2do.Apellido:</label>
+                <label className="me-1 w-25">C.cio:</label>
                   <input
                     id="segundoApellido"
                     type="text"
@@ -474,7 +443,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </div>
                 
                 <div className="d-flex flex-column w-25 pe-3">
-                <label className="me-1 w-25">1er.Nombre:</label>
+                <label className="me-1 w-25">RUT:</label>
                   <input
                     id="primerNombre"
                     type="text"
@@ -488,7 +457,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   />
                 </div>
                 <div className="d-flex flex-column w-25">
-                <label className="me-1 ">Otros nombres:</label>
+                <label className="me-1 ">INFOLAFT:</label>
                   <input
                     id="otrosNombres"
                     type="text"
@@ -501,223 +470,69 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   />
                 </div>
               </div>
-
-              <div className="d-flex flex-row mt-2">
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">Tipo documento:</label>
-                  <select
-                    ref={selectDocumentoRef}
-                    style={{width:245}}
-                    className="form-select form-select-sm m-100 me-3"
-                    onChange={(e)=>setDocument(JSON.parse(e.target.value))}
-                    required
-                  >
-                    <option selected value='' disabled>
-                  -- Seleccione el tipo de documento --
-                </option>
-                  {documentos
-                  .sort((a, b) => a.id - b.id)
-                  .map((elem) => (
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                    {elem.id + " - " + elem.description}
-                  </option>
-                  ))}
-              </select>
-                </div>
-                <div>
-                </div>
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label for='cedula' className="me-1">No.Identificación:</label>
+            <div className="d-flex flex-row mt-2 mb-2">
+            <div className="d-flex flex-column align-items-start w-50 pe-3">
+                  <label className="">Capital de trabajo:</label>
                   <input
-                    id="cedula"
-                    type="number" 
-                    className="form-control form-control-sm w-100"
-                    min={10000}
-                    name="cedula"
-                    pattern="[0-9]"
-                    value={search.cedula}
-                    onChange={(e)=>(handlerChangeSearch(e),handleInputChange(e))}
-                    required
-                    max={9999999999}
-                    minLength={0}
-                    maxLength={10}
-                    size={10}
-                    placeholder="Campo obligatorio"
-                  >
-                  </input>
-                  <span className="validity fw-bold"></span>
-{/*                   <p className="ps-3" style={{color:colorVality}}><strong>{vality}</strong></p>
- */}                </div>
-              </div>
-              <div className="d-flex flex-row mt-2 w-100">
-                <label className="me-1">Dirección:</label>
-                <input
-                  value={search.direccion}
-                  onChange={handlerChangeSearch}
-                  placeholder="campo obligatorio"
-                  type="text"
-                  id="direccion"
-                  style={{textTransform:"uppercase"}}
-                  className="form-control form-control-sm"
-                  min={0}
-                  required
-                >
-                </input>
-              </div>
-              <div className="d-flex flex-row mt-2">
-                <div className="d-flex flex-row w-100">
-                <label className="me-1">Departamento:</label>
-                <select                    
-                    onChange={(e)=>setDepartamento(JSON.parse(e.target.value))}
-                    ref={selectDepartamentoRef}
-                    className="form-select form-select-sm m-100 me-3"
-                    required   
-                 >
-                   <option selected value='' disabled>
-                    -- Seleccione el Departamento --
-                  </option>
-                      {departamentos
-                      .sort((a,b)=>a.id - b.id)
-                      .map((elem)=>(
-                        <option key={elem.id} id={elem.id} value={JSON.stringify(elem)}>
-                          {elem.description} 
-                        </option>
-                      ))
-                    }
-                    </select>
-                </div>
-                <div className="d-flex flex-row w-100">
-                <label className="me-1">Ciudad:</label>
-                <select
-                    ref={selectCiudadRef}
-                    className="form-select form-select-sm w-100"
-                    required
-                    disabled={departamento ? false : true}
-                    onChange={(e)=>setCiudad(JSON.parse(e.target.value))} 
-                  >
-                    
-                  <option selected value='' disabled>
-                    -- Seleccione la Ciudad --
-                  </option>  
-                  {ciudades
-                  .sort((a,b)=>a.id - b.id)
-                  .map((elem)=>(
-                    elem.id == departamento.id ?
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                    {elem.description}
-                    </option>
-                    : 
-                    null
-                  ))
-                }
-                  </select>
-                </div>
-              </div>
-              <div className="d-flex flex-row mt-2">
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">No.Celular:</label>
-                  <input
-                    value={search.celular}
-                    onChange={handlerChangeSearch}
-                    id="celular"
+                    id="primerApellido"
                     type="number"
-                    className="form-control form-control-sm "
-                    min={1000000}
-                    pattern="[0-9]"
-                    max={9999999999}
+                    className="form-control form-control-sm "                     
+                    min={0}
+                    style={{textTransform:"uppercase"}}
                     required
                     placeholder="Campo obligatorio"
+                    value={search.primerApellido}
+                    onChange={handlerChangeSearch}
                   />
-                  <span className="validity fw-bold me-3"></span>
-                </div>
-                <div>
-                </div>
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">Teléfono:</label>
+                </div>   
+                <div className="d-flex flex-column w-50 pe-3">
+                <label className="">Razon Endeudamineto:</label>
                   <input
-                    value={search.telefono}
-                    onChange={handlerChangeSearch}
-                    id="telefono"
-                    type="number"
-                    pattern="[0-9]"
-                    className="form-control form-control-sm mb-2"
-                    min={1000000}
-                    max={9999999999}
-                    
+                    id="segundoApellido"
+                    type="text"
+                    className="form-control form-control-sm "                     
+                    min={0}
+                    style={{textTransform:"uppercase"}}
                     placeholder="(Campo Opcional)"
-                  >
-                  </input>
-                  {/* <span className="validity fw-bold "></span> */}
+                    value={search.segundoApellido}
+                    onChange={handlerChangeSearch}
+                  />
                 </div>
-              </div>
-              <div className="d-flex flex-row align-items-start ">
-                  <label className="me-1 mb-3">Correo electrónico:</label>
+                
+                <div className="d-flex flex-column w-50 pe-3">
+                <label className="">Indice Solvencia:</label>
                   <input
-                    id="correoElectronico"
-                    type="email"
-                    className="form-control form-control-sm "
+                    id="primerNombre"
+                    type="text"
+                    className="form-control form-control-sm "                     
                     min={0}
-                    value={search.correoElectronico}
-                    onChange={(e)=>(handlerChangeSearch(e),manejarCambio(e))}
+                    style={{textTransform:"uppercase"}}
                     required
-                    style={{width:625, textTransform:'lowercase'}}
                     placeholder="Campo obligatorio"
-                  >
-                  </input>
-{/*                   <validarCorreo correo={search.correoNotificaciones}/>
- */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
-{/*                   <span className="validity fw-bold"></span>
- */}              </div>
-                <div className="d-flex flex-column mb-3 w-100">
-                <label className="me-1">Actividad Económica:</label>
-                <select                    
-                    onChange={(e)=>setActividad(JSON.parse(e.target.value))}
-                    ref={selectActividadRef}
-                    style={{width:760}}
-                    className="form-select form-select-sm m-100 me-3"
-                    required   
-                 >
-                   <option selected value='' disabled>
-                    -- Seleccione el Departamento --
-                  </option>
-                      {actividades
-                      .sort((a,b)=>a.id - b.id)
-                      .map((elem)=>(
-                        <option key={elem.id} id={elem.id} value={JSON.stringify(elem)}>
-                          {elem.id + '-' + elem.description} 
-                        </option>
-                      ))
-                    }
-                    </select>
+                    value={search.primerNombre}
+                    onChange={handlerChangeSearch}
+                  />
                 </div>
-              <hr className="my-1" />              
+            </div>
             </div>   
-            <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
-            <div className="d-flex flex-row align-items-start mt-2 ">
-                  <label className="me-1 mb-3"><strong>Correo para la factura electrónica:</strong></label>
-                  <input
-                    value={search.correoFacturaElectronica}
-                    onChange={(e)=>(handlerChangeSearch(e),Cambio(e))}
-                    id="correoFacturaElectronica"
-                    type="email"
-                    className="form-control form-control-sm"
-                    min={0}
-                    required
-                    style={{width:498,textTransform:'lowercase'}} 
-                    placeholder="Campo obligatorio"
-                  >
-                  </input>
-                  <p  className="ps-3" style={{color:color}}><strong>{mensaje}</strong></p>
-                  {/* <span className="validity fw-bold"></span> */}
-              </div>
               <hr className="my-1" />         
+          </div>
+        </div>
+        <div className="d-flex flex-column mb-3">
+          <label className="fw-bold" style={{fontSize:18}}>OBSERVACIONES</label>
+          <textarea
+            value={search.observations}
+            onChange={handlerChangeSearch}
+            id="observations"
+            className="form-control border border-3"
+            style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
+          ></textarea>
+        </div>
+        <div className="bg-light rounded shadow-sm p-3 mb-3">
             <div className="w-100 mt-1">
-              <label className="fw-bold" style={{fontSize:20}}>DOCUMENTOS OBLIGATORIOS</label>
               <div className="d-flex flex-row ">
               <div className="pe-2 w-50">
-                  <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
-
+                  <label className="fw-bold mt-1 me-2">Vbo Administrador Agencia: </label>
                   <div className=" rounded-2" >
                   <div className="d-flex flex-row">
                   <input
@@ -741,7 +556,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </div>
                 </div>
                 <div className=" w-50">
-                  <label className="fw-bold mt-1 ">INFOLAFT: </label>
+                  <label className="fw-bold mt-1 ">Vbo Director Comercial: </label>
                   <div className=" rounded-2" >
                     <div className="d-flex flex-row">
                   <input
@@ -770,7 +585,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
                 
               <div className="d-flex flex-column mt-1 " >
-                  <label className="fw-bold mt-1 me-2">OTROS: </label>
+                  <label className="fw-bold mt-1 me-2">Vbo. Director Financiero: </label>
                   <div className="d-flex flex-row">
                   <input
                     id="DocOtros"
@@ -791,17 +606,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </div>
             </div>
           </div>
-        </div>
-        <div className="d-flex flex-column mb-3">
-          <label className="fw-bold" style={{fontSize:18}}>OBSERVACIONES</label>
-          <textarea
-            value={search.observations}
-            onChange={handlerChangeSearch}
-            id="observations"
-            className="form-control border border-3"
-            style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
-          ></textarea>
-        </div>
         <Modal show={loading} centered>
           <Modal.Body>
             <div className="d-flex align-items-center">

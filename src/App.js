@@ -57,6 +57,8 @@ import MostrarPS from './pages/mostrarPS';
 import MostrarPVN from './pages/mostrarPVN';
 import MostrarPMJ from './pages/mostrarPMJ';
 import MostrarPVJ from './pages/mostrarPVJ';
+import PreAprovacionNatural from './pages/preAprovacionNatural';
+
 
 function App() {
   return(
@@ -127,6 +129,7 @@ function App() {
         <Route path='/contado/persona/juridica' element={<PrivateRoute component={ContadoPersonaJuridica}/>}/>
         <Route path='/credito/persona/natural' element={<PrivateRoute component={CreditoPersonaNatural}/>}/>
         <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
+        <Route path='/pre/aprovacion/natural' element={<PrivateRoute component={PreAprovacionNatural}/>}/>
         <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />
         <Route path='/change/password' element={<PrivateRoute component={ChangePassword}/>}/>
         <Route path='/usuarios' element={<PrivateRoute component={Users}/>}/>
