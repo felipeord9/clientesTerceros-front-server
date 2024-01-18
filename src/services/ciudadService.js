@@ -8,8 +8,8 @@ function getAllCiudades() {
     .then(res => res.data)
 }
 
-function getOneCiudad(id){
-  return fetch(`${url}/${id}`)
+function getOneCiudad(city){
+  return fetch(`${url}/${city}`)
     .then(res=>res.json())
     .then(res=>res.data)
 }

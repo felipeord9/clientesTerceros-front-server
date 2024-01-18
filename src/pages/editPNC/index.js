@@ -139,6 +139,7 @@ export default function EditPNC(){
     docInfemp:'',
     docInfrl:'',
     docOtros:'',
+    nombreComercial:'',
   });
   const [compare,setCompare]=useState({
     cedula:'',
@@ -164,6 +165,7 @@ export default function EditPNC(){
     docFirdoc:'',
     docCerBan:'',
     docValAnt:'',
+    nombreComercial:'',
   })
   useEffect(()=>{
     const datosTercero = localStorage.getItem('data');
@@ -299,6 +301,7 @@ export default function EditPNC(){
           precioSugerido: search.precioSugerido,
           observations:search.observations,
           solicitante:search.solicitante.toUpperCase(),
+          nombreComercial: search.nombreComercial.toUpperCase(),
           tipoFormulario:search.tipoFormulario,
           docVinculacion:compare.docVinculacion,
           docComprAntc:compare.docComprAntc,
@@ -869,12 +872,24 @@ const [colorVality,setColorVality]=useState('red');
  */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
 {/*                   <span className="validity fw-bold"></span>
  */}              </div>
+                <div className="d-flex flex-row align-items-start">
+                <label className="me-1 mb-3"><strong>Nombre Comercial:</strong></label>
+                <input
+                  id="nombreComercial"
+                  type="text"
+                  className="form-control form-control-sm"
+                  value={search.nombreComercial}
+                  onChange={(e)=>handlerChangeSearch(e)}
+                  style={{width:590, textTransform:'uppercase'}}
+                  placeholder="(Campo Opcional)"
+                ></input>
+              </div>
               <hr className="my-1" />
               <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
               <div className="d-flex flex-row align-items-start mt-2 ">
                   <label className="me-1 mb-3">Correo para la factura electrónica:</label>
                   <input
-                    value={search.correoFacturaElectronica}
+                    value={compare.correoFacturaElectronica}
                     onChange={(e)=>(handlerChangeSearch(e),Cambio(e))}
                     id="correoFacturaElectronica"
                     type="email"

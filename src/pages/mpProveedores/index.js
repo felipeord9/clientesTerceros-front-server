@@ -38,7 +38,7 @@ export default function MenuPrincipalProveedores(){
       e = e.target.value
       if(user.role==='cartera'){
         return navigate('/inicio')
-      }else if(user.role==='compras' || user.role==='agencias'){
+      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
@@ -49,7 +49,7 @@ export default function MenuPrincipalProveedores(){
       e = e.target.value
       if(user.role==='cartera'){
         return navigate('/validar/tercero')
-      }else if(user.role==='compras' || user.role==='agencias'){
+      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
         return navigate('/validar/Proveedor')
       }else{
         return navigate('/validacion/admin')
@@ -95,14 +95,17 @@ export default function MenuPrincipalProveedores(){
         color: hover ? 'white':'black',
         padding: '10px',
         cursor: 'pointer',
-        height:170,width:260,
+        height:170,
+        width:260,
         fontSize:21,
         border: hover ? 'solid #D92121': 'solid #B9B9B9',
+        transform: hover ? 'scale(1.1)' : 'scale(1)',
+        transition: 'all 0.3s ease',
       };
     
       return (
         <button
-          className="rounded-2  me-3"
+          className="rounded-2  me-4"
           style={buttonStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -134,6 +137,9 @@ export default function MenuPrincipalProveedores(){
         <div className=" mb-3">
           <a onClick={(e)=>handleClickInicio(e)}><BotonColorCambiante>Creación Proveedor</BotonColorCambiante></a>
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Proveedor</BotonColorCambiante></a>
+          {user.role==='comprasnv' && (
+            <a onClick={(e)=>navigate('/consultar/certificado')}><BotonColorCambiante>Certificados</BotonColorCambiante></a>
+          )}
 {/*           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
  */}        </div>
         </div>

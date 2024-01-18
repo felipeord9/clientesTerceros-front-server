@@ -43,7 +43,7 @@ export default function Inicio2(){
 
     const handleClickBack=(e)=>{
       e = e.target.value;
-      if(user.role==='compras'){
+      if(user.role==='compras' || user.role==='comprasnv'){
         return navigate('/compras')
       }else if(user.role==='agencias' ){
         return navigate('/compras')

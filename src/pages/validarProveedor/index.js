@@ -149,7 +149,7 @@ export default function ValidarProveedor(){
       e = e.target.value
       if( user.role==='cartera'){
         return navigate('/inicio')
-      }else if(user.role==='compras' || user.role==='agencias'){
+      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
@@ -160,7 +160,7 @@ export default function ValidarProveedor(){
       if( user.role==='cartera'){
         /* return navigate('/inicio') */
         return navigate('/menu/principal/Clientes')
-      }else if(user.role==='compras' || user.role==='agencias'){
+      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
       }else{

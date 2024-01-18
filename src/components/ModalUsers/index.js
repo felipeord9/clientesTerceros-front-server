@@ -167,6 +167,7 @@ export default function ModalUsers({
                   <option value="agencias">AGENCIAS</option>
                   <option value='cartera'>CARTERA</option>
                   <option value='compras'>COMPRAS</option>
+                  <option value='comprasnv'>COMPRASNV</option>
                   <option value="admin">ADMINISTRADOR</option>
                 </select>
               </div>

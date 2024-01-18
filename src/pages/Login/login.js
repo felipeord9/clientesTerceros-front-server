@@ -20,7 +20,7 @@ export default function Login() {
     if(isLogged && user.role==='compras')navigate('/validar/Proveedor');
     if(isLogged && user.role==='admin')navigate('/validacion/admin'); */
     if(isLogged && user.role==='cartera')navigate('/menu/principal/Clientes');
-    if(isLogged && user.role==='compras' || isLogged && user.role==='agencias')navigate('/menu/principal/Proveedores');
+    if(isLogged && user.role==='compras' || isLogged && user.role==='agencias' || isLogged && user.role==='comprasnv')navigate('/menu/principal/Proveedores');
     if(isLogged && user.role==='admin')navigate('/menu/principal/admin');
     if(isLogged){
       const body={

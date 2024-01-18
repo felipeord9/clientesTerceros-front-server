@@ -15,6 +15,7 @@ import { TbCircleLetterJ } from 'react-icons/tb' /*letra j*/
 import { RiPassValidLine } from "react-icons/ri";
 import { AiOutlineSelect } from "react-icons/ai";
 import { FaCar } from "react-icons/fa";
+import { PiCertificateBold } from "react-icons/pi";
 
 export const NavBarData = [
   {
@@ -36,7 +37,7 @@ export const NavBarData = [
     path:'/menu/principal/Proveedores',
     icon:<GoHomeFill/>,
     cName:'nav-text',
-    access:['agencias','compras']   
+    access:['agencias','compras','comprasnv']   
   },
   {
     title:'Crear Cliente',
@@ -57,7 +58,7 @@ export const NavBarData = [
     path:'/compras',
     icon:<AiOutlineSelect/>,
     cName:'nav-text',
-    access:['compras','agencias']   
+    access:['compras','agencias','comprasnv']   
   }
   ,
   {
@@ -79,7 +80,7 @@ export const NavBarData = [
     path:'/validar/proveedor',
     icon:<RiPassValidLine />,
     cName:'nav-text',
-    access:['compras','agencias']
+    access:['compras','agencias','comprasnv']
   },
   {
     title:'Persona natural - contado',
@@ -111,28 +112,35 @@ export const NavBarData = [
     path: "/Parqueaderos",
     icon: <FaCar />,
     cName: "nav-text",
-    access: ['admin','compras','cartera','agencias']
+    access: ['admin','compras','cartera','agencias','comprasnv']
   },
   {
     title: "Proveedores varios (Agencias)",
     path: "/tipo/proveedor",
     icon: <FaPeopleLine />,
     cName: "nav-text",
-    access: ['admin','compras']
+    access: ['admin','compras','comprasnv']
   },
   {
     title: "Prestador de servicios",
     path: "/prestador/servicios",
     icon: <MdOutlineMiscellaneousServices />,
     cName: "nav-text",
-    access: ['admin','compras']
+    access: ['admin','compras','comprasnv']
   },
   {
     title: "Proveedor Mcia y Convenios",
     path: "/tipo/persona",
     icon: <FaHandshake />,
     cName: "nav-text",
-    access: ['admin','compras']
+    access: ['admin','compras','comprasnv']
+  },
+  {
+    title:'Generar Certificados',
+    path:'/consultar/certificado',
+    icon:<PiCertificateBold />,
+    cName:'nav-text',
+    access:['admin','comprasnv']
   },
   {
     title: "Usuarios",

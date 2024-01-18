@@ -1,5 +1,5 @@
 import { config } from '../config'
-const url = `${config.apiUrl}/mail/send`;
+const url = `${config.apiUrl2}/mail/send`;
 
 function sendMail(body) {
   return fetch(url, {

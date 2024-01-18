@@ -58,7 +58,9 @@ import MostrarPVN from './pages/mostrarPVN';
 import MostrarPMJ from './pages/mostrarPMJ';
 import MostrarPVJ from './pages/mostrarPVJ';
 import PreAprovacionNatural from './pages/preAprovacionNatural';
-
+import ConsultarCertificado from './pages/consultarCertificado';
+import InfoCertificado from './pages/infoCertificado';
+import GenerateCertificado from './pages/generateCertificado';
 
 function App() {
   return(
@@ -71,7 +73,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
 {/*         <Route path='/recovery/password' element={<RecoveryPassword/>}/>
  */}        <Route path='/send/recovery' element={<SendRecovery/>}/>
-        <Route path='/recuperacion/contrasena/:token' element={<RecoveryPassword/>} />
+        <Route path='/recuperacion/contrasena//:token' element={<RecoveryPassword/>} />
 
         {/* Validacion de tercero */}
         <Route path='/validar/tercero' element={<PrivateRoute component={ValidarTercero}/>}/>
@@ -128,6 +130,9 @@ function App() {
         <Route path='/contado/persona/natural' element={<PrivateRoute component={ContadoPersonaNatural}/>}/>
         <Route path='/contado/persona/juridica' element={<PrivateRoute component={ContadoPersonaJuridica}/>}/>
         <Route path='/credito/persona/natural' element={<PrivateRoute component={CreditoPersonaNatural}/>}/>
+        <Route path='/consultar/certificado' element={<PrivateRoute component={ConsultarCertificado}/>}/>
+        <Route path='/informacion/tercero/certificados' element={<PrivateRoute component={InfoCertificado}/>}/>
+        <Route path='/generar/certificados' element={<PrivateRoute component={GenerateCertificado}/>}/>
         <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
         <Route path='/pre/aprovacion/natural' element={<PrivateRoute component={PreAprovacionNatural}/>}/>
         <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />

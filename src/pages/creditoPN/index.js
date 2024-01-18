@@ -5,6 +5,7 @@ import AuthContext from "../../context/authContext";
 import "./styles.css";
 import { getAllPrecios } from "../../services/precioService";
 import { createCliente, deleteCliente } from "../../services/clienteService";
+import { createPreAprovacion, deletePreAprovacion } from "../../services/preAprovacionService";
 import DepartmentContext  from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
 import { Navigate } from "react-router-dom";
@@ -204,9 +205,9 @@ export default function CreditoPersonaNatural(){
     razonEndeudamiento:'',
     IndiceSolvencia:'',
     observations:'',
-    estadoVboAg:'',
-    estadoVboDc:'',
-    estadoVboDf:'',
+    estadoVboAg:'Pendiente Revision',
+    estadoVboDc:'Pendiente Revision',
+    estadoVboDf:'Pendiente Revision',
     nivelEndeudamiento:'',
     cupoRecomendado:'',
     plazoRecomendado:'',
@@ -399,6 +400,33 @@ export default function CreditoPersonaNatural(){
           docOtros:docOtros,
           nombreComercial: search.nombreComercial.toUpperCase(),
         };
+        const preAprovacion = {
+          cedula: search.cedula,
+          razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
+          fechaRenovaCcio: info.fechaRenovaCcio,
+          puntajeDataCredito: info.puntajeDataCredito,
+          capitalTrabajo: info.capitalTrabajo,
+          razonEndeudamiento: info.razonEndeudamiento,
+          IndiceSolvencia: info.IndiceSolvencia,
+          observations: info.observations,
+          docRut: docRut,
+          docCcio: docCcio,
+          docRefcom: docRefcom,
+          docRefcom2:compare.docRefcom2,
+          docInfemp: docInfemp,
+          docVboAg: docVboAg,
+          docVboDc: docVboDc,
+          docVboDf: docVboDf,
+          estadoVboAg: info.estadoVboAg,
+          estadoVboDc: info.estadoVboDc,
+          estadoVboDf: info.estadoVboDf,
+          nivelEndeudamiento: info.nivelEndeudamiento,
+          cupoRecomendado: info.cupoRecomendado,
+          cupoAprovado: info.cupoAprovado,
+          plazoAprovado: info.plazoAprovado,
+          fechaCreacion: new Date(),
+          plazoRecomendado: info.plazoRecomendado,
+        }
         //creamos una constante la cual llevará el nombre de nuestra carpeta
         const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();        //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
@@ -439,6 +467,7 @@ export default function CreditoPersonaNatural(){
             accion:'1',
           }
           updateBitacora(user.email,info)
+          /* createPreAprovacion(preAprovacion) */
           .then(()=>{
             setLoading(false)
             setFiles([])
@@ -557,6 +586,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
     setSelectedFiles(newFiles);
   };
   const [open,setOpen]=useState(false);
+  
   const handleOpenModal=(e)=>{
     e.preventDefault();
     setOpen(true)
@@ -569,13 +599,13 @@ const [selectedFiles, setSelectedFiles] = useState([]);
     const opcionSelect=e.target.value;
     let nuevoColor='orange';
     switch(opcionSelect){
-      case 'pendiente':
+      case 'Pendiente Revision':
         nuevoColor='orange';
         break;
-      case 'rechazado':
+      case 'Rechazado':
         nuevoColor='red';
         break;
-      case 'aprobado':
+      case 'Aprobado':
         nuevoColor='green';
         break;
       default:
@@ -588,13 +618,13 @@ const [selectedFiles, setSelectedFiles] = useState([]);
     const opcionSelect=e.target.value;
     let nuevoColor='orange';
     switch(opcionSelect){
-      case 'pendiente':
+      case 'Pendiente Revision':
         nuevoColor='orange';
         break;
-      case 'rechazado':
+      case 'Rechazado':
         nuevoColor='red';
         break;
-      case 'aprobado':
+      case 'Aprobado':
         nuevoColor='green';
         break;
       default:
@@ -607,13 +637,13 @@ const [selectedFiles, setSelectedFiles] = useState([]);
     const opcionSelect=e.target.value;
     let nuevoColor='orange';
     switch(opcionSelect){
-      case 'pendiente':
+      case 'Pendiente Revision':
         nuevoColor='orange';
         break;
-      case 'rechazado':
+      case 'Rechazado':
         nuevoColor='red';
         break;
-      case 'aprobado':
+      case 'Aprobado':
         nuevoColor='green';
         break;
       default:
@@ -1506,8 +1536,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             className="fw-bold w-100 ms-2 me-3"
             onSubmit={handleSubmit}
             /* onSubmit={handleOpenModal} */
-            
-            /* onClick={handleOpenModal} */
           >
             REGISTRAR
           </button>
@@ -1555,60 +1583,70 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="w-25 ps-3" /* style={{width:120}} */>
                 <center>
                 <label><strong>C.cio:</strong></label>
-                {selectedFiles[6] && (
+                {selectedFiles[6] ? (
                     <div className="pt-1" style={{width:50}}>
                     <a href={URL.createObjectURL(selectedFiles[6])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
+                ):(
+                  <p className="text-danger"><strong>Sin Archivo</strong></p>
                 )}
                 </center>
               </div>
               <div className="w-25" /* style={{width:120}} */>
                 <center>
                 <label><strong>Rut:</strong></label>
-                {selectedFiles[5] && (
+                {selectedFiles[5] ? (
                     <div className="pt-1 " style={{width:50}}>
                     <a href={URL.createObjectURL(selectedFiles[5])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
+                  ):(
+                    <p className="text-danger"><strong>Sin Archivo</strong></p>
                   )} 
                 </center>
               </div>
               <div className="w-25 ">
                 <center>
                 <label><strong>Infolaft:</strong></label>
-                {selectedFiles[16] && (
+                {selectedFiles[16] ? (
                     <div className=" pt-1 " style={{width:50}} >
                     <a href={URL.createObjectURL(selectedFiles[16])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
+                ):(
+                  <p className="text-danger"><strong>Sin Archivo</strong></p>
                 )}
                 </center> 
               </div>
               <div className="w-25 ">
                 <center>
                 <label><strong>RefCom 1:</strong></label>
-                {selectedFiles[10] && (
+                {selectedFiles[10] ? (
                     <div className=" pt-1" style={{width:50}} >
                     <a href={URL.createObjectURL(selectedFiles[10])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
+                  ):(
+                    <p className="text-danger"><strong>Sin Archivo</strong></p>
                   )}
                 </center>
               </div>
               <div className="w-25 ">
                 <center>
                 <label><strong>RefCom 2:</strong></label>
-                {selectedFiles[11] && (
+                {selectedFiles[11] ? (
                     <div className=" pt-1" style={{width:50}} >
                     <a href={URL.createObjectURL(selectedFiles[11])} target="_blank" rel="noopener noreferrer">
                     <FaEye />Ver
                     </a>
                   </div>
+                  ):(
+                    <p className="text-danger"><strong>Sin Archivo</strong></p>
                   )}
                 </center>
               </div>
@@ -1692,11 +1730,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     style={{width:330,color:colorText}}
                     onChange={(e)=>(cambiarColorSelect(e),handlerChangeInfo(e))}
                   >
-                    <option value={'pendiente'} style={{color:'orange'}}>
+                    <option value={'Pendiente Revision'} style={{color:'orange'}}>
                       Pendiente Revision 
                     </option>
-                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
-                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                    <option style={{color:'red'}} value={'Rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'Aprobado'}>Aprobado</option>
                   </select>
                   <div className="d-flex flex-row">
                   <input
@@ -1727,14 +1765,15 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     required
                     id="estadoVboDc"
                     value={info.estadoVboDc}
+                    
                     style={{width:330,color:colorTextAg}}
                     onChange={(e)=>(cambiarColorSelectAg(e),handlerChangeInfo(e))}
                   >
-                    <option value={'pendiente'} style={{color:'orange'}}>
+                    <option value={'Pendiente Revision'} style={{color:'orange'}}>
                       Pendiente Revision 
                     </option>
-                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
-                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                    <option style={{color:'red'}} value={'Rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'Aprobado'}>Aprobado</option>
                   </select>
                   <div className="d-flex flex-row">
                   <input
@@ -1769,11 +1808,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     style={{width:330,color:colorTextDf}}
                     onChange={(e)=>(cambiarColorSelectDf(e),handlerChangeInfo(e))}
                   >
-                    <option value={'pendiente'} style={{color:'orange'}}>
+                    <option value={'Pendiente Revision'} style={{color:'orange'}}>
                       Pendiente Revision 
                     </option>
-                    <option style={{color:'red'}} value={'rechazado'}>Rechazado</option>
-                    <option style={{color:'green'}} value={'aprobado'}>Aprobado</option>
+                    <option style={{color:'red'}} value={'Rechazado'}>Rechazado</option>
+                    <option style={{color:'green'}} value={'Aprobado'}>Aprobado</option>
                   </select>
                   <div className="d-flex flex-row">
                   <input
@@ -1810,7 +1849,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   id="cupoRecomendado"
                   value={info.cupoRecomendado} onChange={handlerChangeInfo}
                   style={{width:150, height:25}}></input> a un plazo de 
-                  <input type="number" id="plazoRecomendado"
+                  <input type="number"
+                   id="plazoRecomendado"
                   value={info.plazoRecomendado} onChange={handlerChangeInfo}
                   style={{width:150, height:25}}></input> dias, lo recomendado por el vendedor.
                 </label>
@@ -1839,7 +1879,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </div>
               {/* <Fade cascade direction="right"> */}
               <div className="mt-3 d-flex flex-row justify-content-end">
-                <button /* onClick={} */ className="me-4">REGISTRAR</button>
+                <button onClick={(e)=>(handleSubmit(e),handleCloseModal(e))} className="me-4">REGISTRAR</button>
                 <button style={{backgroundColor:'grey'}} onClick={handleCloseModal}>VOLVER</button>
               </div>
               {/* </Fade> */}
