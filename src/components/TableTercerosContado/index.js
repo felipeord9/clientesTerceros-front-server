@@ -415,7 +415,7 @@ export default function TableTerceros({ terceros, loading }) {
         name: "Creado por",
         selector: (row) => row.userName,
         sortable: true,
-        width: '250px',
+        width: '150px',
       },{
         id: " createdAt",
         name: "FechaCreación",
