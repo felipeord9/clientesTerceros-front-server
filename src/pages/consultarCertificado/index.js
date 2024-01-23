@@ -18,6 +18,8 @@ import AuthContext from "../../context/authContext";
 import Button from '@mui/material/Button';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoMdPersonAdd } from "react-icons/io";
+import { GrValidate } from "react-icons/gr";
+import { RiVerifiedBadgeLine } from "react-icons/ri";
 
 export default function ConsultarCertificado(){
   const { user, setUser } = useContext(AuthContext);
@@ -114,8 +116,13 @@ export default function ConsultarCertificado(){
     <Fade cascade damping={0.1} direction="left" triggerOnce='true'>
       <div className="d-flex flex-column">
       <div className="m-0 p-0 d-flex justify-content-center align-items-center flex-column" >
-        <div className="w-100 h-100"  >
-        <Button style={{height:35}} onClick={(e)=>handleClickInicio(e)} variant="contained" className="d-flex justify-content-start"><RiArrowGoBackFill className="me-1" />Back</Button>
+        <div className="w-100 h-100 d-flex flex-row"  >
+          <div className="d-flex w-50 justify-content-start">
+            <Button style={{height:35}} onClick={(e)=>handleClickInicio(e)} variant="contained" className="d-flex justify-content-start"><RiArrowGoBackFill className="me-1" />Back</Button>
+          </div>
+          <div className="d-flex w-50 justify-content-end">
+            <Button style={{height:35}} onClick={(e)=>navigate('/certificados')} variant="contained" className="d-flex justify-content-start">Validar Envios<RiVerifiedBadgeLine className="ms-1" /></Button>
+          </div>
         </div>
      </div>
       
