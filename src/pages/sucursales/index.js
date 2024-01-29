@@ -119,7 +119,27 @@ export default function Users() {
       })
     })
   }
-
+  const customStyles = {
+    cells: {
+      style: {
+        fontSize: '15px', // ajustar el tamaño de la fuente de las celdas
+      },
+    },
+    rows: {
+      style: {
+        height:'35px' // ajusta el alto de las filas según tus necesidades
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: '16px',
+        height:'35px',
+        backgroundColor:'#D92121',
+        opacity:0.9,
+        color:'white'
+      },
+    },
+  };
   return (
     <div className="wrapper justify-content-center  h-100 w-100 m-auto" style={{userSelect:'none'}}>
     <div className='rounder-4'>
@@ -157,7 +177,7 @@ export default function Users() {
               Nueva Sucursal
           </button>
         </div>
-        <TableSucursales users={suggestions} setShowModal={setShowModalSucursal} setSelectedUser={setSelectedSucursal} loading={loading} style={{fontSize:20}}/>
+        <TableSucursales users={suggestions} setShowModal={setShowModalSucursal} setSelectedUser={setSelectedSucursal} loading={loading} customStyles={customStyles}/>
         {/* <button onClick={(e)=>buscarCodigo(e)}>buscar</button>
         <span>{ultimo}</span> */}
         

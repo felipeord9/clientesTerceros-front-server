@@ -7,7 +7,7 @@ import { deleteUserByName } from '../../services/userService';
 import { deleteSucursalByName } from '../../services/sucursalService';
 import { MdDeleteOutline } from "react-icons/md";
 
-export default function TableSucursales({ users, loading, setSelectedUser, setShowModal }) {
+export default function TableSucursales({ users, loading, setSelectedUser, setShowModal , customStyles }) {
 
   const { successAlert } = useAlert()
   const columns = [
@@ -136,7 +136,7 @@ export default function TableSucursales({ users, loading, setSelectedUser, setSh
         columns={columns}
         data={users}
         fixedHeaderScrollHeight={200}
-        
+        customStyles={customStyles}
         progressPending={loading}
         progressComponent={
           <div class="d-flex align-items-center text-danger gap-2 mt-2">

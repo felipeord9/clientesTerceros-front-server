@@ -5,7 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { deleteByCedula } from '../../services/clienteService';
 import { useState } from 'react';
 
-export default function TableTerceros({ terceros, loading }) {
+export default function TableTerceros({ terceros, loading , customStyles }) {
   const [selectedCliente, setSelectedTercero] = useState();
   const columns = [
     {
@@ -436,7 +436,7 @@ export default function TableTerceros({ terceros, loading }) {
         columns={columns}
         data={terceros}
         fixedHeaderScrollHeight={200}
-        
+        customStyles={customStyles}
         progressPending={loading}
         progressComponent={
           <div class="d-flex align-items-center text-danger gap-2 mt-2">

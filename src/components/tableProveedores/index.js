@@ -5,7 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { deleteByCedula } from '../../services/proveedorService';
 import { useState } from 'react';
 
-export default function TableProveedores({ proveedores, loading }) {
+export default function TableProveedores({ proveedores, loading , customStyles}) {
   const columns = [
     {
       id: "delete",
@@ -316,7 +316,7 @@ export default function TableProveedores({ proveedores, loading }) {
         columns={columns}
         data={proveedores}
         fixedHeaderScrollHeight={200}
-        
+        customStyles={customStyles}
         progressPending={loading}
         progressComponent={
           <div class="d-flex align-items-center text-danger gap-2 mt-2">

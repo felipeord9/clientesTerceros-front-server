@@ -6,27 +6,27 @@ import { MdDelete } from "react-icons/md";
 import { deleteUserByName } from '../../services/userService';
 import { MdDeleteOutline } from "react-icons/md";
 
-export default function TableUsers({ users, loading, setSelectedUser, setShowModal }) {
+export default function TableUsers({ users, loading, setSelectedUser, setShowModal , customStyles }) {
 
   const { successAlert } = useAlert()
   const columns = [
     {
       id: "id",
-      name: "#Identificación",
+      name: "ID",
       selector: (row) => row.rowId,
       sortable: true,
-      width: '145px',
+      width: '140px',
     },
     {
       id: "name",
       name: "Nombre",
       selector: (row) => row.name,
       sortable: true,
-      width: '250px'
+      width: '245px'
     },
     {
       id: "email",
-      name: "Correo",
+      name: "Correo Electrónico",
       selector: (row) => row.email,
       sortable: true,
       width: '350px'
@@ -117,7 +117,7 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
         columns={columns}
         data={users}
         fixedHeaderScrollHeight={200}
-        
+        customStyles={customStyles}
         progressPending={loading}
         progressComponent={
           <div class="d-flex align-items-center text-danger gap-2 mt-2">

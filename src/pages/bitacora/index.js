@@ -46,7 +46,27 @@ export default function Bitacora() {
     }
     setSearch(value)
   }
-
+  const customStyles = {
+    cells: {
+      style: {
+        fontSize: '15px', // ajustar el tamaño de la fuente de las celdas
+      },
+    },
+    rows: {
+      style: {
+        height:'35px' // ajusta el alto de las filas según tus necesidades
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: '16px',
+        height:'35px',
+        backgroundColor:'#D92121',
+        opacity:0.9,
+        color:'white'
+      },
+    },
+  };
   return (
     <div className="wrapper justify-content-center  h-100 w-100 m-auto" style={{userSelect:'none'}}>
     <div className='rounder-4'>
@@ -71,7 +91,7 @@ export default function Bitacora() {
               <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />
           </button> */}
         </div>
-        <TableBitacora bitacoras={suggestions} loading={loading} style={{fontSize:20}}/>
+        <TableBitacora bitacoras={suggestions} loading={loading} customStyles={customStyles}/>
       </div>
     </div>
     </div>

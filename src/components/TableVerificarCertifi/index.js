@@ -5,7 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { deleteByCedula } from '../../services/clienteService';
 import { useState } from 'react';
 
-export default function TableVerificarCertifi({ certificados, loading }) {
+export default function TableVerificarCertifi({ certificados, loading , customStyles }) {
   const [selectedCliente, setSelectedTercero] = useState();
   const columns = [
     {
@@ -41,7 +41,7 @@ export default function TableVerificarCertifi({ certificados, loading }) {
       name: "Correo",
       selector: (row) => row.correoEnvio,
       sortable: true,
-      width: '200px'
+      width: 'auto'
     },
     {
       id: "usuarioEnvio",
@@ -63,7 +63,7 @@ export default function TableVerificarCertifi({ certificados, loading }) {
         columns={columns}
         data={certificados}
         fixedHeaderScrollHeight={200}
-        
+        customStyles={customStyles}
         progressPending={loading}
         progressComponent={
           <div class="d-flex align-items-center text-danger gap-2 mt-2">
