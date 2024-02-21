@@ -8,6 +8,7 @@ import { changePassword } from "../../services/authService";
 import { Fade } from "react-awesome-reveal";
 import { updateBitacora } from '../../services/bitacoraService';
 import AuthContext from "../../context/authContext";
+import { comparePassword } from '../../services/userService'
 
 export default function ChangePassword() {
   const { user, setUser } = useContext(AuthContext);
@@ -31,78 +32,79 @@ export default function ChangePassword() {
   },[user])
   const handleSubmit = (e) => {
     e.preventDefault();
-    /* if (currentPassword !== info.password){
-      setErrorInput("La contraseña actual es incorrecta");
-      return setTimeout(() => setErrorInput(""), 3000);
-    } */
-    if (newPassword !== confirmNewPassword) {
-      setErrorInput("La contraseña nueva no coincide");
-      return setTimeout(() => setErrorInput(""), 3000);
+    const body={
+      email:user.email,
+      password: currentPassword,
     }
-    if (currentPassword === newPassword) {
-      setErrorInput("La contraseña anterior es igual a la actual");
-      return setTimeout(() => setErrorInput(""), 3000);
-    }
-    /* try{
-      changePassword({ currentPassword, newPassword })
-    }catch(err){
-      setErrorInput("¡Contraseña actual incorrecta!")
-      return setTimeout(() => setErrorInput(""), 3000)
-    } */
-    Swal.fire({
-      title: '¿Está segur@ de querer cambiar su contraseña?',
-          showDenyButton: true,
-          confirmButtonText: 'Confirmar',
-          confirmButtonColor: '#D92121',
-          denyButtonText: `Cancelar`,
-          denyButtonColor:'blue',
-          icon:'question'
-    }).then((result)=>{
-      if(result.isConfirmed){
-        const info={
-          accion:'1',
-        }
-        updateBitacora(user.email,info)
-        .then((data) => {
-          changePassword({ currentPassword, newPassword })
-          .then(()=>{
-            Swal.fire({
-              title: "¡Correcto!",
-              text: "Contraseña actualizada exitosamente",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 2500,
-            }).then(() => {
-              navigate("/inicio");
-            });
-          }).catch((err)=>{
-            Swal.fire({
-              title: "Uups!",
-              text: "¡Contraseña actual incorrecta! Verificala y vuelve a intentarlo",
-              icon: "warning",
-              showConfirmButton: false,
-              timer: 2500,
-            })
-          })
-          })
-      }else if(result.isDenied){
-        Swal.fire('Oops', 'La información suministrada se ha descartado', 'info')
-        .then(() => {
-          navigate("/inicio");
-        });
+    comparePassword(body)
+    .then(()=>{   
+      if (newPassword !== confirmNewPassword) {
+        setErrorInput("La contraseña nueva no coincide");
+        return setTimeout(() => setErrorInput(""), 3000);
       }
-  })
+      if (currentPassword === newPassword) {
+        setErrorInput("La contraseña actual es igual a la nueva");
+        return setTimeout(() => setErrorInput(""), 3000);
+      }
+      Swal.fire({
+        title: '¿Está segur@ de querer cambiar su contraseña?',
+        showDenyButton: true,
+        confirmButtonText: 'Confirmar',
+        confirmButtonColor: '#D92121',
+        denyButtonText: `Cancelar`,
+        denyButtonColor:'blue',
+          icon:'question'
+      }).then((result)=>{
+        if(result.isConfirmed){
+          const info={
+            accion:'1',
+          }
+          updateBitacora(user.email,info)
+          .then((data) => {
+            changePassword({ currentPassword, newPassword })
+            .then(()=>{
+              Swal.fire({
+                title: "¡Correcto!",
+                text: "Contraseña actualizada exitosamente",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 2500,
+              }).then(() => {
+                navigate("/inicio");
+              });
+            }).catch((err)=>{
+              Swal.fire({
+                title: "Uups!",
+                text: "¡Contraseña actual incorrecta! Verificala y vuelve a intentarlo",
+                icon: "warning",
+                showConfirmButton: false,
+                timer: 2500,
+              })
+            })
+            })
+        }else if(result.isDenied){
+          Swal.fire('Oops', 'La información suministrada se ha descartado', 'info')
+          .then(() => {
+            navigate("/inicio");
+          });
+        }
+      })  
       .catch((error) => {
-        Swal.fire({
-          title: "¡Uups!",
-          text: "¡Contraseña actual incorrecta! Verificala y vuelve a intentarlo",
-          icon: "warning",
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        setErrorInput("¡Contraseña actual incorrecta!")
-        return setTimeout(() => setErrorInput(""), 3000)
+          Swal.fire({
+            title: "¡Uups!",
+            text: "¡Contraseña actual incorrecta! Verificala y vuelve a intentarlo",
+            icon: "warning",
+            showConfirmButton: false,
+            timer: 2500,
+          })
+          setErrorInput("¡Contraseña actual incorrecta!")
+          return setTimeout(() => setErrorInput(""), 3000)
       });
+    })
+    .catch((error)=>{
+      setErrorInput('Contraseña actual incorrecta');
+      return setTimeout(() => setErrorInput(""), 3000);
+    })
   };
   const [shown,setShown]=useState("");
   const switchShown =()=>setShown(!shown);
@@ -115,10 +117,10 @@ export default function ChangePassword() {
 
   const handleClickInicio=(e)=>{
     e = e.target.value
-    if( user.role==='cartera'){
+    if( user.role==='cartera' || user.role==='agencias'){
       /* return navigate('/inicio') */
       return navigate('/menu/principal/Clientes')
-    }else if(user.role==='compras' || user.role==='agencias'){
+    }else if(user.role==='compras' || user.role==='asistente agencia'){
       /* return navigate('/compras') */
       return navigate('/menu/principal/Proveedores')
     }else{
@@ -137,8 +139,7 @@ export default function ChangePassword() {
       <h2 className="mt-1" style={{color:'black'}}><strong>Cambiar contraseña</strong></h2>
       </Fade>
       <form onSubmit={handleSubmit} className=''>
-{/*           <input type="text" id="password" value={user.password}></input>
- */}        <div className='input_group m-3 '>
+        <div className='input_group m-3 '>
         <input  type={shown ? 'text':'password'} onChange={(e)=>setCurrentPassword(e.target.value)} id='current' className='input_group_input' required/>
           <label  for="current" className='input_group_label'>Contraseña actual</label>
           <span className='position-absolute' onClick={switchShown} style={{ right: 10, cursor: "pointer",fontSize:25 }}>{shown ? <Bs.BsEye/>:<Bs.BsEyeSlash/>}</span>
@@ -161,12 +162,12 @@ export default function ChangePassword() {
         <center>
         <label className='mt-1'><a onClick={(e)=>handleClickInicio(e)} className="gui-input" style={{fontSize:'medium',cursor:'pointer'}}><strong>Volver al inicio</strong></a></label>
         </center>
-        <div style={{height:12}}>
+        <div className="d-flex justify-content-center" style={{height:12}}>
         <span
           className="text-center text-danger m-0"
           style={{ fontSize: 15, height: 0 }}
         >
-          {errorInput}
+          <strong>{errorInput}</strong>
         </span>
         </div>
       </form>

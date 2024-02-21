@@ -7,20 +7,18 @@ import * as Bs from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
 import { createBitacora , deleteBitacora } from '../../services/bitacoraService';
 import { Fade } from "react-awesome-reveal";
-import Swal from "sweetalert2";
+import { GiSandsOfTime } from "react-icons/gi";
 
 export default function Login() {
   const {login,isLoginLoading,hasLoginError,isLogged}=useUser()
+  const [loading,setLoading] = useState(false);
   const { user, setUser } = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const navigate =useNavigate()
   useEffect(()=>{
-    /* if(isLogged && user.role==='agencias' || isLogged && user.role==='cartera')navigate('/validar/tercero');
-    if(isLogged && user.role==='compras')navigate('/validar/Proveedor');
-    if(isLogged && user.role==='admin')navigate('/validacion/admin'); */
-    if(isLogged && user.role==='cartera')navigate('/menu/principal/Clientes');
-    if(isLogged && user.role==='compras' || isLogged && user.role==='agencias' || isLogged && user.role==='comprasnv')navigate('/menu/principal/Proveedores');
+    if(isLogged && user.role==='cartera' || isLogged && user.role === 'agencias')navigate('/menu/principal/Clientes');
+    if(isLogged && user.role==='compras' || isLogged && user.role==='asistente agencia' || isLogged && user.role==='comprasnv')navigate('/menu/principal/Proveedores');
     if(isLogged && user.role==='admin')navigate('/menu/principal/admin');
     if(isLogged){
       const body={
@@ -51,16 +49,9 @@ export default function Login() {
 
   const handleLogin=async(e)=>{
     e.preventDefault();
-    login({email,password})
-        /* const body={
-          usuario:email,
-          fechaIngreso: new Date(),
-          accion:info.accion,
-          fechaSalida:info.fechaSalida,
-          macEquipo:info.macEquipo,
-        }
-        createBitacora(body) */
-        /* deleteBitacora(email) */ 
+    setLoading(true)
+    await login({email,password});
+    setLoading(false); 
   }
 
   const [shown,setShown]=useState("");
@@ -86,7 +77,8 @@ export default function Login() {
         </div>
         <div className='align-content-center text-align-center align-items-center'>
           <center>
-          <button type="submit" ><strong>Entrar</strong></button>
+          {/* <button type="submit" ><strong>Entrar</strong></button> */}
+          <button type="submit" >{loading ? <strong>Cargando... <GiSandsOfTime /></strong>:<strong>Entrar</strong>}</button>
           </center>
         </div>
         <center>

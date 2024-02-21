@@ -16,10 +16,6 @@ import { getAllActividad} from '../../services/actividadService';
 import { getAllAgencies } from "../../services/agencyService";
 import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
-import { FaFileDownload } from "react-icons/fa";
-import VinculacionProveedor from '../../pdfs/FORMATO  VINCULACION DE PROVEEDORES.pdf'
-import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
-import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { updateBitacora } from '../../services/bitacoraService';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Logo_pdf from '../../assest/logo_pdf.jpg'
@@ -76,16 +72,7 @@ export default function EditarCCP(){
     input3: null,
     input4: null,
   });
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
 
-  /* Second form */
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
     setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
@@ -194,54 +181,12 @@ export default function EditarCCP(){
       getAllActividad().then((data)=>setActividades(data));
   },[]);
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.departament_id === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      setCiudad(null);
-      selectCiudadRef.current.selectedIndex = 0;
-    }
-  };
-
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
     setSearch({
       ...search,
       [id]: value,
     });
-  };
-
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
-    }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
-
-  const changeType = (e) => {
-    setSearch({
-      ...search,
-      idDepartment: "",
-    });
-    setInvoiceType(!invoiceType);
-    /* setClient(null); */
-    setCiudad(null);
-    selectCiudadRef.current.selectedIndex = 0;
   };
 
   const handleSubmit = (e) => {
@@ -264,13 +209,6 @@ export default function EditarCCP(){
             formData.append(fieldName, files[fieldName]);
           }
         }
-        //agregamos los pdf a un formdata dependiendo del index que les dimos
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }); */
         //creamos el cuerpo de nuestra instancia
         const body={
           cedula: search.cedula,

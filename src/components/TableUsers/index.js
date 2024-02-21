@@ -29,18 +29,18 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
       name: "Correo Electrónico",
       selector: (row) => row.email,
       sortable: true,
-      width: '350px'
+      width: '340px'
     },
     {
       id: "role",
       name: "Rol",
       selector: (row) => row.role.toUpperCase(),
       sortable: true,
-      width: '120px',
+      width: '130px',
     },
     {
       id: "options",
-      name: "Editar",
+      name: "Edit",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
@@ -55,7 +55,7 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
       width: '70px'
     },{
       id: "delete",
-      name: "Eliminar",
+      name: "Delete",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>

@@ -13,14 +13,14 @@ export default function TableVerificarCertifi({ certificados, loading , customSt
       name: "NIT",
       selector: (row) => row.tercero,
       sortable: true,
-      width: '100px',
+      width: '120px',
     },
     {
       id: "nombreTercero",
       name: "Nombre",
       selector: (row) => row.nombreTercero,
       sortable: true,
-      width: '270px',
+      width: 'auto',
     },
     {
       id: "concepto",
@@ -34,7 +34,7 @@ export default function TableVerificarCertifi({ certificados, loading , customSt
       name: "Tipo",
       selector: (row) => row.tipoCertificado,
       sortable: true,
-      width: '88px'
+      width: '100px'
     },
     {
       id: "correoEnvio",
@@ -45,7 +45,7 @@ export default function TableVerificarCertifi({ certificados, loading , customSt
     },
     {
       id: "usuarioEnvio",
-      name: "usuario Envio",
+      name: "Envió",
       selector: (row) => row.usuarioEnvio,
       sortable: true,
       width: '120px'

@@ -1,27 +1,17 @@
 import React, { useState, useContext, useEffect } from "react"
 import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { Fade } from "react-awesome-reveal";
-import { validarCliente } from "../../services/clienteService"; 
 import { validarProveedor } from "../../services/proveedorService";
 import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
 import Button from '@mui/material/Button';
-import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoMdPersonAdd } from "react-icons/io";
 
 export default function ValidarProveedor(){
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
     const [search,setSearch]=useState({
       cedula:'',
     })
@@ -63,13 +53,6 @@ export default function ValidarProveedor(){
       docValAnt:'',
       docOtros:'',
     })
-
-    /* useEffect(()=>{
-      if(validarCliente(search.cedula)){
-        
-      }
-    }) */
-    /* const [cliente,setCliente]=useState([]); */
 
     const searchProveedor = (e)=>{
       e.preventDefault();
@@ -147,9 +130,9 @@ export default function ValidarProveedor(){
 
     const handleClickInicio=(e)=>{
       e = e.target.value
-      if( user.role==='cartera'){
+      if( user.role==='cartera' || user.role==='agencias'){
         return navigate('/inicio')
-      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
@@ -157,10 +140,10 @@ export default function ValidarProveedor(){
     }
     const handleClickImagen=(e)=>{
       e = e.target.value
-      if( user.role==='cartera'){
+      if( user.role==='cartera' || user.role==='agencias'){
         /* return navigate('/inicio') */
         return navigate('/menu/principal/Clientes')
-      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
       }else{
@@ -214,13 +197,18 @@ export default function ValidarProveedor(){
         <h2 className="me-3 mt-3">Validación de proveedor: </h2>
         <div className="d-flex flex-row">
         
-        <TextField min={10000000}
-                    max={9999999999}
-                    value={search.cedula}
-                    className="pe-3 mt-1"
-                    pattern="[0-9]"
-                    onChange={handlerChangeSearch} id="cedula" type="number" style={{fontSize:20}} label="Número de documento" variant="standard"></TextField>
-        
+        <TextField 
+          min={10000000}
+          max={9999999999}
+          value={search.cedula}
+          className="pe-3 mt-1"
+          pattern="[0-9]"
+          onChange={handlerChangeSearch} 
+          id="cedula" type="number" 
+          style={{fontSize:20}} 
+          label="Número de documento" 
+          variant="standard">
+        </TextField>
         </div>
         </div>
         <center>

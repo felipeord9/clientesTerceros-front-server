@@ -46,6 +46,8 @@ export default function Bitacora() {
     }
     setSearch(value)
   }
+
+  /* diseño de la tabla bitacora */
   const customStyles = {
     cells: {
       style: {
@@ -73,24 +75,6 @@ export default function Bitacora() {
     <div className="login-wrapper d-flex flex-column mt-5 pt-3" >
       <h1 className="text-danger fw-bold">Listado Bitacora (registro de actividad)</h1>
       <div className="d-flex flex-column gap-1 h-100">
-        <div className="d-flex justify-content-end mt-1 gap-3 mb-1">
-          {/* <input
-            type="search"
-            value={search}
-            className="form-control form-control-sm w-100"
-            placeholder="Buscar Registro"
-            onChange={searchBitacoras}
-            style={{width:500, fontSize:20}}
-          /> */}
-          {/* <button
-            title="Nuevo usuario"
-            className="d-flex  text-nowrap btn btn-sm btn-danger text-light gap-1" 
-            style={{fontSize:18}}
-            onClick={(e) => setShowModalUsers(!showModalUsers)}>
-              Nuevo usuario
-              <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />
-          </button> */}
-        </div>
         <TableBitacora bitacoras={suggestions} loading={loading} customStyles={customStyles}/>
       </div>
     </div>

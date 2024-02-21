@@ -1,6 +1,4 @@
-import Error from '../../assest/error-404.jpg'
 import Logo from '../../assest/logo-gran-langostino.png'
- 
 
 export default function Page404() {
   return (

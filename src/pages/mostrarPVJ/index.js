@@ -1,15 +1,5 @@
 import React, { useState, useContext, useEffect , useRef} from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
-import TextField from '@mui/material/TextField';
-import { Fade } from "react-awesome-reveal";
+import { useNavigate } from 'react-router-dom';
 import { validarCliente } from "../../services/clienteService"; 
 import { validarProveedor } from "../../services/proveedorService";
 import Swal from "sweetalert2";
@@ -20,6 +10,8 @@ import Logo_pdf from '../../assest/logo_pdf.jpg'
 import { CiEdit } from "react-icons/ci";
 import { config } from "../../config";
 import { getAllCiudades } from "../../services/ciudadService";
+import { getAllAgencies } from "../../services/agencyService";
+import { getAllTipoFormularios } from "../../services/tipoFormularioService";
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const url = `${config.apiUrl2}/uploadMultiple/obtener-archivo/${carpeta}/${archivo}`;
@@ -30,23 +22,16 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
       </a>
     </div>
   );
-
 };
 
 export default function MostrarPVJ(){
   const { user, setUser } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
     const [search,setSearch]=useState({
       cedula:'',
     })
-    const handlerChangeSearch = (e) => {
-      const { id, value } = e.target;
-      setSearch({
-        ...search,
-        [id]: value,
-      });
-    };
+    const [agencias,setAgencias] = useState([]);
+    const [formularios,setFormularios] = useState([]);
 
     const [info,setInfo]=useState({
       cedula:'',
@@ -95,15 +80,15 @@ export default function MostrarPVJ(){
       });
     };
     const [ciudades,setCiudades] = useState([]);
-
-    const selectCiudadRef=useRef();
     useEffect(()=>{
       getAllCiudades().then((data) => setCiudades(data));
+      getAllAgencies().then((data) => setAgencias(data));
+      getAllTipoFormularios().then((data) => setFormularios(data));
+
     },[]);
     const [data,setData]=useState(null);
     const handleSearch = (e) =>{
       e.preventDefault();
-
         validarCliente(search.cedula)
         .then(({data})=>{  
           Swal.fire({
@@ -340,16 +325,24 @@ export default function MostrarPVJ(){
                 </div>
                 <div className="d-flex flex-column align-items-start w-25 me-4">
                   <label className="me-1 fw-bold">Agencia:</label>
-                  {data ? (
-                      <input
-                      id="agencia"   
-                      className="form-control form-control-sm"                   
-                      disabled
-                      value={data.agencia}
-                    ></input>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
+                  <select
+                    id="agencia"
+                    value={info.agencia}
+                    className="form-control form-control-sm w-100"
+                    required
+                    onChange={ChangeInput}
+                    disabled
+                  >
+                  {agencias
+                  .sort((a,b)=>a.id - b.id)
+                  .map((elem)=>(
+                    <option id={elem.id} value={elem.id}>
+                    {elem.description}
+                    </option>
+                    
+                  ))
+                }
+                  </select>
                 </div>
                 <div className="d-flex flex-column align-items-start w-25">
                   <label className="me-1 fw-bold">Solicitante:</label>
@@ -384,7 +377,7 @@ export default function MostrarPVJ(){
                   <select
                     id="ciudad"
                     value={info.ciudad}
-                    className="form-select form-select-sm w-100"
+                    className="form-control form-control-sm w-100"
                     required
                     onChange={ChangeInput}
                     disabled
@@ -446,8 +439,8 @@ export default function MostrarPVJ(){
               disabled
               id="observations"
               value={data.observations}
-              className="form-control border border-3"
-              style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
+              className="form-control form-control-sm border border-3"
+              style={{ minHeight: 70, maxHeight: 100, fontSize: 13 }}
             ></textarea>
           ):(
             <p>no hay nada</p>
@@ -497,7 +490,7 @@ export default function MostrarPVJ(){
                       id="createdAt"   
                       className="form-control form-control-sm"                   
                       disabled
-                      value={data.createdAt}
+                      value={`${new Date(data.createdAt).toLocaleDateString()} - ${new Date(data.createdAt).toLocaleTimeString()}` }
                     ></input>
                   ):(
                     <p>no hay nada</p>
@@ -518,17 +511,24 @@ export default function MostrarPVJ(){
                 </div>
                 <div className="d-flex flex-column align-items-start w-75 " >
                   <label className="me-1 fw-bold">Tipo formato:</label>
-                  {data ? (
-                      <input
-                      id="tipoFormulario"   
-                      className="form-control form-control-sm"                   
-                      disabled
-                      value={data.tipoFormulario}
-                      onChange={(e)=>setTipoForm(e)}
-                    ></input>
-                  ):(
-                    <p>no hay nada</p>
-                  )}
+                  <select
+                    id="tipoFormulario"
+                    value={info.tipoFormulario}
+                    className={`form-control form-control-sm`}
+                    required
+                    onChange={ChangeInput}
+                    disabled
+                  >
+                  {formularios
+                  .sort((a,b)=>a.id - b.id)
+                  .map((elem)=>(
+                    <option id={elem.id} value={elem.id}>
+                    {elem.description}
+                    </option>
+                    
+                  ))
+                }
+                  </select>
                 </div>
       </div>
       </center>

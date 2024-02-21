@@ -1,16 +1,9 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go"
 import TableCertificados from "../../components/tablaCertificados"
-import CertiTable from "../../components/certiTable"
-import { findClientes  } from "../../services/clienteService"
-import { findAll , findByTercero , findCertificados } from '../../services/certificadoService'
-import Swal from "sweetalert2";
 import { getAllCiudades , getOneCiudad } from "../../services/ciudadService";
 
 export default function GenerateCertificado() {
-  const [terceros, setTerceros] = useState([]);
   const [suggestions, setSuggestions] = useState([])
-  const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
 
   const [info,setInfo]=useState({
@@ -25,7 +18,6 @@ export default function GenerateCertificado() {
   
   useEffect(()=>{
     const datos = localStorage.getItem('certificado');
-    const data = localStorage.getItem('dataCerti');
     if(datos){
       setInfo(JSON.parse(datos));
     }

@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
 
 const url = `${config.apiUrl2}/bitacora`;
 
 export const findBitacoras = async () => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -13,7 +16,9 @@ export const findBitacoras = async () => {
   return data
 } 
 export const createBitacora = (body) => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
+
     return fetch(url, {
       method: "POST",
       headers: {
@@ -28,7 +33,9 @@ export const createBitacora = (body) => {
 };
 
 export const updateBitacora = async (email, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/${email}`, body, {
     headers: {
       Authorization: `Bearer ${token}`

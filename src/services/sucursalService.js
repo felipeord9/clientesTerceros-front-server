@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
 
 const url = `${config.apiUrl2}/sucursales`;
 
 export const findSucursales = async () => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -14,7 +17,9 @@ export const findSucursales = async () => {
 }
 
 export const findCodigo = async (cedula) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(`${url}/codigo/${cedula}`, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -24,7 +29,9 @@ export const findCodigo = async (cedula) => {
 }
 
 export const createSucursal = async (body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.post(url, body, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -34,7 +41,9 @@ export const createSucursal = async (body) => {
 }
 
 export const updateSucursal = async (id, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/${id}`, body, {
     headers: {
       Authorization: `Bearer ${token}`

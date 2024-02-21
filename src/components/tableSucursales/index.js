@@ -13,7 +13,7 @@ export default function TableSucursales({ users, loading, setSelectedUser, setSh
   const columns = [
     {
       id: "cedula",
-      name: "Código Siesa",
+      name: "ID",
       selector: (row) => row.cedula,
       sortable: true,
       width: '150px',
@@ -30,7 +30,7 @@ export default function TableSucursales({ users, loading, setSelectedUser, setSh
       name: "Nombre Sucursal",
       selector: (row) => row.nombreSucursal,
       sortable: true,
-      width: '325px'
+      width: 'auto'
     },
     {
       id: "direccion",
@@ -48,7 +48,7 @@ export default function TableSucursales({ users, loading, setSelectedUser, setSh
     },
     {
       id: "options",
-      name: "Editar",
+      name: "Edit",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
@@ -64,7 +64,7 @@ export default function TableSucursales({ users, loading, setSelectedUser, setSh
     },
     {
       id: "delete",
-      name: "Eliminar",
+      name: "Delete",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>

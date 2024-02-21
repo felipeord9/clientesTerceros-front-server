@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go"
-import TableUsers from "../../components/TableUsers"
 import TableSucursales from "../../components/tableSucursales"
-import ModalUsers from "../../components/ModalUsers";
 import ModalSucursal from "../../components/ModalSucursal";
-import { findUsers } from "../../services/userService"
-import { findSucursales, findCodigo } from "../../services/sucursalService"
+import { findSucursales } from "../../services/sucursalService"
 import { validarCliente } from "../../services/clienteService"
 import Swal from "sweetalert2";
 import { BsBuildingFillAdd } from "react-icons/bs";
-import { BsBuildingAdd } from "react-icons/bs";
 
 export default function Users() {
   const [sucursales, setSucursales] = useState([]);
@@ -74,17 +69,6 @@ export default function Users() {
     }
   }
 
-  const buscarCodigo =(e)=>{
-    e.preventDefault();
-    findCodigo(search)
-    .then(({data})=>{
-      Swal.fire({
-        title:`El codigo es:${data.codigoSucursal} y el nombres es ${data.nombreSucursal}`,
-        timer:5000
-      })
-    })  
-  }
-
   const botonHabilitado = search.length > 5;
 
   const handlerNewSucursal = (e) =>{
@@ -132,7 +116,7 @@ export default function Users() {
     },
     headCells: {
       style: {
-        fontSize: '16px',
+        fontSize: '15px',
         height:'35px',
         backgroundColor:'#D92121',
         opacity:0.9,
@@ -178,8 +162,6 @@ export default function Users() {
           </button>
         </div>
         <TableSucursales users={suggestions} setShowModal={setShowModalSucursal} setSelectedUser={setSelectedSucursal} loading={loading} customStyles={customStyles}/>
-        {/* <button onClick={(e)=>buscarCodigo(e)}>buscar</button>
-        <span>{ultimo}</span> */}
         
       </div>
     </div>

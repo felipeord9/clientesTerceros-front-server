@@ -1,13 +1,6 @@
 import React, { useState, useContext, useEffect } from "react"
 import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { Fade } from "react-awesome-reveal";
 import { validarCliente } from "../../services/clienteService"; 
@@ -15,13 +8,11 @@ import { validarProveedor } from "../../services/proveedorService";
 import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
 import Button from '@mui/material/Button';
-import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoMdPersonAdd } from "react-icons/io";
 
 export default function ValidarTercero(){
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
     const [search,setSearch]=useState({
       cedula:'',
     })
@@ -63,13 +54,6 @@ export default function ValidarTercero(){
       docValAnt:'',
       docOtros:'',
     })
-
-    /* useEffect(()=>{
-      if(validarCliente(search.cedula)){
-        
-      }
-    }) */
-    /* const [cliente,setCliente]=useState([]); */
     const handleSearch = (e) =>{
       e.preventDefault();
 
@@ -277,13 +261,18 @@ export default function ValidarTercero(){
         <h2 className="me-3 mt-3">Validación de Cliente: </h2>
         <div className="d-flex flex-row">
         
-        <TextField min={10000000}
-                    max={9999999999}
-                    value={search.cedula}
-                    className="pe-3 mt-1"
-                    pattern="[0-9]"
-                    onChange={handlerChangeSearch} id="cedula" type="number" style={{fontSize:20}} label="Número de documento" variant="standard"></TextField>
-        
+        <TextField 
+          min={10000000}
+          max={9999999999}
+          value={search.cedula}
+          className="pe-3 mt-1"
+          pattern="[0-9]"
+          onChange={handlerChangeSearch} 
+          id="cedula" type="number" 
+          style={{fontSize:20}} 
+          label="Número de documento" 
+          variant="standard">
+        </TextField>
         </div>
         </div>
         <center>
@@ -294,7 +283,6 @@ export default function ValidarTercero(){
       </div>
       </div>
       </Fade>
-      
     </div>
     </div>
     </div>

@@ -1,0 +1,7 @@
+.search-box{
+    font-size: 20px;
+    border: solid 0.3em #000000;
+    display: inline-block;
+    position: relative;
+    border-radius: 2.5em;
+}

@@ -5,27 +5,14 @@ import * as FaIcons from "react-icons/fa";
 import AuthContext from "../../context/authContext";
 import useUser from "../../hooks/useUser";
 import { NavBarData } from "./NavbarData";
-import Swal from "sweetalert2";
 import Logo from "../../assest/item.png";
 import "./styles.css";
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
 import React from "react";
-import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import Icono from '../../assest/iconoAdver.png';
-import Icon2 from '../../assest/icon2.png'
 import Icon3 from '../../assest/gif.gif'
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
 import  Button from "@mui/material/Button";
 import Modal from '@mui/material/Modal'
 import { AiFillEdit } from 'react-icons/ai'
@@ -93,6 +80,11 @@ export default function Navbar() {
       macEquipo:info.macEquipo,
     }
     updateBitacora(user.email,body);
+    window.localStorage.removeItem('dataCerti')
+    window.localStorage.removeItem('generar')
+    window.localStorage.removeItem('data')
+    window.localStorage.removeItem('codCity')
+    window.localStorage.removeItem('certificado')
   }
 
     /* Modal instancias */
@@ -106,10 +98,10 @@ export default function Navbar() {
     }
     const handleClickInicio=(e)=>{
       e = e.target.value
-      if( user.role==='cartera'){
+      if( user.role==='cartera' || user.role==='agencias'){
         /* return navigate('/inicio') */
         return navigate('/menu/principal/Clientes')
-      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
       }else{

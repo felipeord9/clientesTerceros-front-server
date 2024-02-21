@@ -46,7 +46,6 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
       </a>
     </div>
   );
-
 };
 
 export default function EditarPNCR(){
@@ -107,14 +106,6 @@ export default function EditarPNCR(){
     input17: null,
     input18: null,
   });
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
 
   /* Second form */
   const handleFileChange = (fieldName, e) => {
@@ -243,17 +234,6 @@ export default function EditarPNCR(){
       getAllCiudades().then((data) => setCiudades(data));
   },[]);
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.departament_id === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      setCiudad(null);
-      selectCiudadRef.current.selectedIndex = 0;
-    }
-  };
-
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
     setSearch({
@@ -362,8 +342,7 @@ export default function EditarPNCR(){
           nombreComercial: search.nombreComercial.toUpperCase()
         };
         //creamos una constante la cual llevará el nombre de nuestra carpeta
-/*         const folderName = search.cedula;
- */        const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
+        const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
         const originalFolderName= compare.cedula+'-'+compare.primerApellido.toUpperCase()+'-'+ compare.segundoApellido.toUpperCase()+'-'+ compare.primerNombre.toUpperCase()+'-'+ compare.otrosNombres.toUpperCase();

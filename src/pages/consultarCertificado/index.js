@@ -40,21 +40,6 @@ export default function ConsultarCertificado(){
 
     const searchProveedor = (e)=>{
       e.preventDefault();
-      /* const {value} = e.target
-      if(value!==""){
-        const filteredCertificado = certificados.filter((elem)=>{
-          if(elem.tercero.includes(value)||(elem.nombreTercero.includes(value))){
-            return elem
-          }
-        })
-        if(filteredCertificado.length>0){
-          setSuggestions(filteredCertificado)
-        }else{
-          setSuggestions(certificados)
-        }
-      }else{
-        setSuggestions(certificados)
-      } */
       findByTercero(search.tercero)
       .then(({data})=>{  
         Swal.fire({
@@ -140,12 +125,16 @@ export default function ConsultarCertificado(){
         <h2 className="me-3 mt-3">NIT: </h2>
         <div className="d-flex flex-row">
         
-        <TextField min={10000000}
-                    max={9999999999}
-                    value={search.tercero}
-                    className="pe-3 mt-1"
-                    pattern="[0-9]"
-                    onChange={handlerChangeSearch} id="tercero" type="number" style={{fontSize:20}} label="Número de documento" variant="standard"></TextField>
+        <TextField 
+          min={10000000}
+          max={9999999999}
+          value={search.tercero}
+          className="pe-3 mt-1"
+          pattern="[0-9]"
+          onChange={handlerChangeSearch} 
+          id="tercero" type="number" style={{fontSize:20}} 
+          label="Número de documento" variant="standard">
+        </TextField>
         </div>
         </div>
         <div className="d-flex flex-row w-75 me-3">

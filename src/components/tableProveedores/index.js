@@ -9,7 +9,7 @@ export default function TableProveedores({ proveedores, loading , customStyles})
   const columns = [
     {
       id: "delete",
-      name: "Eliminar",
+      name: "Delete",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
@@ -74,10 +74,10 @@ export default function TableProveedores({ proveedores, loading , customStyles})
     },
     {
       id: "tipoDocumento",
-      name: "TipoDoc",
+      name: "Doc",
       selector: (row) => row.tipoDocumento,
       sortable: true,
-      width: '110px',
+      width: '100px',
     }, 
     {
       id: "razonSocial",
@@ -91,7 +91,7 @@ export default function TableProveedores({ proveedores, loading , customStyles})
         name: "Dpto",
         selector: (row) => row.departamento,
         sortable: true,
-        width: '90px'
+        width: '100px'
       },
       {
         id: "ciudad",
@@ -107,13 +107,13 @@ export default function TableProveedores({ proveedores, loading , customStyles})
         width: '300px',
       },{
         id: "celular",
-        name: "# Celular",
+        name: "Celular",
         selector: (row) => row.celular,
         sortable: true,
         width: '150px',
       },{
         id: "telefono",
-        name: "# Telefónico",
+        name: "Teléfonico",
         selector: (row) => row.telefono,
         sortable: true,
         width: '130px',
@@ -126,7 +126,7 @@ export default function TableProveedores({ proveedores, loading , customStyles})
         width: '300px',
       },{
         id: "actividadEconomica",
-        name: "Actividad eco.",
+        name: "Act. econo.",
         selector: (row) => row.actividadEconomica,
         sortable: true,
         width: '150px',
@@ -140,28 +140,28 @@ export default function TableProveedores({ proveedores, loading , customStyles})
       },
       {
         id: "nameRep",
-        name: "NombreRepLegal",
+        name: "Nombre Rep Legal",
         selector: (row) => row.nameRepLegal,
         sortable: true,
-        width: '150px',
+        width: '200px',
       },
       {
         id: "apellidoRepLegal",
-        name: "Apellido rep",
+        name: "Apellido Rep Legal",
         selector: (row) => row.apellidoRepLegal,
         sortable: true,
-        width: '150px',
+        width: '200px',
       },
       {
         id: "tipoDocRepLegal",
-        name: "TipDocRep",
+        name: "DocRep",
         selector: (row) => row.tipoDocRepLegal,
         sortable: true,
         width: '120px',
       },
       {
         id: "numeroDocRepLegal",
-        name: "# Doc",
+        name: "ID Rep.",
         selector: (row) => row.numeroDocRepLegal,
         sortable: true,
         width: '120px',
@@ -178,7 +178,7 @@ export default function TableProveedores({ proveedores, loading , customStyles})
         name: "Observaciones",
         selector: (row) => row.observations,
         sortable: true,
-        width: '250px',
+        width: 'auto',
       },
       {
         id: "agencia",
@@ -299,9 +299,9 @@ export default function TableProveedores({ proveedores, loading , customStyles})
       },{
         id: " createdAt",
         name: "FechaCreación",
-        selector: (row) => row.createdAt,
+        selector: (row) => `${new Date(row.createdAt).toLocaleDateString()} - ${new Date(row.createdAt).toLocaleTimeString()}`,
         sortable: true,
-        width: '200px',
+        width: '215px',
       }
   ]
   

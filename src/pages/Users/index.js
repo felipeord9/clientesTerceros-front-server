@@ -92,14 +92,14 @@ export default function Users() {
             type="search"
             value={search}
             className="form-control form-control-sm w-100"
-            placeholder="Buscar usuario"
+            placeholder="Buscar Usuario por 'Nombre' ó 'ID'"
             onChange={searchUsers}
             style={{width:500, fontSize:20}}
           />
           <button
             title="Nuevo usuario"
-            className="d-flex  text-nowrap btn btn-sm btn-danger text-light gap-1" 
-            style={{fontSize:18}}
+            className="d-flex  text-nowrap btn btn-sm  text-light gap-1" 
+            style={{fontSize:18,backgroundColor:'#D92121', color:'white'}}
             onClick={(e) => setShowModalUsers(!showModalUsers)}>
               Nuevo usuario
               <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />

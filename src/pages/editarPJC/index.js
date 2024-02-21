@@ -95,16 +95,8 @@ export default function EditarPJC(){
     input2: null,
     input3: null,
     input4: null,
-  });/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
-  //------------------------------------------
-  /* second form */
+  });
+
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
     setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
@@ -242,28 +234,6 @@ export default function EditarPJC(){
     }
   }
 
-  
-
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
-    }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     Swal.fire({
@@ -277,13 +247,6 @@ export default function EditarPJC(){
     }) .then(({isConfirmed})=>{
       if(isConfirmed){
         setLoading(true);
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }) */
-        /* second form */
         const formData = new FormData();
 
         for (const fieldName in files) {

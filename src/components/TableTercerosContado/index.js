@@ -10,7 +10,7 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
   const columns = [
     {
       id: "delete",
-      name: "Eliminar",
+      name: "Delete",
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
@@ -57,7 +57,7 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
           </button>
         </div>
       ),
-      width: '80px'
+      width: '90px'
     },
     {
       id: "tipoPersona",
@@ -75,24 +75,24 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
     },
     {
       id: "tipoDocumento",
-      name: "TipoDoc",
+      name: "Doc",
       selector: (row) => row.tipoDocumento,
       sortable: true,
-      width: '110px',
+      width: '100px',
     }, 
     {
       id: "razonSocial",
       name: "Razon social",
       selector: (row) => row.razonSocial,
       sortable: true,
-      width: '350px',
+      width: '300px',
     },
     {
         id: "departamento",
         name: "Dpto",
         selector: (row) => row.departamento,
         sortable: true,
-        width: '90px'
+        width: '100px'
       },
       {
         id: "ciudad",
@@ -108,13 +108,13 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
         width: '300px',
       },{
         id: "celular",
-        name: "# Celular",
+        name: "Celular",
         selector: (row) => row.celular,
         sortable: true,
         width: '150px',
       },{
         id: "telefono",
-        name: "# Telefónico",
+        name: "Teléfonico",
         selector: (row) => row.telefono,
         sortable: true,
         width: '130px',
@@ -124,7 +124,7 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
         name: "Correo Notificaciones",
         selector: (row) => row.correoNotificaciones,
         sortable: true,
-        width: '300px',
+        width: 'auto',
       },
       {
         id:'nombreComercial',
@@ -419,9 +419,9 @@ export default function TableTerceros({ terceros, loading , customStyles }) {
       },{
         id: " createdAt",
         name: "FechaCreación",
-        selector: (row) => row.createdAt,
+        selector: (row) => `${new Date(row.createdAt).toLocaleDateString()} - ${new Date(row.createdAt).toLocaleTimeString()}`,
         sortable: true,
-        width: '200px',
+        width: '210px',
       }
   ]
   

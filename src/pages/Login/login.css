@@ -1,3 +1,4 @@
+/* estructuras utilizadas para fondo*/
 .login-wrapper {
     display: flex;
     flex-direction: column;
@@ -10,12 +11,6 @@
     align-content: center; 
     justify-content: center; */
 }
-img {
-  max-width: 100%;
-  height: auto;
-  /* filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.5)); */
-}
-
 .container {
   background-image: url("../../assest/abstract-rainbow-6296890_1280.jpg"); 
   width: 100%;
@@ -26,21 +21,29 @@ img {
   background-size: 100% 100%;
   background-position: center;
 }
-
-.logoUsuario{
-      width: 50;
-      height: 100;
-}
 .wrapper {
   background-image: url('../../assest/abstract-rainbow-6296890_1280.jpg');
   background-blend-mode: overlay;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: 100% 100%;
-      background-position: center;
-      align-content: center;
-      align-items: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-position: center;
+  align-content: center;
+  align-items: center;
 }
+
+/* funciones de imagenes adaptables y lgo usuario */
+img {
+  max-width: 100%;
+  height: auto;
+  /* filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.5)); */
+}
+.logoUsuario{
+  width: 50;
+  height: 100;
+}
+
+/* darle color a los botones, con bordeado y efecto hover */
 button{
   border:none;
   background-color:#D92121 ;

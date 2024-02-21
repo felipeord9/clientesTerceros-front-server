@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go"
-import TableCertificados from "../../components/tablaCertificados"
 import CertiTable from "../../components/certiTable"
-import { findClientes  } from "../../services/clienteService"
-import { findAll , findByTercero , findCertificados } from '../../services/certificadoService'
-import Swal from "sweetalert2";
+import { findAll } from '../../services/certificadoService'
 
 export default function InfoCertificado() {
   const [terceros, setTerceros] = useState([]);

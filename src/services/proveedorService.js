@@ -1,9 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
+
 const url = `${config.apiUrl2}/proveedor`;
 
 const findProveedores = async () => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
+
     const { data } = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -12,8 +16,19 @@ const findProveedores = async () => {
     return data
 } 
 
+const sendMail = async (body)=>{
+  try{
+    const { data } = await axios.post(`${url}/send/mail`, body)
+    return data
+  } catch(error){
+    throw error
+  }
+}
+
 const validarProveedor = async (cedula)=>{
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(`${url}/numero/${cedula}`,{
     headers:{
       Authorization: `Bearer ${token}`
@@ -23,7 +38,9 @@ const validarProveedor = async (cedula)=>{
 }
 
 const createProveedor = (body) => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
+
     return fetch(url, {
       method: "POST",
       headers: {
@@ -38,7 +55,9 @@ const createProveedor = (body) => {
 };
 
 export const updateProveedor = async (id, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/update/${id}`, body, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -75,5 +94,5 @@ export {
     deleteProveedor,
     validarProveedor,
     deleteByCedula,
-    
+    sendMail,
 }

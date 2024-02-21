@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
 
 const url = `${config.apiUrl2}/certificados`;
 
 export const findCertificados = async () => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -14,7 +17,9 @@ export const findCertificados = async () => {
 }
 
 export const findAll = async(tercero)=>{
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(`${url}/tercero/${tercero}`,{
     headers:{
       Authorization: `Bearer ${token}`
@@ -24,7 +29,9 @@ export const findAll = async(tercero)=>{
 }
 
 export const findByTercero = async(tercero)=>{
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(`${url}/numero/${tercero}`,{
     headers:{
       Authorization: `Bearer ${token}`
@@ -34,7 +41,9 @@ export const findByTercero = async(tercero)=>{
 }
 
 export const createCretificado = async (body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.post(url, body, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -44,7 +53,9 @@ export const createCretificado = async (body) => {
 }
 
 export const updateCertificado = async (id, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/${id}`, body, {
     headers: {
       Authorization: `Bearer ${token}`

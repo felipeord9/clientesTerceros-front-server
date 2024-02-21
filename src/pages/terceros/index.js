@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go"
 import TableTerceros from "../../components/TableTercerosContado"
 import { findClientes } from "../../services/clienteService"
 
@@ -60,7 +59,7 @@ export default function Terceros() {
     },
     headCells: {
       style: {
-        fontSize: '16px',
+        fontSize: '15px',
         height:'35px',
         backgroundColor:'#D92121',
         opacity:0.9,

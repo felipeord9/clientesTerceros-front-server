@@ -1,6 +1,7 @@
 import { useState, useContext, useCallback } from "react";
 import AuthContext from "../context/authContext"
 import { userLogin } from "../services/authService"
+import Cookies from 'js-cookie';
 
 export default function useUser() {
   const { token, setToken } = useContext(AuthContext)
@@ -14,14 +15,17 @@ export default function useUser() {
     setState({ isLoading: true, error: false })
     userLogin({ email, password })
       .then((data) => {
-        window.localStorage.setItem("token", JSON.stringify(data.token))
+        /* window.localStorage.setItem("token", JSON.stringify(data.token)) */
+        Cookies.set('token',data.token, { secure:true , expires: 1 , sameSite: 'strict'})
+        /* Cookies.set(data.cookieConfig) */
         window.localStorage.setItem("user", JSON.stringify(data.user))
         setState({ isLoading: false, error: false })
         setToken(data.token)
         setUser(data.user)
       })
       .catch((err) => {
-        window.localStorage.removeItem("token")
+        /* window.localStorage.removeItem("token") */
+        Cookies.remove('token')
         window.localStorage.removeItem("user")
         setState({ isLoading: false, error: true })
         setTimeout(() => setState({ isLoading: false, error: false }), 3000)
@@ -29,7 +33,8 @@ export default function useUser() {
   }, [setToken, setUser])
 
   const logout = useCallback(() => {
-    window.localStorage.removeItem("token")
+    /* window.localStorage.removeItem("token") */
+    Cookies.remove('token')
     window.localStorage.removeItem("user")
     setToken(null)
     setUser(null)

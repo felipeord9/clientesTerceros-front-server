@@ -109,16 +109,6 @@ export default function EditarPJCR(){
     input12: null,
     input13: null,
   });
-  /*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
-  //------------------------------------------
-  /* second form */
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
     setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
@@ -215,7 +205,6 @@ export default function EditarPJCR(){
     if(datosTercero){
       setSearch(JSON.parse(datosTercero));
       setCompare(JSON.parse(datosTercero))
-
     }
   },[]);
   const [loading, setLoading] = useState(false);
@@ -246,17 +235,6 @@ export default function EditarPJCR(){
     getAllPrecios().then((data)=>setPrecios(data));
 },[]);
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.nit === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      /* setSucursal(null); */
-      selectBranchRef.current.selectedIndex = 0;
-    }
-  };
-
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
     console.log(value);
@@ -284,26 +262,6 @@ export default function EditarPJCR(){
     }
   }
 
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
-    }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     Swal.fire({
@@ -317,13 +275,6 @@ export default function EditarPJCR(){
     }) .then(({isConfirmed})=>{
       if(isConfirmed){
         setLoading(true);
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }) */
-        /* second form */
         const formData = new FormData();
 
         for (const fieldName in files) {

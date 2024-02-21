@@ -62,6 +62,7 @@ import ConsultarCertificado from './pages/consultarCertificado';
 import InfoCertificado from './pages/infoCertificado';
 import GenerateCertificado from './pages/generateCertificado';
 import Certificados from './pages/validarCertificados';
+import Solicitudes from './pages/solicitudes';
 
 function App() {
   return(
@@ -70,11 +71,12 @@ function App() {
       <Navbar/>
       <div id='wrapper' className="d-flex vh-100 bg-gradient">
       <Routes>
+        {/* funcionalidades login y cambio de contraseña */}
         <Route path='/' element={<Navigate to='/login'/>}/>
         <Route path='/login' element={<Login/>}/>
-{/*         <Route path='/recovery/password' element={<RecoveryPassword/>}/>
- */}        <Route path='/send/recovery' element={<SendRecovery/>}/>
+        <Route path='/send/recovery' element={<SendRecovery/>}/>
         <Route path='/recuperacion/contrasena//:token' element={<RecoveryPassword/>} />
+        <Route path='/change/password' element={<PrivateRoute component={ChangePassword}/>}/>
 
         {/* Validacion de tercero */}
         <Route path='/validar/tercero' element={<PrivateRoute component={ValidarTercero}/>}/>
@@ -117,33 +119,40 @@ function App() {
         <Route path='/inicio' element={<PrivateRoute component={Inicio}/>}/>
         {/* inicio compras */}
         <Route path='/compras' element={<PrivateRoute component={Inicio2}/>}/>
-        {/* ruta proveedor/convenio */}
+
+        {/* proveedores */}
         <Route path='/tipo/persona' element={<PrivateRoute component={TipoPersona}/>}/>
         <Route path='/proveedor/convenio/natural' element={<PrivateRoute component={ConvenioNatural}/>}/>
         <Route path='/proveedor/convenio/juridica' element={<PrivateRoute component={ConvenioJuridico}/>}/>
-        {/* ruta prestador de servicios */}
         <Route path='/prestador/servicios' element={<PrivateRoute component={PrestadorServicios}/>}/>
-        {/* ruta proveedor varios  */}
         <Route path='/tipo/proveedor' element={<PrivateRoute component={Tipo}/>}/>
         <Route path='/proveedor/varios/natural' element={<PrivateRoute component={VariosNatural}/>}/>
         <Route path='/proveedor/varios/juridico' element={<PrivateRoute component={VariosJuridico}/>}/>
 
+        {/* clientes */}
         <Route path='/contado/persona/natural' element={<PrivateRoute component={ContadoPersonaNatural}/>}/>
         <Route path='/contado/persona/juridica' element={<PrivateRoute component={ContadoPersonaJuridica}/>}/>
         <Route path='/credito/persona/natural' element={<PrivateRoute component={CreditoPersonaNatural}/>}/>
+        <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
+        <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />
+
+        {/* certificados */}
         <Route path='/consultar/certificado' element={<PrivateRoute component={ConsultarCertificado}/>}/>
         <Route path='/informacion/tercero/certificados' element={<PrivateRoute component={InfoCertificado}/>}/>
         <Route path='/generar/certificados' element={<PrivateRoute component={GenerateCertificado}/>}/>
-        <Route path='/certificados' element={<PrivateRoute component={Certificados}/>}/>
-        <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
+
         <Route path='/pre/aprovacion/natural' element={<PrivateRoute component={PreAprovacionNatural}/>}/>
-        <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />
-        <Route path='/change/password' element={<PrivateRoute component={ChangePassword}/>}/>
+
+        {/* tablas */}
+        <Route path='/certificados' element={<PrivateRoute component={Certificados}/>}/>
         <Route path='/usuarios' element={<PrivateRoute component={Users}/>}/>
         <Route path='/terceros' element={<PrivateRoute component={Terceros}/>}/>
         <Route path='/sucursales' element={<PrivateRoute component={Sucursales}/>}/>
         <Route path='/Proveedores' element={<PrivateRoute component={Proveedores}/>}/>
         <Route path='/bitacora' element={<PrivateRoute component={Bitacora}/>}/>
+        <Route path='/solicitudes' element={<PrivateRoute component={Solicitudes}/>}/>
+
+        {/* pagina error no found */}
         <Route path='*' element={<Page404/>}/>
 
       </Routes>

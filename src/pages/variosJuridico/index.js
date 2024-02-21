@@ -3,10 +3,10 @@ import Swal from "sweetalert2";
 import { Button, Modal } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
+import { getAllTipoFormularios } from '../../services/tipoFormularioService'
 import { FaEye } from "react-icons/fa";
-import DepartmentContext  from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
-import { createProveedor, deleteProveedor } from '../../services/proveedorService';
+import { createProveedor, deleteProveedor , sendMail } from '../../services/proveedorService';
 import { getAllDepartamentos } from "../../services/departamentoService";
 import { getAllCiudades } from "../../services/ciudadService";
 import { getAllActividad} from '../../services/actividadService';
@@ -14,18 +14,21 @@ import { getAllAgencies } from "../../services/agencyService";
 import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from '../../services/bitacoraService';
+import { validarCliente , findClientes } from "../../services/clienteService"; 
+import { validarProveedor , findProveedores } from "../../services/proveedorService";
+import { useNavigate } from 'react-router-dom';
 
 export default function VariosJuridico(){
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
-  const {department,setDepartment}=useContext(DepartmentContext)
-
+  const { user } = useContext(AuthContext);
+  const navigate =useNavigate()
   /* inicializar variables */
   const [agencia, setAgencia] = useState(null);
   const [document,setDocument] = useState(null);
   const [ciudad, setCiudad] = useState(null);
   const [departamento,setDepartamento]= useState('');
   const [actividad, setActividad] = useState(null);
+  const [formularios,setFormularios] = useState([]);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion,setDocVinculacion]=useState(0);
@@ -42,26 +45,28 @@ export default function VariosJuridico(){
   const [docValAnt,setDocValAnt] = useState(0);
 
   //------------------------------------------
-  /* Variable de todos los pdf y el nombre de la carpeta*/
-  /* const [files, setFiles] = useState([]); */
+
   const [files, setFiles] = useState({
     input1: null,
     input2: null,
     input3: null,
   });
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
 
   /* Second form */
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
-    setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
+    if(selectedFile && selectedFile.type === 'application/pdf'){
+      setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
+    }else{
+      Swal.fire({
+        icon:'warning',
+        title:'¡ATENCION!',
+        text:'El aplicativo solo acepta archivo con extensión .pdf',
+        showConfirmButton:true,
+        confirmButtonColor:'#198754',
+        confirmButtonText:'Entendido'
+      })
+    }
   };
   //------------------------------------------
 
@@ -110,18 +115,9 @@ export default function VariosJuridico(){
       getAllDepartamentos().then((data) => setDepartamentos(data));
       getAllCiudades().then((data) => setCiudades(data));
       getAllActividad().then((data)=>setActividades(data));
-  },[]);
+      getAllTipoFormularios().then((data)=>setFormularios(data));
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.departament_id === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      setCiudad(null);
-      selectCiudadRef.current.selectedIndex = 0;
-    }
-  };
+  },[]);
 
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
@@ -130,36 +126,212 @@ export default function VariosJuridico(){
       [id]: value,
     });
   };
+  const [actualizar,setActualizar] = useState('')
+  const [rzNotEnty,setRzNotEnty] = useState(false)
 
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
+  const [clientes,setClientes] = useState()
+  const [proveedores,setProveedores] = useState()
+  useEffect(()=>{
+    findClientes()
+    .then(({data})=>{
+      setClientes(data)
+    })
+    findProveedores()
+    .then(({data})=>{
+      setProveedores(data)
+    })
+  },[])
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if(search.cedula.length>=9 && search.cedula.length<=15){
+        const filtroCliente = clientes.filter((item)=>{
+          if(item.cedula === search.cedula){
+            return item
+          }
+        })
+        const filtroProveedor = proveedores.filter((elem)=>{
+          if(elem.cedula === search.cedula){
+            return elem
+          }
+        })
+        if(filtroCliente.length>0 || filtroProveedor.length>0){
+          Swal.fire({
+            title:'¡ATENCIÓN!',
+            text:`El numero de identificación ${search.cedula}
+            se encuentra registrado en nuestra base de datos como 
+            
+            ${filtroCliente.map((elem)=>{
+              return elem.tipoFormulario
+            })} ${filtroProveedor.map((item)=>{
+              return item.tipoFormulario
+            })}. 
+            ¿Qué acción desea realizar?`,
+            showCancelButton:true,
+            showConfirmButton:true,
+            confirmButtonColor:'#D92121',
+            confirmButtonText:'Consultar',
+            cancelButtonText:'Regresar',
+            showDenyButton:true,
+            denyButtonColor:'blue',
+            denyButtonText:'Actualizar'
+          }).then(({isConfirmed,isDenied})=>{
+            if(isConfirmed){
+              if(user.role==='admin'){
+                navigate('/validacion/admin')
+              }
+              if(user.role==='cartera'){
+                navigate('/validar/tercero')
+              }
+              if(user.role==='compras' || user.role==='agencias'
+              || user.role==='comprasnv'){
+                navigate('/validar/proveedor')
+              }
+            }else if(isDenied){
+              if(filtroCliente.length>0 && filtroProveedor.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }else if(filtroCliente.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }else if(filtroProveedor.length>0){
+                filtroProveedor.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }
+              setActualizar('SI')
+              setRzNotEnty(true)
+            }
+          })
+        }
+      }else{
+        Swal.fire({
+          icon:'warning',
+          title:'Recuerda que el NIT debe contener entre 9 y 15 caracteres',
+          confirmButtonColor:'#D92121',
+          confirmButtonText:'OK'
+        })
+      }
+    };
+  }
+
+  const devolverLista = (lista) =>{
+    const filtrar = lista.map((item)=>{
+      //funcion para que los prefijos de los formatos quede amplio
+      /* if(item.tipoFormulario==='PNC'){
+        return 'PERSONA NATURAL CONTADO,'
+      }else if(item.tipoFormulario==='PJCR'){
+        return 'PERSONA JURIDICA CONTADO,'
+      }else if(item.tipoFormulario==='PNCR'){
+        return 'PERSONA NATURAL CREDITO,'
+      }else if(item.tipoFormulario==='PJCR'){
+        return 'PERSONA JURIDICA CREDITO,'
+      }else if(item.tipoFormulario==='PMJ'){
+        return 'PROVEEDOR MCIA Y CONVENIOS - PERSONA JURIDICA,'
+      }else if(item.tipoFormulario==='PMN'){
+        return 'PROVEEDOR MCIA Y CONVENIOS - PERSONA NATURAL,'
+      }else if(item.tipoFormulario==='PS'){
+        return 'PRESTADOR DE SERVICIOS,'
+      }else if(item.tipoFormulario==='PVJ'){
+        return 'PROVEEDORES VARIOS - PERSONA JURIDICA,'
+      }else if(item.tipoFormulario==='PVN'){
+        return 'PROVEEDORES VARIOS - PERSONA NATURAL,'
+      } */
+      return item.tipoFormulario
+    })
+    const conjunto = new Set(filtrar)
+    return Array.from(conjunto)
+  }
+
+  //funcion para que cuando se cambie de input se ejecute 
+  const handleInputBlur = () => {
+    if(search.cedula.length>=9 && search.cedula.length<=15){
+      const filtroCliente = clientes.filter((item)=>{
+        if(item.cedula === search.cedula){
+          return item
+        }
+      })
+      const filtroProveedor = proveedores.filter((elem)=>{
+        if(elem.cedula === search.cedula){
+          return elem
+        }
+      })
+      if(filtroCliente.length>0 || filtroProveedor.length>0){
+        Swal.fire({
+          title:'¡ATENCIÓN!',
+          text:`El numero de identificación ${search.cedula}
+          se encuentra registrado en nuestra base de datos como 
+          ${devolverLista(filtroCliente)} ${devolverLista(filtroProveedor)}
+          ¿Qué acción desea realizar?`,
+          showCancelButton:true,
+          showConfirmButton:true,
+          confirmButtonColor:'#D92121',
+          confirmButtonText:'Consultar',
+          cancelButtonText:'Regresar',
+          showDenyButton:true,
+          denyButtonColor:'blue',
+          denyButtonText:'Actualizar'
+        }).then(({isConfirmed,isDenied})=>{
+          //si es confirmado es porque le dio a consultar
+          if(isConfirmed){
+            if(user.role==='admin'){
+              navigate('/validacion/admin')
+            }
+            if(user.role==='cartera'){
+              navigate('/validar/tercero')
+            }
+            if(user.role==='compras' || user.role==='agencias'
+            || user.role==='comprasnv'){
+              navigate('/validar/proveedor')
+            }
+          }else if(isDenied){
+            //si es deni es porque le dio a actualizar
+              if(filtroCliente.length>0 && filtroProveedor.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }else if(filtroCliente.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }else if(filtroProveedor.length>0){
+                filtroProveedor.map((item)=>{
+                  setSearch({
+                    ...search,
+                    razonSocial:item.razonSocial,
+                  })
+                })
+              }
+            setActualizar('SI')
+            setRzNotEnty(true)
+          }
+        })
+      }
+    }else{
+      Swal.fire({
+        icon:'warning',
+        title:'Recuerda que el NIT debe contener entre 9 y 15 caracteres',
+        confirmButtonColor:'#D92121',
+        confirmButtonText:'OK'
+      })
     }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
-
-  const changeType = (e) => {
-    setSearch({
-      ...search,
-      idDepartment: "",
-    });
-    setInvoiceType(!invoiceType);
-    /* setClient(null); */
-    setCiudad(null);
-    selectCiudadRef.current.selectedIndex = 0;
   };
 
   const handleSubmit = (e) => {
@@ -182,14 +354,6 @@ export default function VariosJuridico(){
             formData.append(fieldName, files[fieldName]);
           }
         }
-        //agregamos los pdf a un formdata dependiendo del index que les dimos
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }); */
-        //creamos el cuerpo de nuestra instancia
         const body={
           cedula: search.cedula,
           numeroDocumento: search.cedula,
@@ -230,6 +394,11 @@ export default function VariosJuridico(){
           docOtros:docOtros,
           agencia: agencia.id,
           tipoFormulario:search.tipoFormulario,
+          actulizado : actualizar==='' ? null:'SI',
+          fechaActualizacion : actualizar === '' ? null:new Date(),
+          pendiente:1,
+          rechazado:0,
+          aprobado:0,
         };
         //creamos una constante la cual llevará el nombre de nuestra carpeta
         const folderName = search.cedula+'-'+search.razonSocial.toUpperCase();
@@ -247,6 +416,21 @@ export default function VariosJuridico(){
             accion:'1',
           }
           updateBitacora(user.email,info)
+          const filtro = formularios.filter((item)=>{
+            if(item.id===search.tipoFormulario){
+              return item.description
+            }
+          })
+          const tipo = filtro.map((item)=>{
+            return item.description
+          })
+          const mail = {
+            agencia: agencia.description,
+            razonSocial: search.razonSocial.toUpperCase() ,
+            tipoFormulario: tipo,
+          }
+          sendMail(mail)
+          .then(()=>{
           fileSend(formData)
           .then(()=>{
             setLoading(false)
@@ -286,6 +470,24 @@ export default function VariosJuridico(){
               window.location.reload();
             })
           });
+        })
+        .catch((err)=>{
+          setLoading(false);
+          deleteFile(folderName);
+          Swal.fire({
+            title: "¡Ha ocurrido un error!",
+            text: `
+            Ha ocurrido un error al momento de enviar el correo a cartera, intente de nuevo.
+            Si el problema persiste por favor comuniquese con el área de sistemas.`,
+            icon: "error",
+            showConfirmButton: true,
+            confirmButtonColor:'#198754',
+            confirmButtonText:'Aceptar',       
+          })
+          .then(()=>{
+            window.location.reload();
+          })
+        });
       })
       .catch((err)=>{
         setLoading(false);
@@ -398,8 +600,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
           <Fade cascade='true'>
           <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>PROVEEDORES VARIOS (AGENCIAS) - persona JURÍDICA</strong></label>
           </Fade>
-          </center>
           <hr className="my-1" />
+          { actualizar === 'SI' &&
+            <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2"><strong>ACTUALIZACIÓN</strong></label>
+          }
+          </center>
         </div>
       </section>
     </center>
@@ -407,47 +612,30 @@ const [selectedFiles, setSelectedFiles] = useState([]);
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
             <div>
+              <label className="fw-bold mb-1" style={{fontSize:22}}>INFORMACIÓN OFICINA PRINCIPAL</label>
               <div className="d-flex flex-row">
-              <div className="d-flex flex-column me-4 " style={{width:450}}>
-              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
-              <select
-                ref={selectBranchRef}
-                className="form-select form-select-sm w-100"
-                required
-                
-                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
-              >
-                <option selected value='' disabled>
-                  -- Seleccione la Agencia --
-                </option>
-                {agencias
-                  .sort((a, b) => a.id - b.id)
-                  .map((elem) => (
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                      {elem.id + " - " + elem.description}
-                    </option>
-                  ))}
-              </select>
-              </div>
-              <div className="d-flex flex-column mb-2  w-100">
-              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
-              <input
-                  id="solicitante"
-                  type="text"
-                  placeholder="Nombre Solicitante"
-                  value={search.solicitante}
-                  onChange={handlerChangeSearch}
-                  className="form-control form-control-sm"
-                  style={{textTransform:"uppercase"}}
-                  required
-              />
-              </div>        
-              </div>
-            </div>
-            <hr className="my-1" />
-            <div>
-              <label className="fw-bold mb-1" style={{fontSize:22}}>OFICINA PRINCIPAL</label>
-              <div className="d-flex flex-row">
+              <div className="d-flex flex-row w-100"> 
+                <div className="d-flex flex-row align-items-start w-100">
+                  <label className="me-1">NIT:</label>
+                  <input
+                    id="cedula"
+                    type="number"
+                    className="form-control form-control-sm"
+                    min={100000000}
+                    max={999999999999999}
+                    required
+                    pattern="[0-9]"
+                    value={search.cedula}
+                    onChange={handlerChangeSearch}
+                    disabled={actualizar==='' ? false:true }
+                    placeholder="Campo obligatorio"
+                    onKeyPress={actualizar==='' ? handleKeyPress:null}
+                    onBlur={actualizar==='' ?handleInputBlur:null}
+                  >
+                  </input>
+                  <span className="validity fw-bold me-3"></span>
+                </div>
+                </div> 
                 <div className="d-flex flex-row align-items-start w-100">
                   <label className="me-1">Razón Social:</label>
                   <input
@@ -459,27 +647,9 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     onChange={handlerChangeSearch}
                     min={0}
                     required
+                    disabled={rzNotEnty ? true:false}
                     placeholder="Campo obligatorio"
                   />
-                </div> 
-                <div className="d-flex flex-row w-100"> 
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">NIT:</label>
-                  <input
-                    id="cedula"
-                    type="number"
-                    className="form-control form-control-sm"
-                    min={100000000}
-                    max={999999999}
-                    required
-                    pattern="[0-9]"
-                    value={search.cedula}
-                    onChange={handlerChangeSearch}
-                    placeholder="Campo obligatorio"
-                  >
-                  </input>
-                  <span className="validity fw-bold"></span>
-                </div>
                 </div> 
               </div>
               <div className="d-flex flex-row mt-2">
@@ -623,6 +793,46 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </div>
               <hr className="my-1" />  
             </div> 
+
+            <div>
+              <div className="d-flex flex-row">
+              <div className="d-flex flex-column me-4 " style={{width:450}}>
+              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
+              <select
+                ref={selectBranchRef}
+                className="form-select form-select-sm w-100"
+                required
+                
+                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione la Agencia --
+                </option>
+                {agencias
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+              </div>
+              <div className="d-flex flex-column mb-2  w-100">
+              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
+              <input
+                  id="solicitante"
+                  type="text"
+                  placeholder="Nombre Solicitante"
+                  value={search.solicitante}
+                  onChange={handlerChangeSearch}
+                  className="form-control form-control-sm"
+                  style={{textTransform:"uppercase"}}
+                  required
+              />
+              </div>        
+              </div>
+            </div>
+            <hr className="my-1" />
             <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
             <div className="d-flex flex-row align-items-start mt-2 ">
                   <label className="me-1 mb-3"><strong>Correo para la factura electrónica:</strong></label>
@@ -684,7 +894,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     style={{backgroundColor:'#f3f3f3',width:338}}
                     /* onChange={(e) => (handleFileChange(e, 0),setDocRut(1))} */
                     /* second form */
-                    onChange={(e) => (handleFileChange('Infemp', e),setDocInfemp(1),FileChange(e,2))}
+                    onChange={(e) => (handleFileChange(`Infemp`, e),setDocInfemp(1),FileChange(e,2))}
                   />
                   {selectedFiles[2] && (
                     <div className="d-flex justify-content-start ps-1 pt-1" style={{width:50}}>
@@ -757,7 +967,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             className="fw-bold w-100 ms-2 me-3"
             onSubmit={handleSubmit}
           >
-            REGISTRAR
+            {actualizar==='' ? 'REGISTRAR':'ACTUALIZAR'}
           </button>
           <Button variant="secondary" className="w-100 ms-2" onClick={refreshForm}>CANCELAR</Button>
           </div>

@@ -9,7 +9,6 @@ import './styles.css'
 export default function SendRecoveryPassword() {
   const { isLogged } = useUser()
   const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,8 +29,6 @@ export default function SendRecoveryPassword() {
         navigate('/login')
       })
       .catch((error) => {
-        /* setError(error)
-        setTimeout(() => setError(''), 2500) */
         Swal.fire({
           title:'¡Uops!',
           text:'Ha ocurrido un error a la hora de mandar el correo electrónico. Verificalo y vuelve a intentarlo. Si el problema persiste comunicate con el área de sistemas.',

@@ -1,34 +1,19 @@
-import React, { useState } from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useState , useContext } from "react"
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import Select from '@mui/material/Select';
 import { Fade } from "react-awesome-reveal";
+import AuthContext from "../../context/authContext";
 
 export default function Inicio2(){
-    const [pago,setPago]=useState();
-    const [persona,setPersona]=useState();
+    const { user, setUser } = useContext(AuthContext);
     const [tipo,setTipo]=useState();
     const navigate = useNavigate();
-  const handleTipo=(e)=>{
-    setTipo(e.target.value);
-  }
-    const handlePago=(e)=>{
-        setPago(e.target.value);
-    }
-    const handlePersona=(e)=>{
-        setPersona(e.target.value);
-    }
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        if(persona==='Natural'&& pago==='Contado'){
-            Navigate('/contado/persona/natural');
-        }
+    const handleTipo=(e)=>{
+      setTipo(e.target.value);
     }
     return(
         <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto "style={{userSelect:'none'}}>
@@ -66,7 +51,12 @@ export default function Inicio2(){
                 <MenuItem value={40} onClick={(e)=>navigate('/credito/persona/juridica')}>persona <strong className="ps-2 pe-1" style={{color:'blue'}}> JURÍDICA</strong> - pago a<strong className="ps-2 text-danger">CRÉDITO</strong></MenuItem>
                 <center>
                 <hr style={{width:300, color:'black'}}/></center>
-                <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><strong className="">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem>
+                {user.role=='cartera' && (
+                  <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><strong className="">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem>
+                )}
+                {user.role==='agencias' && (
+                  <MenuItem value={30} onClick={(e)=>navigate('/tipo/proveedor')} ><strong>Proveedores varios (Agencias)</strong></MenuItem>
+                )}
                 </Select>
               </FormControl>
             </Box>

@@ -1,13 +1,6 @@
 import React, { useState, useContext, useEffect } from "react"
 import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { Fade } from "react-awesome-reveal";
 import { validarCliente } from "../../services/clienteService"; 
@@ -15,14 +8,11 @@ import { validarProveedor } from "../../services/proveedorService";
 import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
 import Button from '@mui/material/Button';
-import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoMdPersonAdd } from "react-icons/io";
-import gifSuccess from '../../assest/gif_success.gif' 
 
 export default function ValidacionAdmin(){
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
     const [search,setSearch]=useState({
       cedula:'',
     })
@@ -260,9 +250,7 @@ export default function ValidacionAdmin(){
           .catch((error)=>{
             console.log('no es duo')
           })
-
       }
-    
 
     const validacionCompleta =(e)=>{
       e.preventDefault();
@@ -417,7 +405,7 @@ export default function ValidacionAdmin(){
       e = e.target.value
       if(user.role==='agencias' || user.role==='cartera'){
         return navigate('/inicio')
-      }else if(user.role==='compras'){
+      }else if(user.role==='compras' || user.role==='comprasnv' || user.role==='asistente agencia'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
@@ -425,10 +413,10 @@ export default function ValidacionAdmin(){
     }
     const handleClickImagen=(e)=>{
       e = e.target.value
-      if( user.role==='cartera'){
+      if( user.role==='cartera' || user.role==='agencias'){
         /* return navigate('/inicio') */
         return navigate('/menu/principal/Clientes')
-      }else if(user.role==='compras' || user.role==='agencias'){
+      }else if(user.role==='compras' || user.role==='asistente agencia'){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
       }else{

@@ -78,14 +78,6 @@ export default function EditPS(){
     input5: null,
     input6: null,
   });
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
 
   /* Second form */
   const handleFileChange = (fieldName, e) => {
@@ -189,43 +181,12 @@ export default function EditPS(){
       getAllActividad().then((data)=>setActividades(data));
   },[]);
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.departament_id === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      setCiudad(null);
-      selectCiudadRef.current.selectedIndex = 0;
-    }
-  };
-
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
     setSearch({
       ...search,
       [id]: value,
     });
-  };
-
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
-    }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
   };
 
   const changeType = (e) => {
@@ -259,13 +220,6 @@ export default function EditPS(){
             formData.append(fieldName, files[fieldName]);
           }
         }
-        //agregamos los pdf a un formdata dependiendo del index que les dimos
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }); */
         //creamos el cuerpo de nuestra instancia
         const body={
           cedula: search.cedula,

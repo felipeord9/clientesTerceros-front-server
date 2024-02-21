@@ -1,9 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
+
 const url = `${config.apiUrl2}/pre/aprovacion`;
 
 const findPreAprovacion = async () => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
+
     const { data } = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -13,7 +17,9 @@ const findPreAprovacion = async () => {
 } 
 
 const validarPreAprovacion = async (cedula)=>{
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(`${url}/numero/${cedula}`,{
     headers:{
       Authorization: `Bearer ${token}`
@@ -23,7 +29,9 @@ const validarPreAprovacion = async (cedula)=>{
 }
 
 const createPreAprovacion = (body) => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
+
     return fetch(url, {
       method: "POST",
       headers: {
@@ -38,7 +46,9 @@ const createPreAprovacion = (body) => {
 };
 
 export const updatePreAprovacion = async (id, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/update/${id}`, body, {
     headers: {
       Authorization: `Bearer ${token}`

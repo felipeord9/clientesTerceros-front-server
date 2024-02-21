@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { config } from "../config";
+import Cookies from 'js-cookie';
 
 const url = `${config.apiUrl2}/users`;
 
 export const findUsers = async () => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -12,8 +15,23 @@ export const findUsers = async () => {
   })
   return data
 }
+
+export const comparePassword = async (body) =>{
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.post(`${url}/compare`,body,{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
 export const createUser = async (body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.post(url, body, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -23,7 +41,9 @@ export const createUser = async (body) => {
 }
 
 export const updateUser = async (id, body) => {
-  const token = JSON.parse(localStorage.getItem("token"))
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
   const { data } = await axios.patch(`${url}/${id}`, body, {
     headers: {
       Authorization: `Bearer ${token}`

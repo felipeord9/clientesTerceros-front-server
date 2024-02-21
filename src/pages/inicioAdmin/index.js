@@ -1,34 +1,17 @@
 import React, { useState } from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import Select from '@mui/material/Select';
 import { Fade } from "react-awesome-reveal";
 
 export default function InicioAdmin(){
-    const [pago,setPago]=useState();
-    const [persona,setPersona]=useState();
     const [tipo,setTipo]=useState();
     const navigate = useNavigate();
-  const handleTipo=(e)=>{
-    setTipo(e.target.value);
-  }
-    const handlePago=(e)=>{
-        setPago(e.target.value);
-    }
-    const handlePersona=(e)=>{
-        setPersona(e.target.value);
-    }
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        if(persona==='Natural'&& pago==='Contado'){
-            Navigate('/contado/persona/natural');
-        }
+    const handleTipo=(e)=>{
+      setTipo(e.target.value);
     }
     return(
         <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto " style={{userSelect:'none'}}>
@@ -81,9 +64,6 @@ export default function InicioAdmin(){
                 <MenuItem value={50} onClick={(e)=>navigate('/tipo/persona')} className=""><strong>Proveedor Mcia y Convenios</strong></MenuItem>
                 <MenuItem value={60} onClick={(e)=>navigate('/prestador/servicios')} className="" style={{color:'blue'}}><strong>Prestador de servicios</strong></MenuItem>
                 <MenuItem value={70} onClick={(e)=>navigate('/tipo/proveedor')} className="" style={{color:'red'}}><strong>Proveedores varios (Agencias)</strong></MenuItem>
-                {/* <center>
-                <hr style={{width:300, color:'black'}}/></center>
-                <MenuItem value={80} onClick={(e)=>navigate('/Parqueaderos')}><strong className="ps-2 ">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem> */}
                 </div>
                 </Select>
               </FormControl>

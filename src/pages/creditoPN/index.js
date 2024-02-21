@@ -3,8 +3,9 @@ import Swal from "sweetalert2";
 import { Button/* , Modal */ } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
+import { getAllTipoFormularios } from '../../services/tipoFormularioService'
 import { getAllPrecios } from "../../services/precioService";
-import { createCliente, deleteCliente } from "../../services/clienteService";
+import { createCliente, deleteCliente , sendMail } from "../../services/clienteService";
 import { createPreAprovacion, deletePreAprovacion } from "../../services/preAprovacionService";
 import DepartmentContext  from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
@@ -24,13 +25,9 @@ import { getAllAgencies } from "../../services/agencyService";
 import { getAllClasificaciones } from "../../services/clasificacionService";
 import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
-import VinculacionProveedor from '../../pdfs/FORMATO  VINCULACION DE PROVEEDORES.pdf'
-import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
-import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
 import { FaFileDownload } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import TextField from '@mui/material/TextField';
-import Mas from '../../assest/Mas.png'
 import Logo from '../../assest/logo-gran-langostino.png'
 import { updateBitacora } from '../../services/bitacoraService';
 import { createSucursal, deleteSucursalByName } from "../../services/sucursalService";
@@ -38,6 +35,9 @@ import ComproAntiCorrup from '../../pdfs/SALF-05 COMPROMISO ANTICORRUPCION.pdf';
 import NewVinCliente from '../../pdfs/SALF-02 FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
 import  {  NumericFormat  }  from  'react-number-format' ;
 import { Box } from "@mui/material";
+import { validarCliente , findClientes } from "../../services/clienteService"; 
+import { validarProveedor , findProveedores } from "../../services/proveedorService";
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -58,6 +58,7 @@ export default function CreditoPersonaNatural(){
   /* instancias de contexto */
   const { user, setUser } = useContext(AuthContext);
   const {department,setDepartment}=useContext(DepartmentContext)
+  const navigate = useNavigate()
 
   /* inicializar variables */
   const [agencia, setAgencia] = useState(null);
@@ -69,6 +70,7 @@ export default function CreditoPersonaNatural(){
   const [responsabilidad,setResponsabilidad ] = useState(null);
   const [departamento,setDepartamento]= useState('');
   const [precio, setPrecio] = useState(null);
+  const [formularios,setFormularios] = useState([]);
 
   /* inicializar para hacer la busqueda (es necesario inicializar en array vacio)*/
   const [clasificaciones, setClasificaciones]= useState([]);
@@ -149,9 +151,7 @@ export default function CreditoPersonaNatural(){
       const updatedInputs = [...fileInputs];
       updatedInputs.pop();
       setFileInputs(updatedInputs);
-    } /* setVisible=false; */
-    /* const updatedInputs = fileInputs.filter((input) => input.id !== id);
-    setFileInputs(updatedInputs); */
+    } 
   };
   const actualizarFiles =(id,event)=>{
     const updatedInputs = fileInputs.map((input) =>
@@ -160,19 +160,22 @@ export default function CreditoPersonaNatural(){
     setFileInputs(updatedInputs);
   }
 
-  /* cambiar item dependiendo del orden */
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
   const handleFileChange = (fieldName, e) => {
     const selectedFile = e.target.files[0];
-    setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
+    if(selectedFile && selectedFile.type === 'application/pdf'){
+      setFiles(prevFiles => ({ ...prevFiles, [fieldName]: selectedFile }));
+    }else{
+      Swal.fire({
+        icon:'warning',
+        title:'¡ATENCION!',
+        text:'El aplicativo solo acepta archivo con extensión .pdf',
+        showConfirmButton:true,
+        confirmButtonColor:'#198754',
+        confirmButtonText:'Entendido'
+      })
+    }
   };
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
+
   //------------------------------------------
 
   const [search, setSearch] = useState({
@@ -263,18 +266,9 @@ export default function CreditoPersonaNatural(){
     getAllDocuments().then((data)=>setDocumentos(data));
     getAllDepartamentos().then((data) => setDepartamentos(data));
     getAllCiudades().then((data) => setCiudades(data));
-},[]);
+    getAllTipoFormularios().then((data)=>setFormularios(data));
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.nit === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      /* setSucursal(null); */
-      selectBranchRef.current.selectedIndex = 0;
-    }
-  };
+},[]);
 
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
@@ -292,25 +286,236 @@ export default function CreditoPersonaNatural(){
     });
   };
 
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
+  const [actualizar,setActualizar] = useState('')
+  const [rzNotEnty,setRzNotEnty] = useState(false)
+  const [clientes,setClientes] = useState()
+  const [proveedores,setProveedores] = useState()
+  useEffect(()=>{
+    findClientes()
+    .then(({data})=>{
+      setClientes(data)
+    })
+    findProveedores()
+    .then(({data})=>{
+      setProveedores(data)
+    })
+  },[])
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if(search.cedula.length>=5 && search.cedula.length<=10){
+        const filtroCliente = clientes.filter((item)=>{
+          if(item.cedula === search.cedula){
+            return item
+          }
+        })
+        const filtroProveedor = proveedores.filter((elem)=>{
+          if(elem.cedula === search.cedula){
+            return elem
+          }
+        })
+        if(filtroCliente.length>0 || filtroProveedor.length>0){
+          Swal.fire({
+            title:'¡ATENCIÓN!',
+            text:`El numero de identificación ${search.cedula}
+            se encuentra registrado en nuestra base de datos como 
+            
+            ${filtroCliente.map((elem)=>{
+              return elem.tipoFormulario
+            })} ${filtroProveedor.map((item)=>{
+              return item.tipoFormulario
+            })}. 
+            ¿Qué acción desea realizar?`,
+            showCancelButton:true,
+            showConfirmButton:true,
+            confirmButtonColor:'#D92121',
+            confirmButtonText:'Consultar',
+            cancelButtonText:'Regresar',
+            showDenyButton:true,
+            denyButtonColor:'blue',
+            denyButtonText:'Actualizar'
+          }).then(({isConfirmed,isDenied})=>{
+            if(isConfirmed){
+              if(user.role==='admin'){
+                navigate('/validacion/admin')
+              }
+              if(user.role==='cartera'){
+                navigate('/validar/tercero')
+              }
+              if(user.role==='compras' || user.role==='agencias'
+              || user.role==='comprasnv'){
+                navigate('/validar/proveedor')
+              }
+            }else if(isDenied){
+              if(filtroCliente.length>0 && filtroProveedor.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento                  })
+                })
+              }else if(filtroCliente.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento                  })
+                })
+              }else if(filtroProveedor.length>0){
+                filtroProveedor.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento                  })
+                })
+              }
+              setActualizar('SI')
+              setRzNotEnty(true)
+            }
+          })
+        }
+      }else{
+        Swal.fire({
+          icon:'warning',
+          title:'Recuerda que el NÚMERO DE IDENTIFICACIÓN debe contener entre 5 y 10 caracteres',
+          confirmButtonColor:'#D92121',
+          confirmButtonText:'OK'
+        })
+      }
+    };
+  }
+
+  const devolverLista = (lista) =>{
+    const filtrar = lista.map((item)=>{
+      //funcion para que los prefijos de los formatos quede amplio
+      /* if(item.tipoFormulario==='PNC'){
+        return 'PERSONA NATURAL CONTADO,'
+      }else if(item.tipoFormulario==='PJCR'){
+        return 'PERSONA JURIDICA CONTADO,'
+      }else if(item.tipoFormulario==='PNCR'){
+        return 'PERSONA NATURAL CREDITO,'
+      }else if(item.tipoFormulario==='PJCR'){
+        return 'PERSONA JURIDICA CREDITO,'
+      }else if(item.tipoFormulario==='PMJ'){
+        return 'PROVEEDOR MCIA Y CONVENIOS - PERSONA JURIDICA,'
+      }else if(item.tipoFormulario==='PMN'){
+        return 'PROVEEDOR MCIA Y CONVENIOS - PERSONA NATURAL,'
+      }else if(item.tipoFormulario==='PS'){
+        return 'PRESTADOR DE SERVICIOS,'
+      }else if(item.tipoFormulario==='PVJ'){
+        return 'PROVEEDORES VARIOS - PERSONA JURIDICA,'
+      }else if(item.tipoFormulario==='PVN'){
+        return 'PROVEEDORES VARIOS - PERSONA NATURAL,'
+      } */
+      return item.tipoFormulario
+    })
+    const conjunto = new Set(filtrar)
+    return Array.from(conjunto)
+  }
+
+  //funcion para que cuando se cambie de input se ejecute 
+  const handleInputBlur = () => {
+    if(search.cedula.length>=5 && search.cedula.length<=10){
+      const filtroCliente = clientes.filter((item)=>{
+        if(item.cedula === search.cedula){
+          return item
+        }
+      })
+      const filtroProveedor = proveedores.filter((elem)=>{
+        if(elem.cedula === search.cedula){
+          return elem
+        }
+      })
+      if(filtroCliente.length>0 || filtroProveedor.length>0){
+        Swal.fire({
+          title:'¡ATENCIÓN!',
+          text:`El numero de identificación ${search.cedula}
+          se encuentra registrado en nuestra base de datos como 
+          ${devolverLista(filtroCliente)} ${devolverLista(filtroProveedor)}
+          ¿Qué acción desea realizar?`,
+          showCancelButton:true,
+          showConfirmButton:true,
+          confirmButtonColor:'#D92121',
+          confirmButtonText:'Consultar',
+          cancelButtonText:'Regresar',
+          showDenyButton:true,
+          denyButtonColor:'blue',
+          denyButtonText:'Actualizar'
+        }).then(({isConfirmed,isDenied})=>{
+          //si es confirmado es porque le dio a consultar
+          if(isConfirmed){
+            if(user.role==='admin'){
+              navigate('/validacion/admin')
+            }
+            if(user.role==='cartera'){
+              navigate('/validar/tercero')
+            }
+            if(user.role==='compras' || user.role==='agencias'
+            || user.role==='comprasnv'){
+              navigate('/validar/proveedor')
+            }
+          }else if(isDenied){
+            //si es deni es porque le dio a actualizar
+              if(filtroCliente.length>0 && filtroProveedor.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento
+                  })
+                })
+              }else if(filtroCliente.length>0){
+                filtroCliente.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento
+
+                  })
+                })
+              }else if(filtroProveedor.length>0){
+                filtroProveedor.map((item)=>{
+                  setSearch({
+                    ...search,
+                    primerApellido: item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
+                    document: item.tipoDocumento
+
+                  })
+                })
+              }
+            setActualizar('SI')
+            setRzNotEnty(true)
+          }
+        })
+      }
+    }else{
+      Swal.fire({
+        icon:'warning',
+        title:'Recuerda que el NÚMERO DE IDENTIFICACIÓN debe contener entre 5 y 10 caracteres',
+        confirmButtonColor:'#D92121',
+        confirmButtonText:'OK'
+      })
     }
-    return numeroComoTexto;
   };
 
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -325,15 +530,7 @@ export default function CreditoPersonaNatural(){
     }) .then(({isConfirmed})=>{
       if(isConfirmed){
         setLoading(true);
-        //agregamos los pdf a un formdata dependiendo del index que les dimos
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }); */
         const formData = new FormData();
-
         for (const fieldName in files) {
           if (files[fieldName]) {
             formData.append(fieldName, files[fieldName]);
@@ -399,6 +596,12 @@ export default function CreditoPersonaNatural(){
           docCerBan:docCerBan,
           docOtros:docOtros,
           nombreComercial: search.nombreComercial.toUpperCase(),
+          pendiente:1,
+          rechazado:0,
+          aprobado:0,
+          actulizado : actualizar==='' ? null:'SI',
+          fechaActualizacion : actualizar === '' ? null:new Date(),
+
         };
         const preAprovacion = {
           cedula: search.cedula,
@@ -462,11 +665,26 @@ export default function CreditoPersonaNatural(){
         })
         createCliente(body)
         .then(({data}) => {
-          fileSend(formData)
           const info={
             accion:'1',
           }
           updateBitacora(user.email,info)
+          const filtro = formularios.filter((item)=>{
+            if(item.id===search.tipoFormulario){
+              return item.description
+            }
+          })
+          const tipo = filtro.map((item)=>{
+            return item.description
+          })
+          const mail = {
+            agencia: agencia.description,
+            razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
+            tipoFormulario: tipo,
+          }
+          sendMail(mail)
+          .then(()=>{
+          fileSend(formData)
           /* createPreAprovacion(preAprovacion) */
           .then(()=>{
             setLoading(false)
@@ -507,6 +725,19 @@ export default function CreditoPersonaNatural(){
               window.location.reload();
             })
           });
+        })
+        .catch((error)=>{
+          Swal.fire({
+            title: "¡Ha ocurrido un error!",
+            text: `
+            Ha ocurrido un error al momento de enviar el correo a cartera, intente de nuevo.
+            Si el problema persiste por favor comuniquese con el área de sistemas.`,
+            icon: "error",
+            showConfirmButton: true,
+            confirmButtonColor:'#198754',
+            confirmButtonText:'Aceptar',       
+          })
+        })
       })
       .catch((err)=>{
         setLoading(false);
@@ -673,8 +904,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
           <Fade cascade='true'>
           <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger pb-2" style={{fontSize:150}}><strong>persona NATURAL - pago a CRÉDITO</strong></label>
           </Fade>
+          <hr className="my-1" />
+          { actualizar === 'SI' &&
+            <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2"><strong>ACTUALIZACIÓN</strong></label>
+          }
           </center>
-        <hr className="my-1" />
         </div>
       </section>
     </center>
@@ -682,41 +916,46 @@ const [selectedFiles, setSelectedFiles] = useState([]);
       <form className="" onSubmit={handleSubmit} /* onSubmit={handleOpenModal} */>
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
-            <div>
-              <div className="d-flex flex-row">
-                <div className="d-flex flex-column me-4 w-100">
-              <label className="fw-bold" style={{fontSize:18}}>CLASIFICACIÓN</label>
-              <select
-                ref={selectClasificacionRef}
-                className="form-select form-select-sm"
-                onChange={(e)=>setClasificacion(JSON.parse(e.target.value))}
-                required
-              >
-                <option selected value="" disabled>
-                  -- Seleccione la Clasificación --
+            <div className="mb-2">
+              <label className="fw-bold mb-1" style={{fontSize:20}}>INFORMACIÓN DEL CLIENTE</label>
+              <div className="d-flex flex-row mt-2">
+              <div className="d-flex flex-row align-items-start w-100">
+                  <label className="me-1">No.Identificación:</label>
+                  <input
+                    id="cedula"
+                    type="number"
+                    className="form-control form-control-sm w-100"
+                    min={10000}
+                    max={9999999999}
+                    value={search.cedula}
+                    pattern="[0-9]"
+                    onChange={handlerChangeSearch}
+                    required
+                    placeholder="Campo obligatorio"
+                    maxLength={10}
+                    onKeyPress={actualizar==='' ? handleKeyPress:null}
+                    onBlur={actualizar==='' ?handleInputBlur:null}
+                    disabled={actualizar==='' ? false:true }
+
+                  >
+                  </input>
+                  <span className="validity fw-bold me-3"></span>
+                </div>
+                <div className="d-flex flex-row align-items-start w-100">
+                  <label className="me-1">Tipo documento:</label>
+                  <select
+                  style={{width:245}}
+                    ref={selectDocumentoRef}
+                    className="form-select form-select-sm m-100 me-3"
+                    onChange={(e)=>setDocument(JSON.parse(e.target.value))}
+                    required
+                    disabled={actualizar==='' ? false:true }
+
+                  >
+                    <option selected value='' disabled>
+                  -- Seleccione el tipo de documento --
                 </option>
-                {clasificaciones
-                  .sort((a,b)=>a.id - b.id)
-                  .map((elem)=>(                    
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                      {elem.id + ' - ' + elem.description} 
-                    </option>
-                  ))
-                }
-              </select>
-              </div>
-              <div className="d-flex flex-column w-100 ">
-              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
-              <select
-                ref={selectBranchRef}
-                className="form-select form-select-sm w-100"
-                required
-                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
-              >
-                <option selected value='' disabled>
-                  -- Seleccione la Agencia --
-                </option>
-                {agencias
+                  {documentos
                   .sort((a, b) => a.id - b.id)
                   .map((elem) => (
                     <option id={elem.id} value={JSON.stringify(elem)}>
@@ -724,25 +963,9 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     </option>
                   ))}
               </select>
+                </div>
+                
               </div>
-              </div>
-              <div className="d-flex flex-row mt-3 mb-2  w-100">
-              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
-              <input
-                  id="solicitante"
-                  type="text"
-                  style={{textTransform:"uppercase"}}
-                  placeholder="Nombre Solicitante"
-                  value={search.solicitante}
-                  onChange={handlerChangeSearch}
-                  className="form-control form-control-sm "
-                 
-              />
-              </div>        
-            </div>
-            <hr className="my-1" />
-            <div className="mb-2">
-              <label className="fw-bold mb-1" style={{fontSize:20}}>CLIENTE</label>
               <div className="d-flex flex-row">
                 <div className="d-flex flex-column align-items-start w-25 pe-3">
                   <label className="me-1 w-25">1er.Apellido:</label>
@@ -753,6 +976,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     className="form-control form-control-sm "                     
                     min={0}
                     required
+                    disabled={actualizar==='' ? false:true }
                     placeholder="Campo obligatorio"
                     value={search.primerApellido}
                     onChange={handlerChangeSearch}
@@ -763,6 +987,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <input
                     id="segundoApellido"
                     type="text"
+                    disabled={actualizar==='' ? false:true }
                     style={{textTransform:"uppercase"}}
                     className="form-control form-control-sm "                     
                     min={0}
@@ -770,13 +995,13 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     value={search.segundoApellido}
                     onChange={handlerChangeSearch}
                   />
-                </div>
-                
+                </div>              
                 <div className="d-flex flex-column w-25 pe-3">
                 <label className="me-1 w-25">1er.Nombre:</label>
                   <input
                     id="primerNombre"
                     type="text"
+                    disabled={actualizar==='' ? false:true }
                     style={{textTransform:"uppercase"}}
                     className="form-control form-control-sm "                     
                     min={0}
@@ -791,6 +1016,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <input
                     id="otrosNombres"
                     type="text"
+                    disabled={actualizar==='' ? false:true }
                     style={{textTransform:"uppercase"}}
                     className="form-control form-control-sm w-100"                     
                     min={0}
@@ -798,50 +1024,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     value={search.otrosNombres}
                     onChange={handlerChangeSearch}
                   />
-                </div>
-              </div>
-
-              <div className="d-flex flex-row mt-2">
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">Tipo documento:</label>
-                  <select
-                  style={{width:245}}
-                    ref={selectDocumentoRef}
-                    className="form-select form-select-sm m-100 me-3"
-                    onChange={(e)=>setDocument(JSON.parse(e.target.value))}
-                    required
-                  >
-                    <option selected value='' disabled>
-                  -- Seleccione el tipo de documento --
-                </option>
-                  {documentos
-                  .sort((a, b) => a.id - b.id)
-                  .map((elem) => (
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                      {elem.id + " - " + elem.description}
-                    </option>
-                  ))}
-              </select>
-                </div>
-                <div>
-                </div>
-                <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">No.Identificación:</label>
-                  <input
-                    id="cedula"
-                    type="number"
-                    className="form-control form-control-sm w-100"
-                    min={10000}
-                    max={9999999999}
-                    value={search.cedula}
-                    pattern="[0-9]"
-                    onChange={handlerChangeSearch}
-                    required
-                    placeholder="Campo obligatorio"
-                    maxLength={10}
-                  >
-                  </input>
-                  <span className="validity fw-bold"></span>
                 </div>
               </div>
               <div className="d-flex flex-row mt-2 w-100">
@@ -974,6 +1156,65 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 </input>
             </div>
             </div> 
+            <hr className="my-1" />
+            <div>
+              <div className="d-flex flex-row">
+                <div className="d-flex flex-column me-4 w-100">
+              <label className="fw-bold" style={{fontSize:18}}>CLASIFICACIÓN</label>
+              <select
+                ref={selectClasificacionRef}
+                className="form-select form-select-sm"
+                onChange={(e)=>setClasificacion(JSON.parse(e.target.value))}
+                required
+              >
+                <option selected value="" disabled>
+                  -- Seleccione la Clasificación --
+                </option>
+                {clasificaciones
+                  .sort((a,b)=>a.id - b.id)
+                  .map((elem)=>(                    
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + ' - ' + elem.description} 
+                    </option>
+                  ))
+                }
+              </select>
+              </div>
+              <div className="d-flex flex-column w-100 ">
+              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
+              <select
+                ref={selectBranchRef}
+                className="form-select form-select-sm w-100"
+                required
+                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione la Agencia --
+                </option>
+                {agencias
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+              </div>
+              </div>
+              <div className="d-flex flex-row mt-3 mb-2  w-100">
+              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
+              <input
+                  id="solicitante"
+                  type="text"
+                  style={{textTransform:"uppercase"}}
+                  placeholder="Nombre Solicitante"
+                  value={search.solicitante}
+                  onChange={handlerChangeSearch}
+                  className="form-control form-control-sm "
+                 
+              />
+              </div>        
+            </div>
             <hr className="my-1" />
               <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRONICA</label>
               <div className="d-flex flex-row align-items-start mt-2 ">
@@ -1537,7 +1778,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
             onSubmit={handleSubmit}
             /* onSubmit={handleOpenModal} */
           >
-            REGISTRAR
+            {actualizar==='' ? 'REGISTRAR':'ACTUALIZAR'}
           </button>
           <Modal
             open={open}

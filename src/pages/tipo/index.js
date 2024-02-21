@@ -1,14 +1,5 @@
-import React, { useState, useContext } from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import { FaHandshakeSimple } from "react-icons/fa6";
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
+import React, { useContext } from "react"
+import { useNavigate } from 'react-router-dom';
 import { Fade } from "react-awesome-reveal";
 import { IoBusiness } from "react-icons/io5";
 import { BsFileEarmarkPersonFill } from "react-icons/bs";
@@ -18,43 +9,25 @@ import Button from '@mui/material/Button';
 import { RiArrowGoBackFill } from "react-icons/ri";
 
 export default function Inicio2(){
-    const { user, setUser } = useContext(AuthContext);
-    const [pago,setPago]=useState();
-    const [persona,setPersona]=useState();
-    const [tipo,setTipo]=useState();
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
-  const handleTipo=(e)=>{
-    setTipo(e.target.value);
-  }
-    const handlePago=(e)=>{
-        setPago(e.target.value);
-    }
-    const handlePersona=(e)=>{
-        setPersona(e.target.value);
-    }
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        if(persona==='Natural'&& pago==='Contado'){
-            Navigate('/contado/persona/natural');
-        }
-    }
     const handleClickBack=(e)=>{
       e = e.target.value;
       if(user.role==='compras' || user.role==='comprasnv'){
         return navigate('/compras')
-      }else if(user.role==='agencias' ){
+      }else if(user.role==='asistente agencia' ){
         return navigate('/compras')
       }else if(user.role==='admin'){
         return navigate('/inicio/admin')
+      }else if(user.role === 'agencias'){
+        return navigate('/inicio')
       }
     }
     return(
       <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto " style={{userSelect:'none'}}>
       <div className='rounder-4'>
       <div className='login-wrapper p-2 mb-3 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white', userSelect:'none'}}>
-      <Fade cascade damping={0.1} direction="down" triggerOnce='true'>
-{/*       <label className='' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong>Estimad@ {user.name}</strong></label>
-  */}      
+      <Fade cascade damping={0.1} direction="down" triggerOnce='true'>     
     <h4 style={{userSelect:'none'}}>Su elección anterior fue:</h4><h1> <strong className="text-danger">Proveedores Varios (Agencias)</strong></h1>
     <hr style={{width:600, color:'black'}}/></Fade>
 
@@ -71,30 +44,23 @@ export default function Inicio2(){
       </div>
     </div>
     <div className='d-flex flex-row '>
-      {/* <h3>Tipo de pago: </h3> */}
-      
       <div className="d-flex flex-column pt-2">
-              
             <div className="d-flex flex-row">
-            
               <h4><Checkbox
-              /* checked={checked} */
               onChange={(e)=>navigate('/proveedor/varios/natural')}
               inputProps={{ 'aria-label': 'controlled' }}
               /><BsFileEarmarkPersonFill />Persona Natural</h4>
               </div>
               <div className="d-flex flex-row pt-2">
-            
               <h4 className="text-danger"><Checkbox
-              /* checked={checked} */
               onChange={(e)=>navigate('/proveedor/varios/juridico')}
               inputProps={{ 'aria-label': 'controlled' }}
               /><IoBusiness />Persona juridica</h4>
               </div>
             </div>
-    </div>
-    </div>
-    </div>
+          </div>
+        </div>
+      </div>
     </div>
     </div>
     )

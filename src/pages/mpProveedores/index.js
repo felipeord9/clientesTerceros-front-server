@@ -1,44 +1,16 @@
-import React, { useState, useContext, useEffect } from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
-import TextField from '@mui/material/TextField';
+import React, { useState, useContext } from "react"
+import { useNavigate } from 'react-router-dom';
 import { Fade } from "react-awesome-reveal";
-import { validarCliente } from "../../services/clienteService"; 
-import { validarProveedor } from "../../services/proveedorService";
-import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
-import Button from '@mui/material/Button';
-/* import { Button } from "react-bootstrap"; */
-import { RiArrowGoBackFill } from "react-icons/ri";
-import { IoMdPersonAdd } from "react-icons/io";
 
 export default function MenuPrincipalProveedores(){
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
-    const [search,setSearch]=useState({
-      cedula:'',
-    })
-    const handlerChangeSearch = (e) => {
-      const { id, value } = e.target;
-      setSearch({
-        ...search,
-        [id]: value,
-      });
-    };
-
     const handleClickInicio=(e)=>{
       e = e.target.value
       if(user.role==='cartera'){
         return navigate('/inicio')
-      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')
@@ -49,34 +21,11 @@ export default function MenuPrincipalProveedores(){
       e = e.target.value
       if(user.role==='cartera'){
         return navigate('/validar/tercero')
-      }else if(user.role==='compras' || user.role==='agencias' || user.role==='comprasnv'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         return navigate('/validar/Proveedor')
       }else{
         return navigate('/validacion/admin')
       }
-      /* return navigate('/validacion/admin') */
-    }
-
-    const TextOfBinary =({valor})=>{
-      const [labelColor, setLabelColor] = useState('');
-      const [nuevoTexto,setNuevoTexto] = useState('');
-      /* const valorBinario = valor */
-      /* const nuevoTexto = valor ? 'Fue cargado':'No fue cargado'; */
-      useEffect(()=>{
-        if(valor=== 1){
-          setLabelColor('#008F39')
-          setNuevoTexto('Cargado')
-        }else if(valor===0){
-          setLabelColor('#CB3234')
-          setNuevoTexto('No fue cargado')
-        }else{
-          setLabelColor(null)
-          setNuevoTexto('')
-        }
-      },[valor]);
-      return (
-        <label className="" style={{color:labelColor, height:18}}><strong>{nuevoTexto}</strong></label>
-      )
     }
 
     const BotonColorCambiante = ({ children }) => {
@@ -124,14 +73,10 @@ export default function MenuPrincipalProveedores(){
     <Fade cascade damping={0.1} direction="down" triggerOnce='true'>
       <div>
         <center>
-        <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong> Menú Principal Proveedores </strong></label>
+        <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong> Menú Principal </strong></label>
         <hr style={{width:700, color:'black'}}/>
         <h4>A continuación, elige la acción que deseas realizar</h4>
         </center>
-        <div className="d-flex flex-row">
-        <div className="d-flex flex-row">
-        </div>
-        </div>
         <center>
         <div className="m-3">
         <div className=" mb-3">
@@ -140,8 +85,10 @@ export default function MenuPrincipalProveedores(){
           {user.role==='comprasnv' && (
             <a onClick={(e)=>navigate('/consultar/certificado')}><BotonColorCambiante>Certificados</BotonColorCambiante></a>
           )}
-{/*           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
- */}        </div>
+          {user.role==='asistente agencia' && (
+            <a onClick={(e)=>navigate('/solicitudes')}><BotonColorCambiante>Consultar Solicitudes</BotonColorCambiante></a>
+          )}
+       </div>
         </div>
         </center>
       </div>

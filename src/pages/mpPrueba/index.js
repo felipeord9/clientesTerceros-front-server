@@ -1,39 +1,11 @@
 import React, { useState, useContext, useEffect } from "react"
-import Logo from '../../assest/logo-gran-langostino.png'
-import useUser from '../../hooks/useUser';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import { Divider } from "@mui/material";
-import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 import { Fade } from "react-awesome-reveal";
-import { validarCliente } from "../../services/clienteService"; 
-import { validarProveedor } from "../../services/proveedorService";
-import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
-import Button from '@mui/material/Button';
-/* import { Button } from "react-bootstrap"; */
-import { RiArrowGoBackFill } from "react-icons/ri";
-import { IoMdPersonAdd } from "react-icons/io";
 
 export default function MpPrueba(){
   const { user, setUser } = useContext(AuthContext);
   const navigate =useNavigate()
-    const [cedula,setCedula] = useState('');
-    const [search,setSearch]=useState({
-      cedula:'',
-    })
-    const handlerChangeSearch = (e) => {
-      const { id, value } = e.target;
-      setSearch({
-        ...search,
-        [id]: value,
-      });
-    };
-
     const handleClickInicio=(e)=>{
       e = e.target.value
       if(user.role==='agencias' || user.role==='cartera'){
@@ -132,7 +104,6 @@ export default function MpPrueba(){
           <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta solicitudes</BotonColorCambiante></a>
           <div className="d-flex justify-content-center align-items-center" style={{height:150,width:270}}>
           <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong>Menú </strong></label>
-          {/* <label className='text-danger' style={{color:'black', marginBottom:5, fontSize:60, userSelect:'none'}}><strong> </strong></label */}
           </div>
           <a onClick={(e)=>navigate('/bitacora')}><BotonColorCambiante>Bitácora</BotonColorCambiante></a>
         </div>

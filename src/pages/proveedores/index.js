@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go"
 import TableProveedores from "../../components/tableProveedores"
 import { findProveedores } from "../../services/proveedorService"
 
@@ -61,7 +60,7 @@ export default function Proveedores() {
     },
     headCells: {
       style: {
-        fontSize: '16px',
+        fontSize: '15px',
         height:'35px',
         backgroundColor:'#D92121',
         opacity:0.9,

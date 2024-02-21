@@ -4,21 +4,17 @@ import { Button } from "@mui/material";
 import {  Modal } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
-import { Navigate , useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DepartmentContext  from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
 import { FaEye } from "react-icons/fa";
-import { createProveedor, deleteProveedor, updateProveedor } from '../../services/proveedorService';
+import { updateProveedor } from '../../services/proveedorService';
 import { getAllDepartamentos } from "../../services/departamentoService";
 import { getAllCiudades } from "../../services/ciudadService";
 import { getAllActividad} from '../../services/actividadService';
 import { getAllAgencies } from "../../services/agencyService";
 import { getAllDocuments } from '../../services/documentService'
 import { fileSend, deleteFile } from "../../services/fileService";
-import VinculacionProveedor from '../../pdfs/FORMATO  VINCULACION DE PROVEEDORES.pdf'
-import VinculacionCliente from '../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf';
-import Compromiso from '../../pdfs/COMPROMISO ANTICORRUPCION.pdf';
-import { FaFileDownload } from "react-icons/fa";
 import { updateBitacora } from '../../services/bitacoraService';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Logo_pdf from '../../assest/logo_pdf.jpg'
@@ -43,15 +39,9 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 
 export default function EditPVN(){
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const {department,setDepartment}=useContext(DepartmentContext)
   const navigate =useNavigate()
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [document,setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [departamento,setDepartamento]= useState('');
-  const [actividad, setActividad] = useState(null);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion,setDocVinculacion]=useState(0);
@@ -78,14 +68,6 @@ export default function EditPVN(){
     input5: null,
     input6: null,
   });
-/*   const [folderName, setFolderName] = useState('');
- */
-  /* Variable para agregar los pdf */
-  /* const handleFileChange = (event, index) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
-  }; */
 
   /* Second form */
   const handleFileChange = (fieldName, e) => {
@@ -169,13 +151,6 @@ export default function EditPVN(){
   },[]);
   const [loading, setLoading] = useState(false);
   const [invoiceType, setInvoiceType] = useState(false);
-  
-  /* rama seleccionada de cada variable */
-  const selectBranchRef = useRef();
-  const selectDocumentoRef=useRef();
-  const selectDepartamentoRef=useRef();
-  const selectCiudadRef=useRef();
-  const selectActividadRef=useRef();
 
   const limitDeliveryDateField = new Date()
   limitDeliveryDateField.setHours(2)
@@ -189,54 +164,12 @@ export default function EditPVN(){
       getAllActividad().then((data)=>setActividades(data));
   },[]);
 
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.departament_id === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      setCiudad(null);
-      selectCiudadRef.current.selectedIndex = 0;
-    }
-  };
-
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
     setSearch({
       ...search,
       [id]: value,
     });
-  };
-
-  const idParser = (id) => {
-    let numeroComoTexto = id.toString();
-    while (numeroComoTexto.length < 8) {
-      numeroComoTexto = "0" + numeroComoTexto;
-    }
-    return numeroComoTexto;
-  };
-
-  const getFiles = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const nameFile = file.name.split(".");
-      const ext = nameFile[nameFile.length - 1];
-      const newFile = new File([file], `Archivo-Adjunto.${ext}`, {
-        type: file.type,
-      });
-      /* setFiles(newFile); */
-    }
-  };
-
-  const changeType = (e) => {
-    setSearch({
-      ...search,
-      idDepartment: "",
-    });
-    setInvoiceType(!invoiceType);
-    /* setClient(null); */
-    setCiudad(null);
-    selectCiudadRef.current.selectedIndex = 0;
   };
 
   const handleSubmit = (e) => {
@@ -259,13 +192,6 @@ export default function EditPVN(){
             formData.append(fieldName, files[fieldName]);
           }
         }
-        //agregamos los pdf a un formdata dependiendo del index que les dimos
-        /* const formData = new FormData();
-        files.forEach((file, index) => {
-          if (file) {
-            formData.append(`pdfFile${index}`, file);
-          }
-        }); */
         //creamos el cuerpo de nuestra instancia
         const body={
           cedula: search.cedula,

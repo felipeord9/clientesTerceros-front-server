@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
+import Cookies from 'js-cookie';
 
 const url = config.apiUrl2
 
@@ -15,7 +16,8 @@ export const userLogin = async (credentials) => {
 
 export const changePassword = async (credentials) => {
   try {
-    const token = JSON.parse(localStorage.getItem("token"))
+    /* const token = JSON.parse(localStorage.getItem("token")) */
+    const token = Cookies.get('token')
     const { data } = await axios.post(`${url}/auth/change/password`, credentials, {
       headers: {
         Authorization: `Bearer ${token}`
