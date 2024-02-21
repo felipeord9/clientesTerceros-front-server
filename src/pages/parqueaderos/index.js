@@ -176,9 +176,9 @@ export default function Parqueaderos(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            showDenyButton:true,
+            /* showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar'
+            denyButtonText:'Actualizar' */
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -283,9 +283,9 @@ export default function Parqueaderos(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          showDenyButton:true,
+          /* showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar'
+          denyButtonText:'Actualizar' */
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){

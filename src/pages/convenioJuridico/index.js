@@ -247,9 +247,9 @@ export default function ConvenioJuridico(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            showDenyButton:true,
+            /* showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar'
+            denyButtonText:'Actualizar' */
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -354,9 +354,9 @@ export default function ConvenioJuridico(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          showDenyButton:true,
+          /* showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar'
+          denyButtonText:'Actualizar' */
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -448,7 +448,7 @@ export default function ConvenioJuridico(){
           correoElectronico: search.correoElectronico.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
           actividadEconomica: actividad.id,         
-          tipoDocRepLegal: document.codigo,
+          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
           numeroDocRepLegal: search.numeroDocRepLegal,
           nameRepLegal:search.nameRepLegal.toUpperCase(),
           apellidoRepLegal:search.apellidoRepLegal.toUpperCase(),

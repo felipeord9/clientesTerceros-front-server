@@ -200,9 +200,9 @@ export default function ContadoPersonaNatural(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            showDenyButton:true,
+            /* showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar'
+            denyButtonText:'Actualizar' */
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -224,8 +224,8 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento                  
                   })
+                  setDocument(item.tipoDocumento)
                 })
               }else if(filtroCliente.length>0){
                 filtroCliente.map((item)=>{
@@ -235,8 +235,9 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento                  
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroProveedor.length>0){
                 filtroProveedor.map((item)=>{
@@ -246,8 +247,8 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento                  
                   })
+                  setDocument(item.tipoDocumento)
                 })
               }
               setActualizar('SI')
@@ -319,9 +320,9 @@ export default function ContadoPersonaNatural(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          showDenyButton:true,
+          /* showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar'
+          denyButtonText:'Actualizar' */
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -345,8 +346,9 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroCliente.length>0){
                 filtroCliente.map((item)=>{
@@ -356,9 +358,9 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento
-
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroProveedor.length>0){
                 filtroProveedor.map((item)=>{
@@ -368,9 +370,9 @@ export default function ContadoPersonaNatural(){
                     segundoApellido: item.segundoApellido,
                     primerNombre: item.primerNombre,
                     otrosNombres: item.otrosNombres,
-                    document: item.tipoDocumento
-
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }
             setActualizar('SI')
@@ -412,7 +414,7 @@ export default function ContadoPersonaNatural(){
         const body={
           clasificacion: clasificacion.description,
           agencia: agencia.id,
-          tipoDocumento: document.codigo,
+          tipoDocumento: actualizar === '' ? document.codigo:document,
           departamento: departamento.codigo,
           ciudad: ciudad.codigo,
           createdAt: new Date(),
@@ -420,7 +422,7 @@ export default function ContadoPersonaNatural(){
           regimenFiscal: regimen.id,
           responsabilidadFiscal: responsabilidad.id,
           detalleTributario: detalle.id,
-          tipoDocRepLegal: document.codigo,
+          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
           departamentoSucursal:departamento.codigo,
           ciudadSucursal:ciudad.codigo,
           cedula: search.cedula,

@@ -214,9 +214,9 @@ export default function ContadoPersonaJuridica(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            showDenyButton:true,
+            /* showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar'
+            denyButtonText:'Actualizar' */
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -321,9 +321,9 @@ export default function ContadoPersonaJuridica(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          showDenyButton:true,
+          /* showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar'
+          denyButtonText:'Actualizar' */
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -426,7 +426,7 @@ export default function ContadoPersonaJuridica(){
           detalleTributario: detalle.id,
           numeroDocRepLegal: search.numeroDocRepLegal,
           nameRepLegal: search.nameRepLegal.toUpperCase(),
-          tipoDocRepLegal: document.codigo,
+          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
           apellidoRepLegal: search.apellidoRepLegal.toUpperCase(),
           valorEstimado: search.valorEstimado,
           precioSugerido: precio.description,

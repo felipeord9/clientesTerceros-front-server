@@ -241,9 +241,9 @@ export default function ConvenioNatural(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            showDenyButton:true,
+            /* showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar'
+            denyButtonText:'Actualizar' */
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -357,9 +357,9 @@ export default function ConvenioNatural(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          showDenyButton:true,
+          /* showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar'
+          denyButtonText:'Actualizar' */
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -450,7 +450,7 @@ export default function ConvenioNatural(){
         const body={
           cedula: search.cedula,
           numeroDocumento: search.cedula,
-          tipoDocumento: document.codigo,
+          tipoDocumento: actualizar === '' ? document.codigo:document,
           tipoPersona: search.tipoPersona,
           razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
           primerApellido:search.primerApellido.toUpperCase(),
@@ -465,7 +465,7 @@ export default function ConvenioNatural(){
           correoElectronico: search.correoElectronico.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
           actividadEconomica: actividad.id,         
-          tipoDocRepLegal: document.codigo,
+          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
           numeroDocRepLegal: search.cedula,
           nameRepLegal:search.primerNombre.toUpperCase(),
           apellidoRepLegal:search.primerApellido.toUpperCase(),
