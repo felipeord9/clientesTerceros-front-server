@@ -112,7 +112,7 @@ export const NavBarData = [
   },
   {
     title: "C.Comerciales ó Parqueaderos",
-    path: "/Parqueaderos",
+    path: "/tipo/parqueadero",
     icon: <FaCar />,
     cName: "nav-text",
     access: ['admin','compras','cartera','asistente agencia','comprasnv']

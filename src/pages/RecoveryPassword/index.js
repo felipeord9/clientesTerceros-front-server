@@ -6,6 +6,7 @@ import * as Bs from "react-icons/bs";
 import { changeRecoveryPassword } from '../../services/authService';
 import Logo from '../../assest/logo-gran-langostino.png'
 import './styles.css'
+import { GiSandsOfTime } from "react-icons/gi";
 
 export default function RecoveryPassword() {
     const { isLogged } = useUser()
@@ -14,6 +15,7 @@ export default function RecoveryPassword() {
     const [errorInput, setErrorInput] = useState('')
     const { token } = useParams()
     const navigate = useNavigate()
+    const [cargando,setCargando] = useState(false)
 
     useEffect(() => {
       if (isLogged) navigate('/inicio');
@@ -25,8 +27,10 @@ export default function RecoveryPassword() {
       setErrorInput('La contraseña nueva no coincide')
       return setTimeout(() => setErrorInput (''), 3000)
     }
+    setCargando(true)
     changeRecoveryPassword({token, newPassword})
       .then((data) => {
+        setCargando(false)
         Swal.fire({
           title: "¡CORECTO!",
           text: "La contraseña se ha cambiado exitosamente.",
@@ -65,7 +69,7 @@ export default function RecoveryPassword() {
         </div>
         <div className='align-content-center text-align-center align-items-center'>
           <center>
-          <button type="submit"><strong>Reestablecer</strong></button>
+          <button type="submit"><strong>{cargando ? <strong>Cargando... <GiSandsOfTime /></strong>:<strong>Reestablecer</strong>}</strong></button>
           </center>
         </div>
       </form>

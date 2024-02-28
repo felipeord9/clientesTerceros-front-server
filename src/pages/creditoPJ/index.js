@@ -292,9 +292,9 @@ const [fileInputs, setFileInputs] = useState([]);
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            /* showDenyButton:true,
+            showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar' */
+            denyButtonText:'Actualizar'
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -399,9 +399,9 @@ const [fileInputs, setFileInputs] = useState([]);
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          /* showDenyButton:true,
+          showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar' */
+          denyButtonText:'Actualizar'
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -505,7 +505,7 @@ const [fileInputs, setFileInputs] = useState([]);
           detalleTributario: detalle.id,
           numeroDocRepLegal: search.numeroDocRepLegal,
           nameRepLegal: search.nameRepLegal.toUpperCase(),
-          tipoDocRepLegal:actualizar === '' ? document.codigo:document,
+          tipoDocRepLegal:document.codigo,
           apellidoRepLegal: search.apellidoRepLegal.toUpperCase(),
           valorEstimado: search.valorEstimado,
           precioSugerido: precio.description,
@@ -672,7 +672,7 @@ const [fileInputs, setFileInputs] = useState([]);
           title: "¡Ha ocurrido un error!",
             text: `
               Hubo un error al momento de registrar el cliente, intente de nuevo.
-              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+              Si el problema persiste por favor comuniquese con el área de sistemas. ${err}`,
             icon: "error",
             confirmButtonText: "Aceptar"});
       })

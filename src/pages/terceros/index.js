@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
 import TableTerceros from "../../components/TableTercerosContado"
 import { findClientes } from "../../services/clienteService"
+import * as GoIcons from "react-icons/go"
+import { useNavigate } from 'react-router-dom';
+import AuthContext from "../../context/authContext";
 
 export default function Terceros() {
   const [terceros, setTerceros] = useState([]);
   const [suggestions, setSuggestions] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
+  const navigate =useNavigate()
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getAllTerceros()
@@ -67,6 +72,18 @@ export default function Terceros() {
       },
     },
   };
+
+  const handleClickInicio=(e)=>{
+    e = e.target.value
+    if(user.role==='agencias' || user.role==='cartera'){
+      return navigate('/inicio')
+    }else if(user.role==='compras' || user.role==='comprasnv' || user.role==='asistente agencia'){
+      return navigate('/compras')
+    }else{
+      return navigate('/inicio/admin')
+    }
+  }
+  
   return (
     <div className="wrapper justify-content-center  h-100 w-100 m-auto" style={{userSelect:'none'}}>
     <div className='rounder-4'>
@@ -82,7 +99,15 @@ export default function Terceros() {
             onChange={searchTerceros}
             style={{width:500, fontSize:20}}
           />
-        </div>
+          <button
+            title="Nuevo Cliente"
+            className="d-flex  text-nowrap btn btn-sm  text-light gap-1" 
+            style={{fontSize:18,backgroundColor:'#D92121', color:'white'}}
+            onClick={handleClickInicio}>
+              Nuevo Cliente
+              <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />
+          </button>        
+          </div>
         <TableTerceros terceros={suggestions} loading={loading} style={{fontSize:20}} customStyles={customStyles}/>
       </div>
     </div>

@@ -25,9 +25,9 @@ export default function VariosJuridico(){
   /* inicializar variables */
   const [agencia, setAgencia] = useState(null);
   const [document,setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
+  const [ciudad, setCiudad] = useState('');
   const [departamento,setDepartamento]= useState('');
-  const [actividad, setActividad] = useState(null);
+  const [actividad, setActividad] = useState('');
   const [formularios,setFormularios] = useState([]);
 
   /* inicializar los documentos adjuntos */
@@ -364,14 +364,14 @@ export default function VariosJuridico(){
           segundoApellido:search.segundoApellido.toUpperCase(),
           primerNombre:search.primerNombre.toUpperCase(),
           otrosNombres:search.otrosNombres.toUpperCase(),
-          departamento: departamento.codigo,
-          ciudad: ciudad.codigo,
+          departamento: departamento=== '' ? '---': departamento.codigo,
+          ciudad: ciudad === '' ? '-----':ciudad.codigo,
           direccion: search.direccion.toUpperCase(),
           celular: search.celular,
           telefono:search.telefono,
           correoElectronico: search.correoElectronico.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
-          actividadEconomica: actividad.id,         
+          actividadEconomica: actividad=== '' ? '-----' : actividad.id,         
           tipoDocRepLegal: search.tipoDocumento,
           numeroDocRepLegal: search.cedula,
           nameRepLegal:search.razonSocial.toUpperCase(),
@@ -613,6 +613,9 @@ const [selectedFiles, setSelectedFiles] = useState([]);
           <div className="d-flex flex-column gap-1">
             <div>
               <label className="fw-bold mb-1" style={{fontSize:22}}>INFORMACIÓN OFICINA PRINCIPAL</label>
+              <div className="w-100 d-flex justify-content-center text-align-center mb-2">
+                <label className="fw-bold text-danger" style={{fontSize:18}}>*CAMPOS OBLIGATORIOS*</label>
+              </div>
               <div className="d-flex flex-row">
               <div className="d-flex flex-row w-100"> 
                 <div className="d-flex flex-row align-items-start w-100">
@@ -652,10 +655,68 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   />
                 </div> 
               </div>
+              <div className="d-flex flex-row align-items-start  w-100 mt-2">
+                  <label className="me-1">Correo electrónico:</label>
+                  <input
+                    id="correoElectronico"
+                    type="email"
+                    className="form-control form-control-sm "
+                    min={0}
+                    value={search.correoElectronico}
+                    onChange={(e)=>(handlerChangeSearch(e),manejarCambio(e))}
+                    required
+                    style={{textTransform:'lowercase',width:625}}
+                    placeholder="Campo obligatorio"
+                  >
+                  </input>
+{/*                   <validarCorreo correo={search.correoNotificaciones}/>
+ */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
+{/*                   <span className="validity fw-bold"></span>
+ */}              </div>
+               <div className="d-flex flex-row mt-2 mb-2">
+              <div className="d-flex flex-column me-4 " style={{width:450}}>
+              <label className="fw-bold" style={{fontSize:16}}>AGENCIA</label>
+              <select
+                ref={selectBranchRef}
+                className="form-select form-select-sm w-100"
+                required
+                
+                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione la Agencia --
+                </option>
+                {agencias
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+              </div>
+              <div className="d-flex flex-column mb-2  w-100">
+              <label className="fw-bold me-1" style={{fontSize:16}}>SOLICITANTE:</label>
+              <input
+                  id="solicitante"
+                  type="text"
+                  placeholder="Nombre Solicitante"
+                  value={search.solicitante}
+                  onChange={handlerChangeSearch}
+                  className="form-control form-control-sm"
+                  style={{textTransform:"uppercase"}}
+                  required
+              />
+              </div>        
+              </div>
+            <hr className="my-1" />
+            <div className="w-100 d-flex justify-content-center text-align-center mt-2">
+                <label className="fw-bold" style={{fontSize:18}}>(Campos Opcionales)</label>
+              </div>
               <div className="d-flex flex-row mt-2">
                 <label className="me-1">Dirección oficina principal:</label>
                 <input
-                  placeholder="campo obligatorio"
+                  /* placeholder="campo obligatorio" */
                   type="text"
                   id="direccion"
                   style={{textTransform:"uppercase",width:596}}
@@ -663,7 +724,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   onChange={handlerChangeSearch}
                   className="form-control form-control-sm"
                   min={0}
-                  required
                 >
                 </input>
               </div>
@@ -674,7 +734,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     onChange={(e)=>setDepartamento(JSON.parse(e.target.value))}
                     ref={selectDepartamentoRef}
                     className="form-select form-select-sm m-100 me-3"
-                    required   
                  >
                    <option selected value='' disabled>
                     -- Seleccione el Departamento --
@@ -694,7 +753,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <select
                     ref={selectCiudadRef}
                     className="form-select form-select-sm w-100"
-                    required
                     disabled={departamento ? false : true}
                     onChange={(e)=>setCiudad(JSON.parse(e.target.value))} 
                   >
@@ -716,7 +774,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </select>
                 </div>
               </div>
-              <div className="d-flex flex-row mt-2 mb-2">
+              <div className="d-flex flex-row mt-2 mb-2 me-3">
                 <div className="d-flex flex-row align-items-start w-100">
                   <label className="me-1">No.Celular:</label>
                   <input
@@ -728,14 +786,13 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     pattern="[0-9]"
                     value={search.celular}
                     onChange={handlerChangeSearch}
-                    required
-                    placeholder="Campo obligatorio"
+                    /* placeholder="Campo obligatorio" */
                   />
-                  <span className="validity fw-bold me-3"></span>
+                  {/* <span className="validity fw-bold me-3"></span> */}
                 </div>
                 <div>
                 </div>
-                <div className="d-flex flex-row align-items-start w-100">
+                <div className="d-flex flex-row align-items-start w-100 ms-2 ps-2">
                   <label className="me-1">Teléfono:</label>
                   <input
                     id="telefono"
@@ -746,29 +803,12 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     max={9999999999}
                     value={search.telefono}
                     onChange={handlerChangeSearch}
-                    placeholder="(Campo Opcional)"
+                    /* placeholder="(Campo Opcional)" */
                   >
                   </input>
                 </div>
               </div>
-              <div className="d-flex flex-row align-items-start  w-100">
-                  <label className="me-1">Correo electrónico:</label>
-                  <input
-                    id="correoElectronico"
-                    type="email"
-                    className="form-control form-control-sm "
-                    min={0}
-                    value={search.correoElectronico}
-                    onChange={(e)=>(handlerChangeSearch(e),manejarCambio(e))}
-                    required
-                    style={{textTransform:'lowercase',width:625}}
-                    placeholder="Campo obligatorio"
-                  >
-                  </input>
-{/*                   <validarCorreo correo={search.correoNotificaciones}/>
- */}                  <p className="ps-3" style={{color:Span}}><strong>{Validacion}</strong></p>
-{/*                   <span className="validity fw-bold"></span>
- */}              </div>
+              
               <div className="d-flex flex-column mb-4 w-100">
                 <label className="me-1">Actividad Económica:</label>
                 <select                    
@@ -776,7 +816,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     ref={selectActividadRef}
                     style={{width:770}}
                     className="form-select form-select-sm m-100 me-3"
-                    required   
                  >
                    <option selected value='' disabled>
                     -- Seleccione el Departamento --
@@ -791,49 +830,9 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     }
                     </select>
                 </div>
-              <hr className="my-1" />  
+              {/* <hr className="my-1" />  */} 
             </div> 
-
-            <div>
-              <div className="d-flex flex-row">
-              <div className="d-flex flex-column me-4 " style={{width:450}}>
-              <label className="fw-bold" style={{fontSize:18}}>AGENCIA</label>
-              <select
-                ref={selectBranchRef}
-                className="form-select form-select-sm w-100"
-                required
-                
-                onChange={(e)=>setAgencia(JSON.parse(e.target.value))}
-              >
-                <option selected value='' disabled>
-                  -- Seleccione la Agencia --
-                </option>
-                {agencias
-                  .sort((a, b) => a.id - b.id)
-                  .map((elem) => (
-                    <option id={elem.id} value={JSON.stringify(elem)}>
-                      {elem.id + " - " + elem.description}
-                    </option>
-                  ))}
-              </select>
-              </div>
-              <div className="d-flex flex-column mb-2  w-100">
-              <label className="fw-bold me-1" style={{fontSize:18}}>SOLICITANTE:</label>
-              <input
-                  id="solicitante"
-                  type="text"
-                  placeholder="Nombre Solicitante"
-                  value={search.solicitante}
-                  onChange={handlerChangeSearch}
-                  className="form-control form-control-sm"
-                  style={{textTransform:"uppercase"}}
-                  required
-              />
-              </div>        
-              </div>
-            </div>
-            <hr className="my-1" />
-            <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
+            <label className="fw-bold mt-0" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
             <div className="d-flex flex-row align-items-start mt-2 ">
                   <label className="me-1 mb-3"><strong>Correo para la factura electrónica:</strong></label>
                   <input
@@ -843,9 +842,8 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     type="email"
                     className="form-control form-control-sm"
                     min={0}
-                    required
                     style={{width:498,textTransform:'lowercase'}} 
-                    placeholder="Campo obligatorio"
+                    /* placeholder="Campo obligatorio" */
                   >
                   </input>
                   <p  className="ps-3" style={{color:color}}><strong>{mensaje}</strong></p>

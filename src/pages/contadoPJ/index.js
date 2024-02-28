@@ -42,9 +42,9 @@ export default function ContadoPersonaJuridica(){
   const [responsabilidad,setResponsabilidad ] = useState(null);
   const [depart, setDepart]=useState('');
   const [precio, setPrecio] = useState(null);
-  const [formularios,setFormularios] = useState([]);
-
+  
   /* inicializar para hacer la busqueda (es necesario inicializar en array vacio)*/
+  const [formularios,setFormularios] = useState([]);
   const [clasificaciones, setClasificaciones]= useState([]);
   const [agencias, setAgencias] = useState([]);
   const [documentos,setDocumentos] = useState([]);
@@ -214,9 +214,9 @@ export default function ContadoPersonaJuridica(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            /* showDenyButton:true,
+            showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar' */
+            denyButtonText:'Actualizar'
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -321,9 +321,9 @@ export default function ContadoPersonaJuridica(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          /* showDenyButton:true,
+          showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar' */
+          denyButtonText:'Actualizar'
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -376,19 +376,20 @@ export default function ContadoPersonaJuridica(){
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) =>{
     e.preventDefault();
     Swal.fire({
       title:'¿Está segur@?',
       text:'Se realizará el registro del Cliente',
       icon:'question',
+      showConfirmButton:true,
       confirmButtonText:'Aceptar',
       confirmButtonColor:'#198754',
       showCancelButton:true,
-      cancelButtonText:'Cancelar',
-    }) .then(({isConfirmed})=>{
+      cancelButtonText:'Cancelar'
+    }).then(({isConfirmed})=>{
       if(isConfirmed){
-        setLoading(true);
+        setLoading(true)
         const formData = new FormData();
         for (const fieldName in files) {
           if (files[fieldName]) {
@@ -397,9 +398,7 @@ export default function ContadoPersonaJuridica(){
         }
         const body={
           cedula:search.cedula,
-          numeroDocumento: search.cedula,
-          /* cedula:search.cedula+search.DV,
-          numeroDocumento: search.cedula+search.DV, */
+          numeroDocumento: search.cedula, 
           tipoDocumento:search.tipoDocumento,
           tipoPersona:search.tipoPersona,
           razonSocial:search.razonSocial.toUpperCase(),
@@ -426,7 +425,227 @@ export default function ContadoPersonaJuridica(){
           detalleTributario: detalle.id,
           numeroDocRepLegal: search.numeroDocRepLegal,
           nameRepLegal: search.nameRepLegal.toUpperCase(),
-          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
+          tipoDocRepLegal: search.tipoDocumento,
+          apellidoRepLegal: search.apellidoRepLegal.toUpperCase(),
+          valorEstimado: search.valorEstimado,
+          precioSugerido: precio.description,
+          observations: search.observations,
+          createdAt: new Date(),
+          createdBy: user.rowId.toUpperCase(),
+          solicitante: search.solicitante.toUpperCase(),
+          docVinculacion:docVinculacion,
+          docComprAntc:docComprAntc,
+          docCtalnst:docCtaInst,
+          docPagare:docPagare,
+          docRut:docRut,
+          docCcio:docCcio,
+          docCrepL:docCrepL,
+          docEf:docEf,
+          docRefcom:docRefcom,
+          docCvbo:docCvbo,
+          docFirdoc:docFirdoc,
+          docInfemp:docInfemp,
+          docInfrl:docInfrl,
+          docValAnt: docValAnt,
+          docCerBan: docCerBan,
+          docOtros:docOtros,
+          clasificacion: clasificacion.description,
+          agencia: agencia.id,
+          tipoFormulario: search.tipoFormulario,
+          actulizado : actualizar==='' ? null:'SI',
+          fechaActualizacion : actualizar === '' ? null:new Date(),
+          pendiente:1,
+          rechazado:0,
+          aprobado:0,
+        };
+        //creamos una constante la cual llevará el nombre de nuestra carpeta
+        const folderName = search.cedula+'-'+ search.razonSocial.toUpperCase();
+        //agregamos la carpeta donde alojaremos los archivos
+        formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
+        const originalFolderName = search.cedula+'-'+ search.razonSocial.toUpperCase();
+        formData.append('originalFolderName', originalFolderName);
+        const clientName = search.razonSocial.toUpperCase();
+        formData.append('clientName',clientName)
+        //ejecutamos nuestra funcion que creara el cliente
+        const sucur = {
+          cedula: search.cedula,
+          codigoSucursal: 1,
+          nombreSucursal: search.razonSocial.toUpperCase()+' - '+ search.nombreSucursal.toUpperCase(),
+          direccion: search.direccion,
+          departamento:departamento.description,
+          ciudad: ciudad.description,
+          celular: search.celular,
+          correoFacturaElectronica: search.correoNotificaciones,
+          nombreContacto: search.razonSocial.toUpperCase(),
+          celularContacto: search.celular,
+          correoContacto: search.correoNotificaciones,
+          createdAt:new Date(),
+          userName:user.rowId
+        }
+        createSucursal(sucur)
+        .then(()=>{
+          console.log('sucursal creada')
+        }).catch((err)=>{
+          Swal.fire({
+            title:'¡Uops!',
+            text:'Ha ocurrido un error al momento de crear la sucursal de este cliente. Informa a el área de sistemas.'
+          })
+        })
+        createCliente(body)
+        .then(({data})=>{
+          const info={
+            accion:'1',
+          }
+          updateBitacora(user.email,info)
+          const filtro = formularios.filter((item)=>{
+            if(item.id===search.tipoFormulario){
+              return item.description
+            }
+          })
+          const tipo = filtro.map((item)=>{
+            return item.description
+          })
+          const mail = {
+            agencia: agencia.description,
+            razonSocial:search.razonSocial.toUpperCase(),
+            tipoFormulario: tipo,
+          }
+          sendMail(mail)
+          .then(()=>{
+            fileSend(formData)
+          .then(()=>{
+            setLoading(false)
+            setFiles([])
+            Swal.fire({
+              title: 'Creación exitosa!',
+              text: `El Cliente "${data.razonSocial}" con Número 
+              de documento "${data.cedula}" se ha registrado de manera exitosa`,
+              icon: 'success',
+              position:'center',
+              showConfirmButton: true,
+              confirmButtonColor:'#198754',
+              confirmButtonText:'Aceptar',
+            })
+            .then(()=>{
+              window.location.reload();
+            })
+          }) 
+          .catch((err)=>{
+            setLoading(false);
+            deleteSucursalByName(sucur.nombreSucursal.toUpperCase());
+            if(!data){
+              deleteFile(folderName);
+            }else{
+              deleteCliente(data.id);
+            }
+            Swal.fire({
+              title: "¡Ha ocurrido un error!",
+              text: `
+              Ha ocurrido un error al momento de guardar los pdf, intente de nuevo.
+              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+              icon: "error",
+              showConfirmButton: true,
+              confirmButtonColor:'#198754',
+              confirmButtonText:'Aceptar',       
+            })
+            .then(()=>{
+              window.location.reload();
+            })
+          })
+          }).catch((err)=>{
+            Swal.fire({
+              title: "¡Ha ocurrido un error!",
+              text: `
+              Ha ocurrido un error al momento de enviar el correo de solicitud, intente de nuevo.
+              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+              icon: "error",
+              showConfirmButton: true,
+              confirmButtonColor:'#198754',
+              confirmButtonText:'Aceptar',       
+            })
+            .then(()=>{
+              window.location.reload();
+            })
+          })
+        })
+        .catch((err)=>{
+          Swal.fire({
+            title: "¡Ha ocurrido un error!",
+            text: `
+            Ha ocurrido un error al momento de crear el Cliente, intente de nuevo.
+            Si el problema persiste por favor comuniquese con el área de sistemas.`,
+            icon: "error",
+            showConfirmButton: true,
+            confirmButtonColor:'#198754',
+            confirmButtonText:'Aceptar',       
+          })
+          .then(()=>{
+            window.location.reload();
+          })
+        })
+      }else{
+        window.location.reload();
+      }
+    })
+    .catch((err)=>{
+      Swal.fire({
+        title: `${err}`,
+        showConfirmButton: true,
+        confirmButtonColor:'#198754',
+        confirmButtonText:'Aceptar',       
+      })
+    })
+  }
+
+  /* const handleSubmit = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      title:'¿Está segur@?',
+      text:'Se realizará el registro del Cliente',
+      icon:'question',
+      confirmButtonText:'Aceptar',
+      confirmButtonColor:'#198754',
+      showCancelButton:true,
+      cancelButtonText:'Cancelar',
+    }).then(({isConfirmed})=>{
+      if(isConfirmed){
+        setLoading(true);
+        const formData = new FormData();
+        for (const fieldName in files) {
+          if (files[fieldName]) {
+            formData.append(fieldName, files[fieldName]);
+          }
+        }
+        const body={
+          cedula:search.cedula,
+          numeroDocumento: search.cedula, 
+          tipoDocumento:search.tipoDocumento,
+          tipoPersona:search.tipoPersona,
+          razonSocial:search.razonSocial.toUpperCase(),
+          primerApellido:search.primerApellido.toUpperCase(),
+          segundoApellido:search.segundoApellido.toUpperCase(),
+          primerNombre:search.primerNombre.toUpperCase(),
+          otrosNombres:search.otrosNombres.toUpperCase(),
+          departamento:departamento.codigo,
+          ciudad: ciudad.codigo,
+          direccion: search.direccion.toUpperCase(),
+          celular: search.celular,
+          telefono: search.telefono,
+          correoNotificaciones: search.correoNotificaciones.toLowerCase(),
+          nombreSucursal:search.nombreSucursal.toUpperCase(),
+          direccionSucursal: search.direccion.toUpperCase(),
+          departamentoSucursal: departamento.codigo,
+          ciudadSucursal: ciudad.codigo,
+          celularSucursal: search.celular,
+          telefonoSucursal: search.telefono,
+          correoSucursal: search.correoNotificaciones.toLowerCase(),
+          correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
+          regimenFiscal: regimen.id,
+          responsabilidadFiscal: responsabilidad.id,
+          detalleTributario: detalle.id,
+          numeroDocRepLegal: search.numeroDocRepLegal,
+          nameRepLegal: search.nameRepLegal.toUpperCase(),
+          tipoDocRepLegal: search.tipoDocumento,
           apellidoRepLegal: search.apellidoRepLegal.toUpperCase(),
           valorEstimado: search.valorEstimado,
           precioSugerido: precio.description,
@@ -584,17 +803,7 @@ export default function ContadoPersonaJuridica(){
       });
     };
   })
-  .catch((err)=>{
-    setLoading(false);
-    Swal.fire({
-      title: "¡Ha ocurrido un error!",
-      text: `
-        Hubo un error al momento de registrar el cliente, intente de nuevo.
-        Si el problema persiste por favor comuniquese con el área de sistemas.`,
-      icon: "error",
-      confirmButtonText: "Aceptar"});
-    })
-  };
+  }; */
 
   const refreshForm = () => {
     Swal.fire({
@@ -885,7 +1094,147 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                  required
               />
               </div>        
-            </div>                       
+            </div>  
+            <hr className=" mt-3 mb-3 my-1" />
+
+              <label className="fw-bold mt-1" style={{fontSize:20}}>DATOS FACTURA ELECTRÓNICA</label>
+              <div className="d-flex flex-row align-items-start mt-2 ">
+                  <label className="me-1 mb-3">Correo para la factura electrónica:</label>
+                  <input
+                    value={search.correoFacturaElectronica}
+                    onChange={(e)=>(handlerChangeSearch(e),Cambio(e))}
+                    id="correoFacturaElectronica"
+                    type="email"
+                    className="form-control form-control-sm"
+                    min={0}
+                    required
+                    style={{width:498,textTransform:'lowercase'}} 
+                    placeholder="Campo obligatorio"
+                  >
+                  </input>
+                  <p  className="ps-3" style={{color:color}}><strong>{mensaje}</strong></p>
+                  {/* <span className="validity fw-bold"></span> */}
+              </div>
+              <div className="d-flex flex-row mb-3">
+                <div className="pe-3" style={{width:255}}>
+                <label className="fw-bold" style={{fontSize:18}}>Regimen fiscal:</label>
+                <select
+                ref={selectRegimenRef}
+                className="form-select form-select-sm w-100"
+                required
+                onChange={(e)=>setRegimen(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione el regimen --
+                </option>
+                {regimenes
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+                </div>
+                <div className=" pe-3" style={{width:255}}>
+                <label className="fw-bold" style={{fontSize:18}}>Responsabilidad fiscal:</label>
+                <select
+                ref={selectResponsabilidadRef}
+                className="form-select form-select-sm w-100"
+                required
+                onChange={(e)=>setResponsabilidad(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione la responsabilidad --
+                </option>
+                {responsabilidades
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+                </div>
+                <div className="" style={{width:255}}>
+                <label className="fw-bold" style={{fontSize:18}}>Detalle tributario:</label>
+                <select
+                ref={selectBranchRef}
+                className="form-select form-select-sm w-100"
+                required
+                onChange={(e)=>setDetalle(JSON.parse(e.target.value))}
+              >
+                <option selected value='' disabled>
+                  -- Seleccione el detalle --
+                </option>
+                {detalles
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.id + " - " + elem.description}
+                    </option>
+                  ))}
+              </select>
+                </div>
+              </div>   
+              <hr className="my-1" />
+            <label className="fw-bold mb-1 mt-1" style={{fontSize:22}}>PROMEDIO DE COMPRA MENSUAL ESTIMADO</label>
+            <div className="d-flex flex-row w-100 mt-2 mb-4">
+              <div className="d-flex flex-row align-items-start w-100">
+                  <label className="">Promedio Compra:</label>
+                  <label className="ps-2">$</label>
+                  {/* <input
+                    id="valorEstimado"
+                    value={valorEstimado}
+                    onChange={cambiarInput}
+                    style={{width:225}}
+                    value={((search.valorEstimado))}
+                    onChange={handlerChangeSearch}
+                    type="number"
+                    className="form-control form-control-sm "
+                    min={0}
+                    required
+                    pattern="[0-9]"
+                    placeholder="Campo obligatorio"
+                  >
+                  </input> */}
+                  <NumericFormat
+                    thousandSeparator=","
+                    decimalSeparator="."
+                    id="valorEstimado"
+                    className="form-control form-control-sm "
+                    allowNegative={false}
+                    style={{width:225}}
+                    decimalScale={0}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.valorEstimado}
+                    onChange={(e)=>handlerChangeSearch(e)}
+                  />
+                </div>
+                {/* <span>{search.valorEstimado}</span> */}
+                  <div className="w-100 d-flex flex-row">
+                  <label className="me-1">Lista de Precios:</label>
+                  <select
+                    style={{width:245}}
+                    ref={selectPrecioRef}
+                    className="form-select form-select-sm m-100 me-3"
+                    onChange={(e)=>setPrecio(JSON.parse(e.target.value))}
+                    required
+                  >
+                    <option selected value='' disabled>
+                  -- Seleccione el tipo de precios sugerido --
+                </option>
+                  {precios
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                      {elem.description}
+                    </option>
+                  ))}
+              </select>
+                  </div>
+              </div>                  
             <hr className="my-1" />
             <div className="w-100 mt-1">
               <label className="fw-bold" style={{fontSize:22}}>DOCUMENTOS OBLIGATORIOS</label>

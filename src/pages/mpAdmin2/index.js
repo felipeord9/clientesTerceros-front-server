@@ -9,8 +9,12 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import ModalAgencia from "../../components/modalAgencia";
+import ModalClasificacion from "../../components/modalClasificacion";
+import ModalPrecios from "../../components/modalPrecios";
+import ModalDepartamento from "../../components/modalDepartamento";
 
-export default function MenuPrincipalAdmin(){
+export default function MenuPrincipalAdmin2(){
   const { user } = useContext(AuthContext);
   const navigate =useNavigate()
 
@@ -35,8 +39,10 @@ export default function MenuPrincipalAdmin(){
         return navigate('/validacion/admin')
       }
     }
+    
+    const [inactivo, setInactivo] = useState(true);
 
-    const BotonColorCambiante = ({ children }) => {
+    const BotonColorCambiante = ({ children , activo }) => {
       const [hover, setHover] = useState(false);
       const handleMouseEnter = () => {
         setHover(true);
@@ -45,15 +51,15 @@ export default function MenuPrincipalAdmin(){
         setHover(false);
       };
       const buttonStyle = {
-        backgroundColor: hover ? '#D92121' : 'whitesmoke', // Cambia los colores según tus necesidades
-        color: hover ? 'white':'black',
+        backgroundColor: activo ? (hover ? '#D92121' : 'whitesmoke') : 'grey' , // Cambia los colores según tus necesidades
+        color: activo ? ( hover ? 'white':'black') : 'grey',
         padding: '10px',
         cursor: 'pointer',
         height: 120,
         width:220,
         fontSize:21,
-        border: hover ? 'solid #D92121': 'solid #B9B9B9',
-        transform: hover ? 'scale(1.1)' : 'scale(1)',
+        border: activo ? (hover ? 'solid #D92121': 'solid #B9B9B9') : 'grey',
+        transform: activo ? ( hover ? 'scale(1.1)' : 'scale(1)') : 'grey',
         /* filter: hover ? 'brightness(80%)' : 'brightness(100%)', */
         transition: 'all 0.3s ease',
       };
@@ -61,6 +67,7 @@ export default function MenuPrincipalAdmin(){
         <button
           className="rounded-2  me-4"
           style={buttonStyle}
+          disabled={!activo}          
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -79,43 +86,64 @@ export default function MenuPrincipalAdmin(){
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    const cambiarEstadoBoton = () => {
+      setInactivo(!inactivo);
+    };
+    const [showModalAgency, setShowModalAgency] = useState(false)
+    const [showModalClasificacion, setShowModalClasificacion] = useState(false)
+    const [showModalPrecios, setShowModalPrecios] = useState(false)
+    const [showModalDepartamento, setShowModalDepartamento] = useState(false)
+
     return(
       <div className=" wrapper d-flex justify-content-center align-items-center vh-100 w-100 m-auto "style={{userSelect:'none'}}>
       <div className='rounder-4'>
     <div style={{height:70}}></div>
       <div className='login-wrapper p-2 mb-2 pb-1 mt-1 shadow-lg border-light rounded-4 border border-5 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
     <div className='d-flex flex-row '>
+    <ModalAgencia 
+        showModal={showModalAgency} 
+        setShowModal={setShowModalAgency} 
+      />
+    <ModalClasificacion
+      showModal={showModalClasificacion}
+      setShowModal={setShowModalClasificacion}
+    />
+    <ModalPrecios
+      showModal={showModalPrecios}
+      setShowModal={setShowModalPrecios}
+    />
+    <ModalDepartamento
+      showModal={showModalDepartamento}
+      setShowModal={setShowModalDepartamento}
+    />
     {/* <Fade cascade damping={0.1} direction="down" triggerOnce='true'> */}
     <div className="d-flex flex-row">
         <center>
         <div className="ms-4 mt-4 mb-0 me-0" style={{border:10,borderColor:'#D92121'}}>
         <div className=" mb-4">
-          <a onClick={(e)=>handleClickInicio(e)}><BotonColorCambiante>Creación Tercero</BotonColorCambiante></a>
-          <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Tercero</BotonColorCambiante></a>
-          <a onClick={(e)=>navigate('/sucursales')}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
+          <a onClick={(e)=>setShowModalAgency(!showModalAgency)}><BotonColorCambiante activo={cambiarEstadoBoton}>Gestión Agencia</BotonColorCambiante></a>
+          <a onClick={(e)=>setShowModalClasificacion(!showModalClasificacion)}><BotonColorCambiante activo={cambiarEstadoBoton}>Gestión Clasificación</BotonColorCambiante></a>
+          <a onClick={(e)=>setShowModalPrecios(!showModalPrecios)}><BotonColorCambiante activo={cambiarEstadoBoton}>Gestión Lista Precios</BotonColorCambiante></a>
         </div>
         <div className="d-flex flex-row mb-4" >
-          <a onClick={(e)=>navigate('/solicitudes')}><BotonColorCambiante>Consultar solicitudes</BotonColorCambiante></a>
-          <a onClick={(e)=>navigate('/consultar/certificado')}><BotonColorCambiante>Generar Certificados</BotonColorCambiante></a>
-          {/* <div className="d-flex justify-content-center align-items-center me-3 mb-3" style={{height:120,width:223}}>
-          <label className='text-danger' style={{color:'black' ,marginBottom:5, fontSize:70, userSelect:'none'}}><strong>Menú </strong></label>
-          </div> */}
-          <a onClick={(e)=>navigate('/bitacora')}><BotonColorCambiante>Bitácora</BotonColorCambiante></a>
+          <a onClick={(e)=>setShowModalDepartamento(!showModalDepartamento)}><BotonColorCambiante activo={cambiarEstadoBoton}>Gestión Paises</BotonColorCambiante></a>
+          <a onClick={(e)=>navigate('/consultar/certificado')}><Button className="rounded-2  me-4" variant="contained" disabled style={{height: 120,width:220,}}></Button></a>
+          <a onClick={(e)=>navigate('/bitacora')}><Button className="rounded-2  me-4" variant="contained" disabled style={{height: 120,width:220,}}></Button></a>
         </div>
         <div >
-          <a onClick={(e)=>navigate('/usuarios')}><BotonColorCambiante>Gestionar usuarios</BotonColorCambiante></a>
-          <a onClick={(e)=>navigate('/terceros')}><BotonColorCambiante>Gestionar clientes</BotonColorCambiante></a>
-          <a onClick={(e)=>navigate('/Proveedores')}><BotonColorCambiante>Gestionar proveedor</BotonColorCambiante></a>
+          <a onClick={(e)=>navigate('/usuarios')}><Button className="rounded-2  me-4" variant="contained" disabled style={{height: 120,width:220,}}></Button></a>
+          <a onClick={(e)=>navigate('/terceros')}><Button className="rounded-2  me-4" variant="contained" disabled style={{height: 120,width:220,}}></Button></a>
+          <a onClick={(e)=>navigate('/Proveedores')}><Button className="rounded-2  me-4" variant="contained" disabled style={{height: 120,width:220,}}></Button></a>
         </div>
         <div className="w-100 d-flex flex-row mt-2">
           <div className="w-100 justify-content-end text-align-center">
             <MobileStepper
             steps={2}
-            /* activeStep={activeStep} */
-            className="w-100 justify-content-center text-align-center"
             position="static"
+            activeStep={1}
+            className="w-100 justify-content-center text-align-center"
             nextButton={
-              <Button className="" size="small" onClick={(e)=>(handleNext(e),navigate('/menu/principal/adminis'))}>
+              <Button className="" size="small" disabled>
                 Next
                 {theme.direction === 'rtl' ? (
                   <KeyboardArrowLeft />
@@ -125,7 +153,7 @@ export default function MenuPrincipalAdmin(){
               </Button>
             }
             backButton={
-              <Button size="small" onClick={(e)=> (handleBack(e))} disabled>
+              <Button size="small" onClick={(e)=> (navigate('/menu/principal/admin'))} >
                 {theme.direction === 'rtl' ? (
                   <KeyboardArrowRight />
                 ) : (

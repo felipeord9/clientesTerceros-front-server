@@ -72,7 +72,7 @@ export default function TablaSolicitudes({ solicitudes, loading , customStyles ,
       id:'razonSocial',
       name:'Razon Social',
       cell: (row) =>(row.razonSocial),
-      width:'350px',
+      width:'450px',
       sortable: true
     },{
       id:'agencia',
@@ -81,14 +81,14 @@ export default function TablaSolicitudes({ solicitudes, loading , customStyles ,
         const buscar = agencias.find(item=>item.id===row.agencia)?.description;
         return buscar || 'N/A';
       },
-      width:'250px',
+      width:'300px',
       sortable: true
     },
     {
       id:'solicitante',
       name:'Solictante',
       cell: (row) =>(row.solicitante),
-      width:'200px',
+      width:'300px',
       sortable: true
     },
     {

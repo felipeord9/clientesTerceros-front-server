@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
 import TableProveedores from "../../components/tableProveedores"
 import { findProveedores } from "../../services/proveedorService"
+import * as GoIcons from "react-icons/go"
+import { useNavigate } from 'react-router-dom';
+import AuthContext from "../../context/authContext";
 
 export default function Proveedores() {
   const [proveedores, setProveedores] = useState([]);
   const [suggestions, setSuggestions] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
+  const navigate =useNavigate()
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getAllProveedores()
@@ -68,6 +73,18 @@ export default function Proveedores() {
       },
     },
   };
+
+  const handleClickInicio=(e)=>{
+    e = e.target.value
+    if( user.role==='cartera' || user.role==='agencias'){
+      return navigate('/inicio')
+    }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
+      return navigate('/compras')
+    }else{
+      return navigate('/inicio/admin')
+    }
+  }
+
   return (
     <div className="wrapper justify-content-center  h-100 w-100 m-auto" style={{userSelect:'none'}}>
     <div className='rounder-4'>
@@ -83,14 +100,14 @@ export default function Proveedores() {
             onChange={searchProveedores}
             style={{width:500, fontSize:20}}
           />
-          {/* <button
-            title="Nuevo usuario"
-            className="d-flex  text-nowrap btn btn-sm btn-danger text-light gap-1" 
-            style={{fontSize:18}}
-            onClick={(e) => setShowModalUsers(!showModalUsers)}>
-              Nuevo usuario
+          <button
+            title="Nuevo Cliente"
+            className="d-flex  text-nowrap btn btn-sm  text-light gap-1" 
+            style={{fontSize:18,backgroundColor:'#D92121', color:'white'}}
+            onClick={handleClickInicio}>
+              Nuevo Proveedor
               <GoIcons.GoPersonAdd style={{width: 25, height: 25}} />
-          </button> */}
+          </button>
         </div>
         <TableProveedores proveedores={suggestions} loading={loading} customStyles={customStyles}/>
       </div>

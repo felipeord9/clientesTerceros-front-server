@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
 const { config } = require('../config')
 
 const url = `${config.apiUrl2}/departamentos`;
@@ -7,6 +10,51 @@ function getAllDepartamentos() {
     .then(res => res.json())
     .then(res => res.data)
 }
+
+export const findOneDepartamento = async (id) => {
+  const token = Cookies.get('token')
+  const { data } = await axios.get(`${url}/${id}`,{
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
+export const createDepartamento = async (body) => {
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.post(url, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
+export const updateDepartamento = async (id, body) => {
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.patch(`${url}/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
+export const deleteDepartamento = (id) => {
+  return fetch(`${url}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => res);
+};
 
 export {
   getAllDepartamentos

@@ -41,10 +41,12 @@ import EditPS from './pages/editarPS';
 import EditPVN from './pages/editarPVN';
 import EditarPVJ from './pages/editarPVJ';
 import MenuPrincipalAdmin from './pages/mpAdmin';
+import MenuPrincipalAdmin2 from './pages/mpAdmin2';
 import MenuPrincipalClientes from './pages/mpClientes';
 import MenuPrincipalProveedores from './pages/mpProveedores';
 import MpPrueba from './pages/mpPrueba';
 import Parqueaderos from './pages/parqueaderos';
+import ParqueaderosNatural from './pages/parqueaderosNatural';
 import EditarCCP from './pages/editarCCP';
 import Sucursales from './pages/sucursales';
 import MostartPNCR from './pages/mostrarPNCR';
@@ -63,6 +65,7 @@ import InfoCertificado from './pages/infoCertificado';
 import GenerateCertificado from './pages/generateCertificado';
 import Certificados from './pages/validarCertificados';
 import Solicitudes from './pages/solicitudes';
+import tipoParqueadero from './pages/tipoParqueadero';
 
 function App() {
   return(
@@ -109,6 +112,7 @@ function App() {
 
         {/* menus principales */}
         <Route path='/menu/principal/admin' element={<PrivateRoute component={MenuPrincipalAdmin}/>}/>
+        <Route path='/menu/principal/adminis' element={<PrivateRoute component={MenuPrincipalAdmin2}/>}/>
         <Route path='/menu/principal/Clientes' element={<PrivateRoute component={MenuPrincipalClientes}/>}/>
         <Route path='/menu/principal/Proveedores' element={<PrivateRoute component={MenuPrincipalProveedores}/>}/>
         <Route path='/menu/principal/Prueba' element={<PrivateRoute component={MpPrueba}/>}/>
@@ -134,7 +138,9 @@ function App() {
         <Route path='/contado/persona/juridica' element={<PrivateRoute component={ContadoPersonaJuridica}/>}/>
         <Route path='/credito/persona/natural' element={<PrivateRoute component={CreditoPersonaNatural}/>}/>
         <Route path='/credito/persona/juridica' element={<PrivateRoute component={CreditoPersonaJuridica}/>}/>
+        <Route path='/tipo/parqueadero' element={<PrivateRoute component={tipoParqueadero}/>} />
         <Route path='/Parqueaderos' element={<PrivateRoute component={Parqueaderos}/>} />
+        <Route path='/centros/comerciales' element={<PrivateRoute component={ParqueaderosNatural}/>} />
 
         {/* certificados */}
         <Route path='/consultar/certificado' element={<PrivateRoute component={ConsultarCertificado}/>}/>

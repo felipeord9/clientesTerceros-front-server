@@ -197,7 +197,7 @@ export default function ValidarTercero(){
       e = e.target.value
       if(user.role==='agencias' || user.role==='cartera'){
         return navigate('/inicio')
-      }else if(user.role==='compras'){
+      }else if(user.role==='compras' || user.role==='comprasnv' || user.role==='asistente agencia'){
         return navigate('/compras')
       }else{
         return navigate('/inicio/admin')

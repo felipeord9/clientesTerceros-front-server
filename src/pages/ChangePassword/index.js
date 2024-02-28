@@ -9,10 +9,11 @@ import { Fade } from "react-awesome-reveal";
 import { updateBitacora } from '../../services/bitacoraService';
 import AuthContext from "../../context/authContext";
 import { comparePassword } from '../../services/userService'
+import { GiSandsOfTime } from "react-icons/gi";
 
 export default function ChangePassword() {
   const { user, setUser } = useContext(AuthContext);
-
+  const [cargando,setCargando] = useState(false)
   const [realPassword,setRealPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -59,10 +60,12 @@ export default function ChangePassword() {
           const info={
             accion:'1',
           }
+          setCargando(true)
           updateBitacora(user.email,info)
           .then((data) => {
             changePassword({ currentPassword, newPassword })
             .then(()=>{
+              setCargando(false)
               Swal.fire({
                 title: "¡Correcto!",
                 text: "Contraseña actualizada exitosamente",
@@ -156,7 +159,7 @@ export default function ChangePassword() {
         </div>
         <div className='align-content-center text-align-center align-items-center'>
           <center>
-          <button type="submit"><strong>CAMBIAR</strong></button>
+          <button type="submit"><strong>{cargando ? <strong>Cargando... <GiSandsOfTime /></strong>:<strong>CAMBIAR</strong>}</strong></button>
           </center>
         </div>
         <center>

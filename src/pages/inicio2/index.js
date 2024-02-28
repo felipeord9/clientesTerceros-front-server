@@ -72,7 +72,7 @@ export default function Inicio2(){
                 <MenuItem value={10} onClick={(e)=>navigate('/tipo/persona')} className=""><strong><FaHandshake className="me-1"/>Proveedor Mcia y Convenios</strong></MenuItem>
                 <center>
                 <hr style={{width:300, color:'black'}}/></center>
-                <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><FaCar /><strong className="ps-2 ">C.Comerciales Ó parqueaderos</strong></MenuItem>
+                <MenuItem value={50} onClick={(e)=>navigate('/tipo/parqueadero')}><FaCar /><strong className="ps-2 ">C.Comerciales Ó parqueaderos</strong></MenuItem>
                 </Select>
               </FormControl>
             </Box>

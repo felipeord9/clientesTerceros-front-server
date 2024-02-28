@@ -5,11 +5,13 @@ import useUser from '../../hooks/useUser';
 import { sendRecovery } from '../../services/authService';
 import Logo from '../../assest/logo-gran-langostino.png'
 import './styles.css'
+import { GiSandsOfTime } from "react-icons/gi";
 
 export default function SendRecoveryPassword() {
   const { isLogged } = useUser()
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
+  const [cargando,setCargando] = useState(false)
 
   useEffect(() => {
     if (isLogged) navigate('/inicio');
@@ -17,8 +19,10 @@ export default function SendRecoveryPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setCargando(true)
     sendRecovery(email)
       .then((data) => {
+        setCargando(false)
         Swal.fire({
           title: "¡CORECTO!",
           text: "Se te acaba de enviar el enlace de recuperación, revisa tu correo y sigue los pasos para reestablecer tu contraseña (Tienes 15 minutos para llevar a cabo este proceso)",
@@ -52,7 +56,7 @@ export default function SendRecoveryPassword() {
         </div>
         <div className='align-content-center text-align-center align-items-center'>
           <center>
-          <button type="submit"><strong>Enviar</strong></button>
+          <button type="submit"><strong>{cargando ? <strong>Cargando... <GiSandsOfTime /></strong>:<strong>Entrar</strong>}</strong></button>
           </center>
         </div>
         <center>

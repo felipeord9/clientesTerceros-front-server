@@ -20,7 +20,7 @@ import { validarCliente , findClientes } from "../../services/clienteService";
 import { validarProveedor , findProveedores } from "../../services/proveedorService";
 import { useNavigate } from 'react-router-dom';
 
-export default function Parqueaderos(){
+export default function ParqueaderosNatural(){
   /* instancias de contexto */
   const { user } = useContext(AuthContext);
   const navigate =useNavigate()
@@ -30,6 +30,7 @@ export default function Parqueaderos(){
   const [ciudad, setCiudad] = useState(null);
   const [departamento,setDepartamento]= useState('');
   const [formularios,setFormularios] = useState([]);
+  const [document,setDocument] = useState(null);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion,setDocVinculacion]=useState(0);
@@ -81,25 +82,25 @@ export default function Parqueaderos(){
   const [agencias, setAgencias] = useState([]);
   const [ciudades,setCiudades] = useState([]);
   const [departamentos,setDepartamentos]=useState([]);
+  const [documentos,setDocumentos] = useState([]);
 
   const [search, setSearch] = useState({
     clasificacion:'-',
     cedula:'',
-    tipoPersona:'2',
-    tipoDocumento:'N',
+    tipoPersona:'1',
     razonSocial:'',
-    primerApellido:'',
-    segundoApellido:'',
+    primerApellido:''.toUpperCase(),
+    segundoApellido:''.toUpperCase(),
     primerNombre:'',
     otrosNombres:'',
     direccion:'',
     celular:'',
     telefono:'',
-    correoElectronico:'',
+    correoNotificaciones:'',
     correoFacturaElectronica:'',
     observations:'',
     solicitante:'',
-    tipoFormulario:'CCPJ'
+    tipoFormulario:'CCPN'
   });
   const [loading, setLoading] = useState(false);
   const [invoiceType, setInvoiceType] = useState(false);
@@ -120,6 +121,7 @@ export default function Parqueaderos(){
       getAllDepartamentos().then((data) => setDepartamentos(data));
       getAllCiudades().then((data) => setCiudades(data));
       getAllTipoFormularios().then((data)=>setFormularios(data));
+      getAllDocuments().then((data)=>setDocumentos(data));
 
   },[]);
 
@@ -176,9 +178,9 @@ export default function Parqueaderos(){
             confirmButtonColor:'#D92121',
             confirmButtonText:'Consultar',
             cancelButtonText:'Regresar',
-            /* showDenyButton:true,
+            showDenyButton:true,
             denyButtonColor:'blue',
-            denyButtonText:'Actualizar' */
+            denyButtonText:'Actualizar'
           }).then(({isConfirmed,isDenied})=>{
             if(isConfirmed){
               if(user.role==='admin'){
@@ -188,7 +190,7 @@ export default function Parqueaderos(){
                 navigate('/validar/tercero')
               }
               if(user.role==='compras' || user.role==='agencias'
-              || user.role==='comprasnv' || user.role==='asistente agencia'){
+              || user.role==='comprasnv'){
                 navigate('/validar/proveedor')
               }
             }else if(isDenied){
@@ -196,22 +198,35 @@ export default function Parqueaderos(){
                 filtroCliente.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
                 })
               }else if(filtroCliente.length>0){
                 filtroCliente.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroProveedor.length>0){
                 filtroProveedor.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
                 })
               }
               setActualizar('SI')
@@ -222,7 +237,7 @@ export default function Parqueaderos(){
       }else{
         Swal.fire({
           icon:'warning',
-          title:'Recuerda que el NIT debe contener entre 5 y 10 caracteres',
+          title:'Recuerda que el Número de Identificación debe contener entre 5 y 10 caracteres',
           confirmButtonColor:'#D92121',
           confirmButtonText:'OK'
         })
@@ -283,9 +298,9 @@ export default function Parqueaderos(){
           confirmButtonColor:'#D92121',
           confirmButtonText:'Consultar',
           cancelButtonText:'Regresar',
-          /* showDenyButton:true,
+          showDenyButton:true,
           denyButtonColor:'blue',
-          denyButtonText:'Actualizar' */
+          denyButtonText:'Actualizar'
         }).then(({isConfirmed,isDenied})=>{
           //si es confirmado es porque le dio a consultar
           if(isConfirmed){
@@ -305,22 +320,37 @@ export default function Parqueaderos(){
                 filtroCliente.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroCliente.length>0){
                 filtroCliente.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido:item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }else if(filtroProveedor.length>0){
                 filtroProveedor.map((item)=>{
                   setSearch({
                     ...search,
-                    razonSocial:item.razonSocial,
+                    primerApellido: item.primerApellido,
+                    segundoApellido: item.segundoApellido,
+                    primerNombre: item.primerNombre,
+                    otrosNombres: item.otrosNombres,
                   })
+                  setDocument(item.tipoDocumento)
+
                 })
               }
             setActualizar('SI')
@@ -331,7 +361,7 @@ export default function Parqueaderos(){
     }else{
       Swal.fire({
         icon:'warning',
-        title:'Recuerda que el NIT debe contener entre 5 y 10 caracteres',
+        title:'Recuerda que el Número de Identificación debe contener entre 5 y 10 caracteres',
         confirmButtonColor:'#D92121',
         confirmButtonText:'OK'
       })
@@ -361,7 +391,7 @@ export default function Parqueaderos(){
         //creamos el cuerpo de nuestra instancia
         const body={
           clasificacion:search.clasificacion,
-          tipoDocumento: search.tipoDocumento,
+          tipoDocumento: actualizar === '' ? document.codigo:document,
           departamento: departamento.codigo,
           ciudad: ciudad.codigo,
           regimenFiscal:'-',
@@ -379,7 +409,7 @@ export default function Parqueaderos(){
           precioSugerido:'-',
           numeroDocumento: search.cedula,
           tipoPersona: search.tipoPersona,
-          razonSocial: search.razonSocial.toUpperCase() ,
+          razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
           primerApellido:search.primerApellido.toUpperCase(),
           segundoApellido:search.segundoApellido.toUpperCase(),
           primerNombre:search.primerNombre.toUpperCase(),
@@ -387,12 +417,12 @@ export default function Parqueaderos(){
           direccion: search.direccion.toUpperCase(),
           celular: search.celular,
           telefono:search.telefono,
-          correoNotificaciones:search.correoElectronico.toLowerCase(),
+          correoNotificaciones:search.correoNotificaciones.toLowerCase(),
           correoFacturaElectronica: search.correoFacturaElectronica.toLowerCase(),
-          tipoDocRepLegal: search.tipoDocumento,
+          tipoDocRepLegal: actualizar === '' ? document.codigo:document,
           numeroDocRepLegal: search.cedula,
-          nameRepLegal:search.razonSocial.toUpperCase(),
-          apellidoRepLegal:search.razonSocial.toUpperCase(),
+          nameRepLegal:search.primerNombre.toUpperCase(),
+          apellidoRepLegal:search.primerApellido.toUpperCase(),
           observations:search.observations,
           createdAt: new Date(),
           createdBy: user.rowId.toUpperCase(),
@@ -423,24 +453,24 @@ export default function Parqueaderos(){
 
         };
         //creamos una constante la cual llevará el nombre de nuestra carpeta
-        const folderName = search.cedula+'-'+search.razonSocial.toUpperCase();
+        const folderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
         //agregamos la carpeta donde alojaremos los archivos
         formData.append('folderName', folderName); // Agregar el nombre de la carpeta al FormData
-        const originalFolderName = search.cedula+'-'+search.razonSocial.toUpperCase();
+        const originalFolderName = search.cedula+'-'+search.primerApellido.toUpperCase()+'-'+ search.segundoApellido.toUpperCase()+'-'+ search.primerNombre.toUpperCase()+'-'+ search.otrosNombres.toUpperCase();
         formData.append('originalFolderName', originalFolderName);
         //creamos una constante con el nombre del cliente para darselo a todos los documentos
-        const clientName = search.razonSocial.toUpperCase();
+        const clientName = body.razonSocial;
         formData.append('clientName',clientName)
         //ejecutamos nuestra funcion que creara el cliente
         const sucur = {
           cedula: search.cedula,
           codigoSucursal: 1,
-          nombreSucursal: search.razonSocial.toUpperCase() + ' - PRINCIPAL',
+          nombreSucursal: search.primerApellido.toUpperCase()+' '+ search.segundoApellido.toUpperCase()+' '+ search.primerNombre.toUpperCase()+' '+ search.otrosNombres.toUpperCase() + ' - PRINCIPAL',
           direccion: search.direccion,
           departamento:departamento.description,
           ciudad: ciudad.description,
           celular: search.celular,
-          correoFacturaElectronica: search.correoElectronico.toLowerCase(),
+          correoFacturaElectronica: search.correoNotificaciones.toLowerCase(),
           nombreContacto: search.razonSocial.toUpperCase(),
           celularContacto: search.celular,
           correoContacto: search.correoFacturaElectronica,
@@ -472,7 +502,7 @@ export default function Parqueaderos(){
           })
           const mail = {
             agencia: agencia.description,
-            razonSocial: search.razonSocial.toUpperCase() ,
+            razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
             tipoFormulario: tipo,
           }
           sendMail(mail)
@@ -483,7 +513,7 @@ export default function Parqueaderos(){
             setFiles([])
             Swal.fire({
               title: 'Creación exitosa!',
-              text: `El Centro Comercial o Parqueadero "${data.razonSocial}" con Número 
+              text: `El Centro Comercial o Parqueadero de Persona Natural "${data.primerNombre} ${data.otrosNombres} ${data.primerApellido} ${data.segundoApellido}" con Número 
               de documento "${data.cedula}" se ha registrado de manera exitosa`,
               icon: 'success',
               position:'center',
@@ -543,7 +573,8 @@ export default function Parqueaderos(){
           title: "¡Ha ocurrido un error!",
             text: `
               Hubo un error al momento de guardar la informacion del Centro Comercial o Parqueadero, intente de nuevo.
-              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+              Si el problema persiste por favor comuniquese con el área de sistemas.
+              ${err}`,
             icon: "error",
             confirmButtonText: "Aceptar",
         })
@@ -559,7 +590,8 @@ export default function Parqueaderos(){
       title: "¡Ha ocurrido un error!",
         text: `
           Hubo un error al momento de registrar el Centro Comercial o Parqueadero, intente de nuevo.
-          Si el problema persiste por favor comuniquese con el área de sistemas.`,
+          Si el problema persiste por favor comuniquese con el área de sistemas.
+          `,
        icon: "error",
        confirmButtonText: "Aceptar"});
     })
@@ -646,7 +678,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
           <center>
           <Fade cascade='true'>
           <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>CENTROS COMERCIALES Y PARQUEADEROS</strong></label>
-          <label className=" m-1 ms-4 me-4 mb-2 mt-0" style={{fontSize:20}}><strong>(Persona Jurídica)</strong></label>
+          <label className=" m-1 ms-4 me-4 mb-2 mt-0" style={{fontSize:20}}><strong>(Persona Natural)</strong></label>
           </Fade>
           <hr className="my-1" />
           { actualizar === 'SI' &&
@@ -660,54 +692,127 @@ const [selectedFiles, setSelectedFiles] = useState([]);
         <div className="bg-light rounded shadow-sm p-3 mb-3">
           <div className="d-flex flex-column gap-1">
             <div>
-              <label className="fw-bold mb-1" style={{fontSize:22}}>INFORMACIÓN OFICINA PRINCIPAL</label>
-              <div className="d-flex flex-row">
-                <div className="d-flex flex-row w-100"> 
+              <label className="fw-bold mb-1" style={{fontSize:22}}>INFORMACIÓN DEL TERCERO</label>
+              <div className="d-flex flex-row mt-2">         
                 <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">NIT:</label>
+                  <label for='cedula' className="me-1">No.Identificación:</label>
                   <input
                     id="cedula"
-                    type="number"
-                    className="form-control form-control-sm"
+                    type="number" 
+                    onKeyPress={actualizar==='' ? handleKeyPress:null}
+                    onBlur={actualizar==='' ? handleInputBlur:null}
+                    className="form-control form-control-sm w-100"
                     min={10000}
-                    max={9999999999}
-                    required
+                    disabled={actualizar==='' ? false:true }
+                    name="cedula"
                     pattern="[0-9]"
                     value={search.cedula}
-                    onChange={handlerChangeSearch}
+                    onChange={(e)=>(handlerChangeSearch(e),handleInputChange(e))}
+                    required
+                    max={9999999999}
+                    minLength={0}
+                    maxLength={10}
+                    size={10}
                     placeholder="Campo obligatorio"
-                    disabled={actualizar==='' ? false:true }
-                    onKeyPress={actualizar==='' ? handleKeyPress:null}
-                    onBlur={actualizar==='' ?handleInputBlur:null}
-
                   >
                   </input>
                   <span className="validity fw-bold me-3"></span>
-                </div>
-                </div> 
+               </div>
                 <div className="d-flex flex-row align-items-start w-100">
-                  <label className="me-1">Razón Social:</label>
-                  <input
-                    id="razonSocial"
-                    type="text"
-                    style={{textTransform:"uppercase",width:280}}
-                    className="form-control form-control-sm me-3"
-                    value={search.razonSocial}
-                    onChange={handlerChangeSearch}
-                    min={0}
+                  <label className="me-1">Tipo documento:</label>
+                  <select
+                    ref={selectDocumentoRef}
+                    style={{width:240}}
+                    value={document}
+                    className="form-select form-select-sm m-100 me-3"
+                    onChange={(e)=>setDocument(JSON.parse(e.target.value))}
                     required
-                    disabled={rzNotEnty ? true:false}
-                    placeholder="Campo obligatorio"
-                  />
-                </div> 
+                    disabled={actualizar==='' ? false:true }
+                  >
+                    <option selected value='' disabled>
+                  -- Seleccione el tipo de documento --
+                </option>
+                  {documentos
+                  .sort((a, b) => a.id - b.id)
+                  .map((elem) => (
+                    <option id={elem.id} value={JSON.stringify(elem)}>
+                    {elem.id + " - " + elem.description}
+                  </option>
+                  ))}
+              </select>
+                </div>
               </div>
               <div className="d-flex flex-row mt-2">
-                <label className="me-1">Dirección oficina principal:</label>
+                <div className="d-flex flex-column align-items-start w-25 pe-3">
+                  <label className="me-1 w-25">1er.Apellido:</label>
+                  <input
+                    id="primerApellido"
+                    type="text"
+                    className="form-control form-control-sm "                     
+                    min={0}
+                    disabled={rzNotEnty ? true:false}
+                    style={{textTransform:"uppercase"}}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.primerApellido}
+                    onChange={handlerChangeSearch}
+                  />
+                </div>   
+                <div className="d-flex flex-column w-25 pe-3">
+                <label className="me-1 w-25">2do.Apellido:</label>
+                  <input
+                    id="segundoApellido"
+                    type="text"
+                    className="form-control form-control-sm "                     
+                    min={0}
+                    disabled={rzNotEnty ? true:false}
+
+                    style={{textTransform:"uppercase"}}
+                    placeholder="(Campo Opcional)"
+                    value={search.segundoApellido}
+                    onChange={handlerChangeSearch}
+                  />
+                </div>
+                
+                <div className="d-flex flex-column w-25 pe-3">
+                <label className="me-1 w-25">1er.Nombre:</label>
+                  <input
+                    id="primerNombre"
+                    type="text"
+                    className="form-control form-control-sm "                     
+                    min={0}
+                    disabled={rzNotEnty ? true:false}
+
+                    style={{textTransform:"uppercase"}}
+                    required
+                    placeholder="Campo obligatorio"
+                    value={search.primerNombre}
+                    onChange={handlerChangeSearch}
+                  />
+                </div>
+                <div className="d-flex flex-column w-25">
+                <label className="me-1 ">Otros nombres:</label>
+                  <input
+                    id="otrosNombres"
+                    type="text"
+                    className="form-control form-control-sm w-100"                     
+                    min={0}
+                    style={{textTransform:"uppercase"}}
+                    placeholder="(Campo Opcional)"
+                    value={search.otrosNombres}
+                    disabled={rzNotEnty ? true:false}
+
+                    onChange={handlerChangeSearch}
+                  />
+                </div>
+              </div>
+              <div className="d-flex flex-row mt-2">
+                <label className="me-1">Dirección:</label>
                 <input
                   placeholder="campo obligatorio"
                   type="text"
                   id="direccion"
-                  style={{textTransform:"uppercase",width:596}}
+                  style={{textTransform:"uppercase"}}
                   value={search.direccion}
                   onChange={handlerChangeSearch}
                   className="form-control form-control-sm"
@@ -800,17 +905,17 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   </input>
                 </div>
               </div>
-              <div className="d-flex flex-row align-items-start  w-100 mb-4">
-                  <label className="me-1">Correo electrónico:</label>
+              <div className="d-flex flex-row align-items-start ">
+                  <label className="me-1 mb-3">Correo notificaciones:</label>
                   <input
-                    id="correoElectronico"
+                    id="correoNotificaciones"
                     type="email"
                     className="form-control form-control-sm "
                     min={0}
-                    value={search.correoElectronico}
+                    value={search.correoNotificaciones}
                     onChange={(e)=>(handlerChangeSearch(e),manejarCambio(e))}
                     required
-                    style={{textTransform:'lowercase',width:625}}
+                    style={{width:585, textTransform:'lowercase'}}
                     placeholder="Campo obligatorio"
                   >
                   </input>

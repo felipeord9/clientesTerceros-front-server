@@ -52,7 +52,7 @@ export default function Inicio2(){
                 <center>
                 <hr style={{width:300, color:'black'}}/></center>
                 {user.role=='cartera' && (
-                  <MenuItem value={50} onClick={(e)=>navigate('/Parqueaderos')}><strong className="">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem>
+                  <MenuItem value={50} onClick={(e)=>navigate('/tipo/parqueadero')}><strong className="">C.COMERCIALES Ó PARQUEADEROS</strong></MenuItem>
                 )}
                 {user.role==='agencias' && (
                   <MenuItem value={30} onClick={(e)=>navigate('/tipo/proveedor')} ><strong>Proveedores varios (Agencias)</strong></MenuItem>

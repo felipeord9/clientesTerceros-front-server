@@ -46,14 +46,13 @@ export default function InicioAdmin(){
                 <div className="d-flex flex-row">
                 <div style={{width:70}}></div>
                 <h4 className="h-100 ps-2 pe-2 rounded-2" style={{backgroundColor:'#D92121', color:'white'}}>Tipos de Clientes</h4>
-                </div>                
+                </div>
                 <MenuItem value={10} onClick={(e)=>navigate('/contado/persona/natural')}>persona <strong className="ps-2 pe-1 text-accept"> NATURAL</strong> - pago a<strong className="ps-2">CONTADO</strong></MenuItem>
                 <MenuItem value={20} onClick={(e)=>navigate('/credito/persona/natural')}>persona <strong className="ps-2 pe-1"> NATURAL</strong> - pago a<strong className="ps-2 text-danger">CRÉDITO</strong></MenuItem>
-                {/* <center>
-                <hr style={{width:300, color:'black'}}/></center> */}
+
                 <MenuItem value={30} onClick={(e)=>navigate('/contado/persona/juridica')}>persona <strong className="ps-2 pe-1" style={{color:'blue'}}> JURÍDICA</strong> - pago a<strong className="ps-2 ">CONTADO</strong></MenuItem>
                 <MenuItem value={40} onClick={(e)=>navigate('/credito/persona/juridica')}>persona <strong className="ps-2 pe-1" style={{color:'blue'}}> JURÍDICA</strong> - pago a<strong className="ps-2 text-danger">CRÉDITO</strong></MenuItem>
-                <MenuItem value={80} onClick={(e)=>navigate('/Parqueaderos')}><strong className=" ">C.Comerciales Ó Parqueaderos</strong></MenuItem>
+                <MenuItem value={80} onClick={(e)=>navigate('/tipo/parqueadero')}><strong className=" ">C.Comerciales Ó Parqueaderos</strong></MenuItem>
                 <center>
                 <hr style={{width:300, color:'black'}}/></center>
                 <div className="d-flex flex-row">
