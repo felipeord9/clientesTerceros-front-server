@@ -78,7 +78,7 @@ function App() {
         <Route path='/' element={<Navigate to='/login'/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/send/recovery' element={<SendRecovery/>}/>
-        <Route path='/recuperacion/contrasena//:token' element={<RecoveryPassword/>} />
+        <Route path='/recuperacion/contrasena/:token' element={<RecoveryPassword/>} />
         <Route path='/change/password' element={<PrivateRoute component={ChangePassword}/>}/>
 
         {/* Validacion de tercero */}

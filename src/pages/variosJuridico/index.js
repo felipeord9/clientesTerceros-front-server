@@ -144,7 +144,7 @@ export default function VariosJuridico(){
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      if(search.cedula.length>=9 && search.cedula.length<=15){
+      if(search.cedula.length>=5 && search.cedula.length<=15){
         const filtroCliente = clientes.filter((item)=>{
           if(item.cedula === search.cedula){
             return item
@@ -218,7 +218,7 @@ export default function VariosJuridico(){
       }else{
         Swal.fire({
           icon:'warning',
-          title:'Recuerda que el NIT debe contener entre 9 y 15 caracteres',
+          title:'Recuerda que el NIT debe contener entre 5 y 15 caracteres',
           confirmButtonColor:'#D92121',
           confirmButtonText:'OK'
         })
@@ -256,7 +256,7 @@ export default function VariosJuridico(){
 
   //funcion para que cuando se cambie de input se ejecute 
   const handleInputBlur = () => {
-    if(search.cedula.length>=9 && search.cedula.length<=15){
+    if(search.cedula.length>=5 && search.cedula.length<=15){
       const filtroCliente = clientes.filter((item)=>{
         if(item.cedula === search.cedula){
           return item
@@ -327,7 +327,7 @@ export default function VariosJuridico(){
     }else{
       Swal.fire({
         icon:'warning',
-        title:'Recuerda que el NIT debe contener entre 9 y 15 caracteres',
+        title:'Recuerda que el NIT debe contener entre 5 y 15 caracteres',
         confirmButtonColor:'#D92121',
         confirmButtonText:'OK'
       })
@@ -622,12 +622,12 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <label className="me-1">NIT:</label>
                   <input
                     id="cedula"
-                    type="number"
+                    type="text"
                     className="form-control form-control-sm"
-                    min={100000000}
+                    min={10000}
                     max={999999999999999}
                     required
-                    pattern="[0-9]"
+                    /*pattern="[0-9]"*/
                     value={search.cedula}
                     onChange={handlerChangeSearch}
                     disabled={actualizar==='' ? false:true }
@@ -636,7 +636,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                     onBlur={actualizar==='' ?handleInputBlur:null}
                   >
                   </input>
-                  <span className="validity fw-bold me-3"></span>
+                  {/*<span className="validity fw-bold me-3"></span>*/}
                 </div>
                 </div> 
                 <div className="d-flex flex-row align-items-start w-100">
@@ -855,7 +855,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
               <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2024) </label>
 
                   <div className=" rounded-2" >
                   <div className="d-flex flex-row">

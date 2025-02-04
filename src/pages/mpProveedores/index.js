@@ -19,13 +19,13 @@ export default function MenuPrincipalProveedores(){
 
     const handleClickBack=(e)=>{
       e = e.target.value
-      if(user.role==='cartera'){
+      /*if(user.role==='cartera'){
         return navigate('/validar/tercero')
       }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         return navigate('/validar/Proveedor')
       }else{
-        return navigate('/validacion/admin')
-      }
+        return*/ navigate('/validacion/admin')
+      /*}*/
     }
 
     const BotonColorCambiante = ({ children }) => {

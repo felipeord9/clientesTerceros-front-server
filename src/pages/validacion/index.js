@@ -416,7 +416,7 @@ export default function ValidacionAdmin(){
       if( user.role==='cartera' || user.role==='agencias'){
         /* return navigate('/inicio') */
         return navigate('/menu/principal/Clientes')
-      }else if(user.role==='compras' || user.role==='asistente agencia'){
+      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv' ){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
       }else{

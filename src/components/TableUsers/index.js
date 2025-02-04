@@ -5,9 +5,11 @@ import Swal from 'sweetalert2';
 import { MdDelete } from "react-icons/md";
 import { deleteUserByName } from '../../services/userService';
 import { MdDeleteOutline } from "react-icons/md";
+import { useEffect, useState, useContext, useRef } from "react";
+import AuthContext from "../../context/authContext";
 
 export default function TableUsers({ users, loading, setSelectedUser, setShowModal , customStyles }) {
-
+  const { user } = useContext(AuthContext);
   const { successAlert } = useAlert()
   const columns = [
     {
@@ -44,12 +46,14 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
+	{user.role === 'superadmin' &&
           <button title="Editar usuario" className='btn btn-sm btn-primary' onClick={(e) => {
             setSelectedUser(row)
             setShowModal(true)
           }}>
             <FiIcons.FiEdit />
           </button>
+	}
         </div>
       ),
       width: '70px'
@@ -59,7 +63,8 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
       center: true,
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
-          <button title="Eliminar usuario" className='btn btn-sm btn-danger ' onClick={(e) => {
+         {user.role === 'superadmin' &&
+	   <button title="Eliminar usuario" className='btn btn-sm btn-danger ' onClick={(e) => {
             setSelectedUser(row)
             Swal.fire({
               title:'¿Esta segur@?',
@@ -100,6 +105,7 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
           }}>
             <MdDeleteOutline />
           </button>
+	}
         </div>
       ),
       width: '80px'

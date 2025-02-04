@@ -800,7 +800,7 @@ const [colorVality,setColorVality]=useState('red');
                 <div className="d-flex flex-column mb-3" >
                   <div className="d-flex flex-row">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2024) </label>
                   </div>
                   <div className="d-flex flex-column">
                   <TextOfBinary valor={search.docRut}></TextOfBinary>

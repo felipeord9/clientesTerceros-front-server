@@ -677,7 +677,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
         <div className="d-flex flex-column">
           <center>
           <Fade cascade='true'>
-          <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>CENTROS COMERCIALES Y PARQUEADEROS</strong></label>
+	  {user.role==='cartera' ? 
+              <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>CLIENTES OCASIONALES</strong></label>
+            :           
+            <label className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2" style={{fontSize:100}}><strong>CENTROS COMERCIALES Y PARQUEADEROS</strong></label>
+          }
           <label className=" m-1 ms-4 me-4 mb-2 mt-0" style={{fontSize:20}}><strong>(Persona Natural)</strong></label>
           </Fade>
           <hr className="my-1" />
@@ -1008,7 +1012,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row ">
               <div className="pe-2 w-50">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2024) </label>
 
                   <div className=" rounded-2" >
                   <div className="d-flex flex-row">

@@ -21,6 +21,8 @@ export default function TipoParqueadero(){
         return navigate('/inicio/admin')
       }else if(user.role === 'agencias'){
         return navigate('/inicio')
+      }else if(user.role === 'cartera'){
+        return navigate('/inicio')
       }
     }
     return(
@@ -28,7 +30,17 @@ export default function TipoParqueadero(){
       <div className='rounder-4'>
       <div className='login-wrapper p-2 mb-3 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white', userSelect:'none'}}>
       <Fade cascade damping={0.1} direction="down" triggerOnce='true'>     
-    <h4 style={{userSelect:'none'}}>Su elección anterior fue:</h4><h1> <strong className="text-danger">Centros Comerciales Ó Parqueaderos</strong></h1>
+    {user.role === 'cartera' ? 
+      <div className="d-flex flex-column w-100 justify-content-center align-items-center text-align-center">
+        <h4 style={{userSelect:'none'}}>Su elección anterior fue:</h4>
+        <h1> <strong className="text-danger">Clientes Ocasionales</strong></h1>
+      </div>
+      :
+      <div className="d-flex flex-column w-100 justify-content-center align-items-center text-align-center">
+        <h4 style={{userSelect:'none'}}>Su elección anterior fue:</h4>
+        <h1> <strong className="text-danger">Centros Comerciales Ó Parqueaderos</strong></h1>
+      </div>
+    }
     <hr style={{width:650, color:'black'}}/></Fade>
 
     <Fade cascade>

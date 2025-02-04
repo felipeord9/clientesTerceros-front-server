@@ -1267,7 +1267,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                 <div className="d-flex flex-column" /* style={{height:120}} */>
                   <div className="d-flex flex-row">
                   <label className="fw-bold mt-1 ">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2024) </label>
                   </div>
                   <div className="d-flex flex-column">
                     <TextOfBinary valor={search.docRut}></TextOfBinary>

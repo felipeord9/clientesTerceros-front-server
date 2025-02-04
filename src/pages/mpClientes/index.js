@@ -19,13 +19,13 @@ export default function MenuPrincipalClientes(){
 
     const handleClickBack=(e)=>{
       e = e.target.value
-      if(user.role==='cartera'){
+      /*if(user.role==='cartera'){
         return navigate('/validar/tercero')
       }else if(user.role==='compras' || user.role==='comprasnv' || user.role==='asistente agencia'){
         return navigate('/validar/Proveedor')
       }else{
-        return navigate('/validacion/admin')
-      }
+        return*/ navigate('/validacion/admin')
+      /*}*/
     }
 
     const BotonColorCambiante = ({ children }) => {
@@ -95,7 +95,6 @@ export default function MenuPrincipalClientes(){
           <div className=" mb-3">
             <a onClick={(e)=>navigate('/inicio')}><BotonColorCambiante>Creación Tercero</BotonColorCambiante></a>
             <a onClick={(e)=>handleClickBack(e)}><BotonColorCambiante>Consulta Tercero</BotonColorCambiante></a>
-            <a onClick={(e)=>navigate('/sucursales')}><BotonColorCambiante>Creación sucursal</BotonColorCambiante></a>
           </div>
           </div>
         )}

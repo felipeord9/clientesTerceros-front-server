@@ -1465,7 +1465,7 @@ const [selectedFiles, setSelectedFiles] = useState([]);
               <div className="d-flex flex-row">
               <div className="d-flex flex-column mt-2 w-100 me-2">
                   <label className="fw-bold mt-1 me-2">RUT: </label>
-                  <label className="ms-2 mt-1 ">(AÑO 2023) </label>
+                  <label className="ms-2 mt-1 ">(AÑO 2024) </label>
                   <div className=" rounded-2 pt-1" >
                   <div className="d-flex flex-row">
                   <input
