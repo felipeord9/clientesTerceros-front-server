@@ -1,0 +1,27 @@
+.search-box{
+    display: flex;
+    flex-direction: row;
+}
+
+.titulo{
+    display: flex;
+    font-size: 30;
+}
+
+.contenedor1{
+    width: 75%;
+}
+
+@media (max-width: 900px) {
+    .search-box{
+      flex-direction: column;
+      padding-top: 18px;
+    }
+    .titulo{
+        display: none;
+        font-size: 15;
+    }
+    .contenedor1{
+        width: 100%;
+    }
+}

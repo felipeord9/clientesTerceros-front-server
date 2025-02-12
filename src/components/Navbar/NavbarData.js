@@ -12,6 +12,8 @@ import { RiPassValidLine } from "react-icons/ri";
 import { AiOutlineSelect } from "react-icons/ai";
 import { FaCar } from "react-icons/fa";
 import { PiCertificateBold } from "react-icons/pi";
+import { VscPersonAdd } from "react-icons/vsc";
+import { BsFileEarmarkPerson } from "react-icons/bs";
 
 export const NavBarData = [
   {
@@ -64,6 +66,13 @@ export const NavBarData = [
     access:['compras','asistente agencia','comprasnv']   
   }
   ,
+  {
+    title:'Registrar empleado',
+    path:'/registrar/empleado',
+    icon:<VscPersonAdd />,
+    cName:'nav-text',
+    access:['admin','recursos humanos']   
+  },
   {
     title:'Validación Existencia',
     path:'/validacion/admin',
@@ -146,13 +155,6 @@ export const NavBarData = [
     access:['admin','comprasnv']
   },
   {
-    title: "Usuarios",
-    path: "/usuarios",
-    icon: <BsFillPeopleFill />,
-    cName: "nav-text",
-    access: ['admin']
-  },
-  {
     title: "Clientes",
     path: "/terceros",
     icon: <BsClipboardCheck />,
@@ -165,7 +167,23 @@ export const NavBarData = [
     icon: <BsClipboardCheckFill />,
     cName: "nav-text",
     access: ['admin']
-  },{
+  },
+  {
+    title:'Empleados',
+    path: '/empleados',
+    /* icon: <PiFloppyDiskBackFill />, */
+    icon: <BsFileEarmarkPerson  />,
+    cName: "nav-text",
+    access: ['admin', 'recursos humanos']
+  },
+  {
+    title: "Usuarios",
+    path: "/usuarios",
+    icon: <BsFillPeopleFill />,
+    cName: "nav-text",
+    access: ['admin']
+  },
+  {
     title:'Bitácora',
     path: '/bitacora',
     icon: <GiArchiveRegister />,

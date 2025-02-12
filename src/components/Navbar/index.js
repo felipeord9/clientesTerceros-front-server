@@ -116,7 +116,7 @@ export default function Navbar() {
           className="position-fixed shadow w-100"
           style={{ fontSize: 20, left: 0, height: "60px", zIndex: 2, userSelect:'none', backgroundColor:'white' }}
         >
-          <div className="d-flex flex-row justify-content-between w-100 h-100 px-4 shadow">
+          <div className="d-flex flex-row justify-content-between w-100 h-100 px-3 shadow">
             <div
               id="logo-header"
               className="d-flex flex-row align-items-center gap-2"
@@ -149,7 +149,7 @@ export default function Navbar() {
                 className="d-flex align-items-center position-relative bg-danger rounded-pill p-2 pe-4"
                 style={{ right: "-20px", height: 35, userSelect:'none'}}
               >
-                <span className="text-light text-nowrap m-0">{user.name}</span>
+                <span className="text-light text-nowrap m-0" style={{fontSize:16}}>{user.name}</span>
               </div>
               {/* iten con menu */} 
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>

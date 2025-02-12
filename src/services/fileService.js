@@ -14,7 +14,21 @@ export const fileSend = async(formData) =>{
       } catch (error) {
         throw error;
       }
+}
+
+export const filesEmployee = async(formData) =>{
+  try {
+      const {data}= await axios.post(`${url}/uploadMultiple/employee`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      return data;
+    } catch (error) {
+      throw error;
     }
+}
+
 
 export const getArchivos = (folderName)=>{
    

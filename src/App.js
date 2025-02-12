@@ -66,6 +66,8 @@ import GenerateCertificado from './pages/generateCertificado';
 import Certificados from './pages/validarCertificados';
 import Solicitudes from './pages/solicitudes';
 import tipoParqueadero from './pages/tipoParqueadero';
+import FormEmpleados from './pages/formEmpleado';
+import Empleados from './pages/empleados';
 
 function App() {
   return(
@@ -149,6 +151,9 @@ function App() {
 
         <Route path='/pre/aprovacion/natural' element={<PrivateRoute component={PreAprovacionNatural}/>}/>
 
+        {/* empleados */}
+        <Route path='/registrar/empleado' element={<PrivateRoute component={FormEmpleados}/>}/>
+
         {/* tablas */}
         <Route path='/certificados' element={<PrivateRoute component={Certificados}/>}/>
         <Route path='/usuarios' element={<PrivateRoute component={Users}/>}/>
@@ -157,6 +162,7 @@ function App() {
         <Route path='/Proveedores' element={<PrivateRoute component={Proveedores}/>}/>
         <Route path='/bitacora' element={<PrivateRoute component={Bitacora}/>}/>
         <Route path='/solicitudes' element={<PrivateRoute component={Solicitudes}/>}/>
+        <Route path='/empleados' element={<PrivateRoute component={Empleados}/>}/>
 
         {/* pagina error no found */}
         <Route path='*' element={<Page404/>}/>

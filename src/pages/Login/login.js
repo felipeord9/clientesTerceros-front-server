@@ -19,6 +19,7 @@ export default function Login() {
   useEffect(()=>{
     if(isLogged && user.role==='cartera' || isLogged && user.role === 'agencias')navigate('/menu/principal/Clientes');
     if(isLogged && user.role==='compras' || isLogged && user.role==='asistente agencia' || isLogged && user.role==='comprasnv')navigate('/menu/principal/Proveedores');
+    if(isLogged && user.role==='recursos humanos') navigate('/registrar/empleado');
     if(isLogged && user.role==='admin')navigate('/menu/principal/admin');
     if(isLogged){
       const body={
