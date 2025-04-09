@@ -727,7 +727,6 @@ const [selectedFiles, setSelectedFiles] = useState([]);
                   <select
                     ref={selectDocumentoRef}
                     style={{width:240}}
-                    value={document}
                     className="form-select form-select-sm m-100 me-3"
                     onChange={(e)=>setDocument(JSON.parse(e.target.value))}
                     required
