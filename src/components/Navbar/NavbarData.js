@@ -38,6 +38,13 @@ export const NavBarData = [
     access:['asistente agencia','compras','comprasnv']   
   },
   {
+    title:'Menu Principal',
+    path:'/menu/principal/rrhh',
+    icon:<GoHomeFill/>,
+    cName:'nav-text',
+    access:['recursos humanos']   
+  },
+  {
     title:'Crear Cliente',
     path:'/inicio',
     icon:<AiOutlineSelect />,
@@ -93,6 +100,13 @@ export const NavBarData = [
     icon:<RiPassValidLine />,
     cName:'nav-text',
     access:['compras','asistente agencia','comprasnv']
+  },
+  {
+    title:'Validación Existencia',
+    path:'/validar/empleado',
+    icon:<RiPassValidLine />,
+    cName:'nav-text',
+    access:['recursos humanos']
   },
   {
     title:'Persona natural - contado',

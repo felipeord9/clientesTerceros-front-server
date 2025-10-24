@@ -1,0 +1,33 @@
+.Select-text a:hover {
+    background-color: #df1414;
+    color: #f3e2c2;
+  }
+h3{
+    user-select: 'none';
+}
+
+.text-val-emp{
+  display: flex;
+}
+
+.margin-bottons{
+  margin: 15px;
+}
+
+.div-bottons{
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 900px) {
+.text-val-emp{
+  display: none;
+}
+.margin-bottons{
+  margin: 5px;
+}
+.div-bottons{
+  flex-direction: column;
+  
+}
+}

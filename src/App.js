@@ -31,6 +31,7 @@ import Terceros from './pages/terceros';
 import ValidarTercero from './pages/validarTercero';
 import ValidarProveedor from './pages/validarProveedor';
 import ValidacionAdmin from './pages/validacion';
+import ValidarEmpleado from './pages/validarEmpleado';
 import EditarPNC from './pages/editPNC';
 import EditarPNCR from './pages/editarPNCR';
 import EditarPJC from './pages/editarPJC';
@@ -44,6 +45,7 @@ import MenuPrincipalAdmin from './pages/mpAdmin';
 import MenuPrincipalAdmin2 from './pages/mpAdmin2';
 import MenuPrincipalClientes from './pages/mpClientes';
 import MenuPrincipalProveedores from './pages/mpProveedores';
+import MenuPrincipalRRHH from './pages/mpRRHH';
 import MpPrueba from './pages/mpPrueba';
 import Parqueaderos from './pages/parqueaderos';
 import ParqueaderosNatural from './pages/parqueaderosNatural';
@@ -87,6 +89,7 @@ function App() {
         <Route path='/validar/tercero' element={<PrivateRoute component={ValidarTercero}/>}/>
         <Route path='/validar/Proveedor' element={<PrivateRoute component={ValidarProveedor}/>}/>
         <Route path='/validacion/admin' element={<PrivateRoute component={ValidacionAdmin}/>}/>
+        <Route path='/validar/empleado' element={<PrivateRoute component={ValidarEmpleado}/>}/>
 
         {/* Mostrar validacion */}
         <Route path='/informacion/PNC' element={<PrivateRoute component={MostartPNC}/>}/>
@@ -117,6 +120,7 @@ function App() {
         <Route path='/menu/principal/adminis' element={<PrivateRoute component={MenuPrincipalAdmin2}/>}/>
         <Route path='/menu/principal/Clientes' element={<PrivateRoute component={MenuPrincipalClientes}/>}/>
         <Route path='/menu/principal/Proveedores' element={<PrivateRoute component={MenuPrincipalProveedores}/>}/>
+        <Route path='/menu/principal/rrhh' element={<PrivateRoute component={MenuPrincipalRRHH}/>}/>
         <Route path='/menu/principal/Prueba' element={<PrivateRoute component={MpPrueba}/>}/>
 
         {/* inicio admin */}
@@ -153,6 +157,7 @@ function App() {
 
         {/* empleados */}
         <Route path='/registrar/empleado' element={<PrivateRoute component={FormEmpleados}/>}/>
+        <Route path='/registrar/empleado/:rowid' element={<PrivateRoute component={FormEmpleados}/>}/>
 
         {/* tablas */}
         <Route path='/certificados' element={<PrivateRoute component={Certificados}/>}/>

@@ -12,3 +12,21 @@
     padding-left: 0;
     color: green;
   }
+
+  .link-files {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .ancho-tabla{
+    width: 52vw;
+  }
+
+  @media (max-width: 900px) {
+    .link-files{
+      flex-direction: column;
+    }
+    .ancho-tabla{
+      width: 82vw;
+    }
+  }

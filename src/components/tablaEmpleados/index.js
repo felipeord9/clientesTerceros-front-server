@@ -12,11 +12,11 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
   const { successAlert } = useAlert()
   const columnsForComprasnv = [
     {
-      id: "cedula",
+      id: "rowId",
       name: "C.C",
       selector: (row) => row.rowId,
       sortable: true,
-      width: '150px',
+      width: '130px',
     },
     {
       id: "Nombre",
@@ -120,9 +120,9 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
   ]
   const columnsForRecursosHumanos = [
     {
-      id: "cedula",
+      id: "rowId",
       name: "C.C",
-      selector: (row) => row.cedula,
+      selector: (row) => row.rowId,
       sortable: true,
       width: '150px',
     },
@@ -131,7 +131,7 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
       name: "Nombre Empleado",
       selector: (row) => `${row.primerNombre} ${row.otrosNombres} ${row.primerApellido} ${row.segundoApellido}`,
       sortable: true,
-      width: 'auto'
+      width: '400px'
     },
     {
       id: "agencia",
@@ -139,7 +139,14 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
       selector: (row) => row.agencia,
       sortable: true,
       width: 'auto',
-    }
+    },
+    {
+      id: "Cargo",
+      name: "Cargo",
+      selector: (row) => row.cargo,
+      sortable: true,
+      width: 'auto'
+    },
     
   ]
   const columns = (user.role === 'admin' || user.role==='comprasnv') ? columnsForComprasnv :columnsForRecursosHumanos;

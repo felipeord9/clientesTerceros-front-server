@@ -104,6 +104,8 @@ export default function Navbar() {
       }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
         /* return navigate('/compras') */
         return navigate('/menu/principal/Proveedores')
+      }else if(user.role === 'recursos humanos'){
+        return navigate('/menu/principal/rrhh')
       }else{
         /* return navigate('/inicio/admin') */
         return navigate('/menu/principal/admin')
@@ -216,9 +218,9 @@ export default function Navbar() {
                   </Button>
                 </MenuItem>
                 <MenuItem style={{userSelect:'none'}}>         
-                  <button onClick={handleOpenModal}>
+                  <button className="d-flex w-100" onClick={handleOpenModal}>
                     <FiIcons.FiLogOut style={{width:18, height:18}}/>
-                    <label className="ms-1" style={{fontSize:15}}>CERRAR SECCIÓN</label>
+                    <label className="ms-1" style={{fontSize:15}}>CERRAR SESIÓN</label>
                   </button>          
                   <Modal open={openModal}
                     onClose={handleCloseModal}

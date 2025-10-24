@@ -35,7 +35,10 @@ export default function Empleados() {
     const { value } = e.target;
     if (value !== "") {
       const filteredEmpleados = empleados.filter((elem) => {
-        if (elem.rowId.includes(value.toUpperCase())) {
+        const name = `${elem.primerNombre} ${elem.otrosNombres} ${elem.primerApellido} ${elem.segundoApellido}`
+        if (elem.rowId.includes(value.toUpperCase()) ||
+          name.toLowerCase().includes(value.toLowerCase())  
+        ) {
           return elem;
         }
       });
@@ -92,7 +95,7 @@ export default function Empleados() {
       style={{ userSelect: "none" }}
     >
       {/* <div className='rounder-4'> */}
-      <div className="container d-flex flex-column pt-5 h-100 contenedor1 gap-1">
+      <div className="container d-flex flex-column pt-5 h-100 contenedor1 gap-1 pb-4">
         <h1 className="titulo text-danger fw-bold pt-2 w-100 justify-content-center text-align-center">
           Listado de empleados registrados
         </h1>

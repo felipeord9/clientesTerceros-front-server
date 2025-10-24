@@ -36,6 +36,29 @@ const sendMail = async ()=>{
   }
 }
 
+const sendMail2 = async (body)=>{
+  try{
+    const { data } = await axios.post(`${url}/send/mail`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch(error){
+    throw error
+  }
+}
+
+export const verifyTokenWhithId = async (token) => {
+  const localToken = JSON.parse(localStorage.getItem("token"))
+  const { data } = await axios.get(`${url}/verify/${token}`, {
+    headers: {
+      Authorization: `Bearer ${localToken}`
+    }
+  })
+  return data
+}
+
 const createEmpleado = (body) => {
     /* const token = JSON.parse(localStorage.getItem("token")) */
     const token = Cookies.get('token')
@@ -65,6 +88,18 @@ export const updateEmpleado = async (id, body) => {
   return data
 }
 
+export const updateEmployee = async (id, body) => {
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.patch(`${url}/update/employee/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
 const deleteEmpleado = (id) => {
   return fetch(`${url}/${id}`, {
     method: "DELETE",
@@ -82,4 +117,5 @@ export {
     createEmpleado,
     deleteEmpleado,
     sendMail,
+    sendMail2,
 }
