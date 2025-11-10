@@ -450,6 +450,7 @@ export default function VariosNatural(){
             agencia: agencia.description,
             razonSocial: search.primerApellido.toUpperCase() +' '+ search.segundoApellido.toUpperCase() +' '+ search.primerNombre.toUpperCase() +' '+ search.otrosNombres.toUpperCase(),
             tipoFormulario: tipo,
+            id: data.id
           }
           sendMail(mail)
           .then(()=>{

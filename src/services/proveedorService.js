@@ -37,6 +37,18 @@ const validarProveedor = async (cedula)=>{
   return data
 }
 
+const validarProveedorId = async (id)=>{
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.get(`${url}/id/${id}`,{
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
 const createProveedor = (body) => {
     /* const token = JSON.parse(localStorage.getItem("token")) */
     const token = Cookies.get('token')
@@ -93,6 +105,7 @@ export {
     createProveedor,
     deleteProveedor,
     validarProveedor,
+    validarProveedorId,
     deleteByCedula,
     sendMail,
 }

@@ -40,6 +40,18 @@ const validarCliente = async (cedula)=>{
   return data
 }
 
+const validarClienteId = async (id)=>{
+  /* const token = JSON.parse(localStorage.getItem("token")) */
+  const token = Cookies.get('token')
+
+  const { data } = await axios.get(`${url}/id/${id}`,{
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return data
+}
+
 const createCliente = (body) => {
     /* const token = JSON.parse(localStorage.getItem("token")) */
     const token = Cookies.get('token')
@@ -105,6 +117,7 @@ export {
     createCliente,
     deleteCliente,
     validarCliente,
+    validarClienteId,
     deleteByCedula,
     duoFind,
     sendMail

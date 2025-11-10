@@ -592,6 +592,7 @@ const [fileInputs, setFileInputs] = useState([]);
             agencia: agencia.description,
             razonSocial:search.razonSocial.toUpperCase(),
             tipoFormulario: tipo,
+            id: data.id
           }
           sendMail(mail)
           .then(()=>{

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect , useRef} from "react"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useParams } from 'react-router-dom';
 import { validarCliente } from "../../services/clienteService"; 
-import { validarProveedor } from "../../services/proveedorService";
+import { validarProveedor , validarProveedorId } from "../../services/proveedorService";
 import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -32,6 +32,7 @@ export default function MostrarPMN(){
     })
     const [agencias,setAgencias] = useState([]);
     const [formularios,setFormularios] = useState([]);
+    const { id } = useParams();
 
     const [info,setInfo]=useState({
       cedula:'',
@@ -68,7 +69,14 @@ export default function MostrarPMN(){
     })
     useEffect(()=>{
       const datosTercero = localStorage.getItem('data');
-      if(datosTercero){
+      if(id){
+        validarProveedorId(id)
+        .then(({data})=>{
+          localStorage.setItem('data',JSON.stringify(data));
+          setData((data));
+          setInfo((data));
+        })
+      } else {
         setData(JSON.parse(datosTercero));
         setInfo(JSON.parse(datosTercero));
       }

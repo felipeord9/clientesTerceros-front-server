@@ -93,15 +93,25 @@ function App() {
 
         {/* Mostrar validacion */}
         <Route path='/informacion/PNC' element={<PrivateRoute component={MostartPNC}/>}/>
+        <Route path='/informacion/PNC/:id' element={<PrivateRoute component={MostartPNC}/>}/>
         <Route path='/informacion/PNCR' element={<PrivateRoute component={MostartPNCR}/>}/>
+        <Route path='/informacion/PNCR/:id' element={<PrivateRoute component={MostartPNCR}/>}/>
         <Route path='/informacion/PJC' element={<PrivateRoute component={MostrarPJC}/>}/>
+        <Route path='/informacion/PJC/:id' element={<PrivateRoute component={MostrarPJC}/>}/>
         <Route path='/informacion/PJCR' element={<PrivateRoute component={MostrarPJCR}/>}/>
+        <Route path='/informacion/PJCR/:id' element={<PrivateRoute component={MostrarPJCR}/>}/>
         <Route path='/informacion/CCP' element={<PrivateRoute component={MostrarCCP}/>}/>
+        <Route path='/informacion/CCP/:id' element={<PrivateRoute component={MostrarCCP}/>}/>
         <Route path='/informacion/PMN' element={<PrivateRoute component={MostrarPMN}/>}/>
+        <Route path='/informacion/PMN/:id' element={<PrivateRoute component={MostrarPMN}/>}/>
         <Route path='/informacion/PS' element={<PrivateRoute component={MostrarPS}/>}/>
+        <Route path='/informacion/PS/:id' element={<PrivateRoute component={MostrarPS}/>}/>
         <Route path='/informacion/PVN' element={<PrivateRoute component={MostrarPVN}/>}/>
+        <Route path='/informacion/PVN/:id' element={<PrivateRoute component={MostrarPVN}/>}/>
         <Route path='/informacion/PMJ' element={<PrivateRoute component={MostrarPMJ}/>}/>
+        <Route path='/informacion/PMJ/:id' element={<PrivateRoute component={MostrarPMJ}/>}/>
         <Route path='/informacion/PVJ' element={<PrivateRoute component={MostrarPVJ}/>}/>
+        <Route path='/informacion/PVJ/:id' element={<PrivateRoute component={MostrarPVJ}/>}/>
 
         {/* Editar informacion validada */}
         <Route path='/editar/info/PNC' element={<PrivateRoute component={EditarPNC}/>}/>

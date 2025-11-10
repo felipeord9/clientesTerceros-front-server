@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect , useRef} from "react"
-import { useNavigate } from 'react-router-dom';
-import { validarCliente } from "../../services/clienteService"; 
+import { useNavigate , useParams } from 'react-router-dom';
+import { validarCliente , validarClienteId } from "../../services/clienteService"; 
 import { validarProveedor } from "../../services/proveedorService";
 import Swal from "sweetalert2";
 import AuthContext from "../../context/authContext";
@@ -32,6 +32,7 @@ export default function MostartPNC(){
     })
     const [agencias,setAgencias] = useState([]);
     const [formularios,setFormularios] = useState([]);
+    const { id } = useParams();
 
     const [info,setInfo]=useState({
       cedula:'',
@@ -67,7 +68,14 @@ export default function MostartPNC(){
     })
     useEffect(()=>{
       const datosTercero = localStorage.getItem('data');
-      if(datosTercero){
+      if(id){
+        validarClienteId(id)
+        .then(({data})=>{
+          localStorage.setItem('data',JSON.stringify(data));
+          setData((data));
+          setInfo((data));
+        })
+      }else{
         setData(JSON.parse(datosTercero));
         setInfo(JSON.parse(datosTercero));
       }
