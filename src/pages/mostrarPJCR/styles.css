@@ -5,3 +5,16 @@
 h3{
     user-select: 'none';
 }
+
+.div-botons{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+@media (max-width: 900px) {
+    .div-botons{
+      display: flex;
+      flex-direction: column;
+    }
+}

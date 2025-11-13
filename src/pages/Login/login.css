@@ -11,26 +11,6 @@
     align-content: center; 
     justify-content: center; */
 }
-.container {
-  /* background-image: url("../../assest/abstract-rainbow-6296890_1280.jpg");  */
-  width: 100%;
-  border-radius: 10px;
-  background-blend-mode: overlay;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-  background-position: center;
-}
-.wrapper {
-  background-image: url('../../assest/abstract-rainbow-6296890_1280.jpg');
-  background-blend-mode: overlay;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-  background-position: center;
-  align-content: center;
-  align-items: center;
-}
 
 /* funciones de imagenes adaptables y lgo usuario */
 img {

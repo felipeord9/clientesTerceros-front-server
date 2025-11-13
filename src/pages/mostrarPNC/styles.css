@@ -5,3 +5,26 @@
 h3{
     user-select: 'none';
 }
+
+.wrap {
+  background-image: url('../../assest/abstract-rainbow-6296890_1280.jpg');
+  /* background-color: rgba(255, 255, 255, 0.4); */
+  background-blend-mode: overlay;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.div-botons{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+@media (max-width: 900px) {
+    .div-botons{
+      display: flex;
+      flex-direction: column;
+    }
+}

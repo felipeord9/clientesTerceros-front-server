@@ -1580,10 +1580,10 @@ export default function FormEmpleados() {
                         -- Seleccione el cargo --
                       </option>
                       {cargos
-                        ?.sort((a, b) => a.id - b.id)
+                        ?.sort((a, b) => a.description.localeCompare(b.description))
                         ?.map((elem) => (
                           <option id={elem.id} value={elem.description}>
-                            {elem.codigo + " - " + elem.description}
+                            {elem.description}
                           </option>
                         ))}
                     </select>

@@ -113,7 +113,7 @@ export default function MenuPrincipalRRHH(){
               <div className="m-2 justify-content-center align-items-center d-flex flex-column gap-4 mb-3" >
                 <div className=" div-bottons mt-2 gap-4">
                   <a onClick={(e)=>navigate('/registrar/empleado')}><BotonColorCambiante>Creación Empleado</BotonColorCambiante></a>
-                  <a onClick={(e)=>navigate('/validar/empleado')}><BotonColorCambiante>Consulta Empleado</BotonColorCambiante></a>
+                  <a onClick={(e)=>navigate('/empleados')}><BotonColorCambiante>Consulta Empleado</BotonColorCambiante></a>
                 </div>
                 <div className=" div-bottons gap-4">
                   <a onClick={(e)=>setShowModalCargo(!showModalCargo)}><BotonColorCambiante activo={cambiarEstadoBoton}>Gestión Cargo</BotonColorCambiante></a>

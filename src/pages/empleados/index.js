@@ -109,7 +109,7 @@ export default function Empleados() {
             <input
               type="search"
               className="form-control form-control-sm"
-              style={{ fontSize: 18 }}
+              style={{ fontSize: 18 , textTransform: 'uppercase' }}
               placeholder="Buscar Empleado por 'ID' o 'Nombre'"
               onChange={(e)=>searchEmpleado(e)}
             />
