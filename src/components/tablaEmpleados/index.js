@@ -6,10 +6,13 @@ import { findEmpleadoByCedula , deleteEmpleado } from '../../services/empleadoSe
 import { MdDeleteOutline } from "react-icons/md";
 import AuthContext from "../../context/authContext";
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function TableEmpleados({ empleados, loading, setSelectedEmpleado, setShowModal , customStyles }) {
   const { user } = useContext(AuthContext);
   const { successAlert } = useAlert()
+  const navigate = useNavigate();
+
   const columnsForComprasnv = [
     {
       id: "rowId",
@@ -46,8 +49,7 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
       cell: (row, index, column, id) => (
         <div className='d-flex gap-2 p-1'>
           <button title="Editar Sucursal" className='btn btn-sm btn-primary' onClick={(e) => {
-            setSelectedEmpleado(row)
-            setShowModal(true)
+            navigate(`/registrar/empleado/${row.rowId}`)
           }}>
             <FiIcons.FiEdit />
           </button>
@@ -138,14 +140,14 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
       name: "Agencia",
       selector: (row) => row.agencia,
       sortable: true,
-      width: 'auto',
+      width: '350px',
     },
     {
       id: "Cargo",
       name: "Cargo",
       selector: (row) => row.cargo,
       sortable: true,
-      width: 'auto'
+      width: '350px'
     },
     
   ]

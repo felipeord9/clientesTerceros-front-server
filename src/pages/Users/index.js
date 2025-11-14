@@ -3,6 +3,7 @@ import * as GoIcons from "react-icons/go"
 import TableUsers from "../../components/TableUsers"
 import ModalUsers from "../../components/ModalUsers";
 import { findUsers } from "../../services/userService"
+import './styles.css'
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -74,10 +75,26 @@ export default function Users() {
     },
   };
 
+  //logica para saber si es celular
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 900); // Establecer a true si la ventana es menor o igual a 768px
+      };
+  
+      // Llama a handleResize al cargar y al cambiar el tamaño de la ventana
+      window.addEventListener("resize", handleResize);
+      handleResize(); // Llama a handleResize inicialmente para establecer el estado correcto
+  
+      // Elimina el event listener cuando el componente se desmonta
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
   return (
-    <div className="wrapper justify-content-center  h-100 w-100 m-auto" style={{userSelect:'none'}}>
-    <div className='rounder-4'>
-    <div className="login-wrapper d-flex flex-column mt-5 pt-3" >
+    <div className="wrap w-100 d-flex" style={{userSelect:'none'}}>
+    <div className={`container d-flex flex-column w-100 py-3 mt-5 rounded-4 ${!isMobile && 'justify-content-center'}`} >
       <h1 className="text-danger fw-bold">Listado de Usuarios registrados</h1>
       <ModalUsers 
         user={selectedUser}
@@ -86,8 +103,8 @@ export default function Users() {
         setShowModal={setShowModalUsers} 
         reloadInfo={getAllUsers} 
       />
-      <div className="d-flex flex-column gap-2 h-100">
-        <div className="d-flex justify-content-end mt-1 gap-3 mb-1">
+      <div className="d-flex flex-column gap-1" style={{height: "calc(100% - 60px)",}}>
+        <div className="div-botons justify-content-end mt-1 gap-3 mb-1">
           <input
             type="search"
             value={search}
@@ -98,7 +115,7 @@ export default function Users() {
           />
           <button
             title="Nuevo usuario"
-            className="d-flex  text-nowrap btn btn-sm  text-light gap-1" 
+            className="d-flex justify-content-center align-text-center text-nowrap btn btn-sm  text-light gap-1" 
             style={{fontSize:18,backgroundColor:'#D92121', color:'white'}}
             onClick={(e) => setShowModalUsers(!showModalUsers)}>
               Nuevo usuario
@@ -107,7 +124,6 @@ export default function Users() {
         </div>
         <TableUsers users={suggestions} setShowModal={setShowModalUsers} setSelectedUser={setSelectedUser} loading={loading} customStyles={customStyles}/>
       </div>
-    </div>
     </div>
     </div>
   )

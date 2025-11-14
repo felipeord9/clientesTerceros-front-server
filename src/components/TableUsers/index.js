@@ -17,28 +17,28 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
       name: "ID",
       selector: (row) => row.rowId,
       sortable: true,
-      width: '140px',
+      width: '200px',
     },
     {
       id: "name",
       name: "Nombre",
       selector: (row) => row.name,
       sortable: true,
-      width: '245px'
+      width: '380px'
     },
     {
       id: "email",
       name: "Correo Electrónico",
       selector: (row) => row.email,
       sortable: true,
-      width: '340px'
+      width: '380px'
     },
     {
       id: "role",
       name: "Rol",
       selector: (row) => row.role.toUpperCase(),
       sortable: true,
-      width: '130px',
+      width: '150px',
     },
     {
       id: "options",
@@ -114,9 +114,9 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
   
   return (
     <div
-      className="wrapper justify-content-center d-flex flex-column rounded w-100 h-100" style={{userSelect:'none',fontSize:20}}
+      className="d-flex flex-column rounded m-0 p-0 table-orders"
+      style={{ width: "100%" }}
     >
-    <div className='login-wrapper justify-content-center shadow border border-2 rounded-4 ' style={{width:1050,height:350,backgroundColor:'white'}} >
       <DataTable
         className="bg-light text-center border border-2 h-100"
         style={{fontSize:20 , height:450}}
@@ -138,10 +138,17 @@ export default function TableUsers({ users, loading, setSelectedUser, setShowMod
         dense
         striped
         fixedHeader
+        pagination
+        paginationComponentOptions={{
+          rowsPerPageText: "Filas por página:",
+          rangeSeparatorText: "de",
+          selectAllRowsItem: false,
+        }}
+        paginationPerPage={50}
+        paginationRowsPerPageOptions={[15, 25, 50, 100]}
         noDataComponent={
           <div style={{padding: 24}}>Ningún resultado encontrado...</div>}  
       />
-    </div>
     </div>
   )
 }

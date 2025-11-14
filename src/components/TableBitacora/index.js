@@ -1,51 +1,50 @@
-import * as FiIcons from 'react-icons/fi';
-import DataTable from 'react-data-table-component'
+import * as FiIcons from "react-icons/fi";
+import DataTable from "react-data-table-component";
 
-export default function TableBitacora({ bitacoras, loading , customStyles }) {
+export default function TableBitacora({ bitacoras, loading, customStyles }) {
   const columns = [
     {
       id: "usuario",
       name: "Usuario logged",
       selector: (row) => row.usuario,
       sortable: true,
-      width: '250px',
+      width: "400px",
     },
     {
       id: "accion",
       name: "Acciones",
       selector: (row) => row.accion,
       sortable: true,
-      width: '100px'
+      width: "140px",
     },
     {
       id: "fechaIngreso",
       name: "Fecha_Hora_Ingreso",
       selector: (row) => row.fechaIngreso,
       sortable: true,
-      width: '200px'
+      width: "300px",
     },
     {
       id: "fechaSalida",
       name: "Fecha_Hora_Salida",
       selector: (row) => row.fechaSalida,
       sortable: true,
-      width: '200px'
+      width: "300px",
     },
     {
       id: "macEquipo",
       name: "Mac Equipo Ingresado",
       selector: (row) => row.macEquipo,
       sortable: true,
-      width: '200px'
+      width: "300px",
     },
-    
-  ]
-  
+  ];
+
   return (
     <div
-      className="wrapper justify-content-center d-flex flex-column rounded w-100 h-100" style={{userSelect:'none',fontSize:20}}
+      className="d-flex flex-column rounded m-0 p-0 table-orders"
+      style={{ width: "100%" }}
     >
-    <div className='login-wrapper justify-content-center shadow border border-2 rounded-4' style={{width:1000,height:430, backgroundColor:'white'}} >
       <DataTable
         className="bg-light text-center border border-2 h-100 w-100"
         columns={columns}
@@ -66,11 +65,10 @@ export default function TableBitacora({ bitacoras, loading , customStyles }) {
         dense
         striped
         fixedHeader
-        
         noDataComponent={
-          <div style={{padding: 24}}>Ningún resultado encontrado...</div>} 
+          <div style={{ padding: 24 }}>Ningún resultado encontrado...</div>
+        }
       />
-      </div>
     </div>
-  )
+  );
 }
