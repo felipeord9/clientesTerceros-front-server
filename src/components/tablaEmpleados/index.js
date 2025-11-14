@@ -26,21 +26,21 @@ export default function TableEmpleados({ empleados, loading, setSelectedEmpleado
       name: "Nombre Empleado",
       selector: (row) => `${row.primerNombre} ${row.otrosNombres} ${row.primerApellido} ${row.segundoApellido}`,
       sortable: true,
-      width: 'auto'
+      width: '400px'
     },
     {
       id: "Agencia",
       name: "Agencia",
       selector: (row) => row.agencia,
       sortable: true,
-      width: 'auto'
+      width: '350px'
     },
     {
       id: "Cargo",
       name: "Cargo",
       selector: (row) => row.cargo,
       sortable: true,
-      width: 'auto'
+      width: '350px'
     },
     {
       id: "options",

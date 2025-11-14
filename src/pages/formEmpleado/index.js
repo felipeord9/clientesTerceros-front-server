@@ -2098,7 +2098,7 @@ export default function FormEmpleados() {
                         {docEps === 1 && (
                           <CarpetaArchivoLink
                             carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`}
-                            archivo={`EPS-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}
+                            archivo={`Eps-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}
                           />
                         )}
                       </div>
@@ -2344,7 +2344,7 @@ export default function FormEmpleados() {
                           {docARL === 1 && (
                             <CarpetaArchivoLink
                               carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`}
-                              archivo={`ARL-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}
+                              archivo={`Arl-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}
                             />
                           )}
                         </div>

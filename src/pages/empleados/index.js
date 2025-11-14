@@ -35,9 +35,10 @@ export default function Empleados() {
     const { value } = e.target;
     if (value !== "") {
       const filteredEmpleados = empleados.filter((elem) => {
-        const name = `${elem.primerNombre} ${elem.otrosNombres} ${elem.primerApellido} ${elem.segundoApellido}`
-        if (elem.rowId.includes(value.toUpperCase()) ||
-          name.toLowerCase().includes(value.toLowerCase())  
+        const name = `${elem.primerNombre} ${elem.otrosNombres} ${elem.primerApellido} ${elem.segundoApellido}`;
+        if (
+          elem.rowId.includes(value.toUpperCase()) ||
+          name.toLowerCase().includes(value.toLowerCase())
         ) {
           return elem;
         }
@@ -89,6 +90,23 @@ export default function Empleados() {
     }
   };
 
+  //logica para saber si es celular
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 900); // Establecer a true si la ventana es menor o igual a 768px
+    };
+
+    // Llama a handleResize al cargar y al cambiar el tamaño de la ventana
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Llama a handleResize inicialmente para establecer el estado correcto
+
+    // Elimina el event listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div
       className="fondo justify-content-center h-100 w-100 m-auto"
@@ -96,46 +114,43 @@ export default function Empleados() {
     >
       {/* <div className='rounder-4'> */}
       <div className="container d-flex flex-column pt-5 h-100 contenedor1 gap-1 pb-4">
+        {isMobile &&
+          <div style={{height: isMobile && '25px'}}></div>
+        }
         <h1 className="titulo text-danger fw-bold pt-2 w-100 justify-content-center text-align-center">
           Listado de empleados registrados
         </h1>
-        <div
-          className="d-flex search-box gap-2"
-        >
-          {/* <div
-            className=" search-box gap-3 w-100"
-            onSubmit={findOrder}
-          > */}
-            <input
-              type="search"
-              className="form-control form-control-sm"
-              style={{ fontSize: 18 , textTransform: 'uppercase' }}
-              placeholder="Buscar Empleado por 'ID' o 'Nombre'"
-              onChange={(e)=>searchEmpleado(e)}
-            />
-            <button
-              type="submit"
-              title="Nuevo Cliente"
-              className="d-flex  text-nowrap btn btn-sm  text-light gap-1"
-              style={{
-                right: 0,
-                fontSize: 18,
-                backgroundColor: "#D92121",
-                color: "white",
-              }}
-              onClick={(e) => navigate("/registrar/empleado")}
-            >
-              Nuevo Empleado
-              <GoIcons.GoPersonAdd style={{ width: 25, height: 25 }} />
-            </button>
-          {/* </div> */}
-          </div>
-          <TablaEmpleados
-            empleados={suggestions}
-            loading={loading}
-            style={{ fontSize: 20 }}
-            customStyles={customStyles}
+        <div className="div-botons gap-2">
+          <input
+            type="search"
+            className="form-control form-control-sm"
+            style={{ fontSize: 18, textTransform: "uppercase" }}
+            placeholder="Buscar Empleado por 'ID' o 'Nombre'"
+            onChange={(e) => searchEmpleado(e)}
           />
+          <button
+            type="submit"
+            title="Nuevo Cliente"
+            className="d-flex  text-nowrap btn btn-sm  text-light gap-1"
+            style={{
+              right: 0,
+              fontSize: 18,
+              backgroundColor: "#D92121",
+              color: "white",
+            }}
+            onClick={(e) => navigate("/registrar/empleado")}
+          >
+            Nuevo Empleado
+            <GoIcons.GoPersonAdd style={{ width: 25, height: 25 }} />
+          </button>
+          {/* </div> */}
+        </div>
+        <TablaEmpleados
+          empleados={suggestions}
+          loading={loading}
+          style={{ fontSize: 20 }}
+          customStyles={customStyles}
+        />
       </div>
       {/* </div> */}
     </div>
