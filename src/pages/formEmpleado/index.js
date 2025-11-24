@@ -2258,7 +2258,7 @@ export default function FormEmpleados() {
                         style={{ backgroundColor: "#f3f3f3" }}
                         /* disabled={exist === true ? true : false} */
                         onChange={(e) => (
-                          handleFileChange("Ingreso", e),
+                          handleFileChange("ExamenIngreso", e),
                           setDocExaIngreso(1),
                           FileChange(e, 8)
                         )}
