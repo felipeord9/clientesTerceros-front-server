@@ -832,7 +832,7 @@ export default function FormEmpleados() {
               codigo: search.id,
               type: 'actualizacion',
             };
-            const formData = new FormData();
+            /* const formData = new FormData(); */
             formData.append('razonSocial', `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}` );
             formData.append('agencia', `${agencia.description}` );
             formData.append('tipoFormulario', `empleados` );
