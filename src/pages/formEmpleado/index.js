@@ -28,6 +28,7 @@ import {
   updateEmpleado,
   updateEmployee,
   verifyTokenWhithId,
+  updateAsCreated,
 } from "../../services/empleadoService";
 import { useNavigate, useParams } from "react-router-dom";
 import { config } from "../../config";
@@ -938,6 +939,56 @@ export default function FormEmpleados() {
     });
   }
 
+  const handleCreado = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      title:'¿Estás segur@?',
+      text:'Se marca este empleado en estado creado en nuestro sistema',
+      confirmButtonColor:'green',
+      confirmButtonText:'Confirmo',
+      showCancelButton: true,
+      cancelButtonText: 'Regresar',
+      cancelButtonColor:'red'
+    }).then(({isConfirmed})=>{
+      if(isConfirmed){
+        setLoading(true);
+        const body = {
+          id: search.id,
+          estado: 'Creado',
+          rowId: search.cedula,
+          tipoDocumento: document,
+          razonSocial: `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}`,
+        }
+        updateAsCreated(body)
+        .then(({data})=>{
+          setLoading(false);
+           Swal.fire({
+            title: "¡Excelente!",
+            text: `El empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}" con Número 
+              de documento: "${search.cedula}", se ha marcado como creado en el sistema.`,
+            position: "center",
+            showConfirmButton: true,
+            confirmButtonColor: "#198754",
+            confirmButtonText: "Aceptar",
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((err) => {
+          setLoading(false);
+          Swal.fire({
+            title: "¡Ha ocurrido un error!",
+            text: `
+              Hubo un error al momento de guardar la informacion del empleado, intente de nuevo.
+              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        });
+      }
+    })
+  }
+
   const refreshForm = () => {
     Swal.fire({
       title: "¿Está segur@?",
@@ -1216,6 +1267,13 @@ export default function FormEmpleados() {
                       style={{fontSize:20}}
                     >
                         <strong style={{color:'green'}}>REVISADO</strong>
+                    </label>
+                  }
+                  {(actualizar && search.estado === 'Creado') &&
+                    <label
+                      style={{fontSize:20}}
+                    >
+                        <strong className="text-warning" style={{color:'warning'}}>CREADO</strong>
                     </label>
                   }
                 </Fade>
@@ -1622,7 +1680,7 @@ export default function FormEmpleados() {
                       id="fechaInicioContrato"
                       type="date"
                       className="form-control form-control-sm "
-                      max={new Date().toISOString().split("T")[0]}
+                      /* max={new Date().toISOString().split("T")[0]} */
                       required
                       style={{ textTransform: "uppercase" }}
                       placeholder="Campo obligatorio"
@@ -1664,20 +1722,6 @@ export default function FormEmpleados() {
                       autoComplete="off"
                     />
                   </div>
-                  {/* <div className="d-flex flex-column">
-                    <label className="me-1 ">:</label>
-                    <input
-                      id="otrosNombres"
-                      type="text"
-                      className="form-control form-control-sm w-100"
-                      min={0}
-                      style={{ textTransform: "uppercase" }}
-                      placeholder="(Campo Opcional)"
-                      value={search.otrosNombres}
-                      onChange={handlerChangeSearch}
-                      autoComplete="off"
-                    />
-                  </div> */}
                 </div>
 
                 {/* estudia actualmente, que estudia, establecimiento, semestre */}
@@ -2469,13 +2513,22 @@ export default function FormEmpleados() {
                 >
                   {actualizar === "" ? "REGISTRAR" : "ACTUALIZAR"}
                 </button>
-                {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado') &&
+                {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
                   <Button
-                    variant="success"
-                    className="d-flex w-100 justify-content-center fw-bold"
-                    onClick={(e)=>handleRevisado(e)}
+                  variant="success"
+                  className="d-flex w-100 justify-content-center fw-bold"
+                  onClick={(e)=>handleRevisado(e)}
                   >
                     REVISADO
+                  </Button>
+                }
+                {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
+                  <Button
+                    variant="warning"
+                    className="d-flex w-100 justify-content-center fw-bold"
+                    onClick={(e)=>handleCreado(e)}
+                  >
+                    CREADO
                   </Button>
                 }
                 <Button 
@@ -2498,13 +2551,22 @@ export default function FormEmpleados() {
                   >
                     {actualizar === "" ? "REGISTRAR" : "ACTUALIZAR"}
                   </button>
-                  {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado') &&
+                  {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
                     <Button
-                      variant="success"
-                      className="ms-3 fw-bold"
-                      onClick={(e)=>handleRevisado(e)}
+                    variant="success"
+                    className="ms-3 fw-bold"
+                    onClick={(e)=>handleRevisado(e)}
                     >
                       REVISADO
+                    </Button>
+                  }
+                  {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
+                    <Button
+                      variant="warning"
+                      className="ms-3 fw-bold"
+                      onClick={(e)=>handleCreado(e)}
+                    >
+                      CREADO
                     </Button>
                   }
                   <Button

@@ -49,6 +49,20 @@ const sendMail2 = async (body)=>{
   }
 }
 
+const updateAsCreated = async (body)=>{
+  try{
+    const { data } = await axios.post(`${url}/update/ascreated`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch(error){
+    throw error
+  }
+}
+
+
 export const verifyTokenWhithId = async (token) => {
   const localToken = JSON.parse(localStorage.getItem("token"))
   const { data } = await axios.get(`${url}/verify/${token}`, {
@@ -118,4 +132,5 @@ export {
     deleteEmpleado,
     sendMail,
     sendMail2,
+    updateAsCreated,
 }
