@@ -2,10 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import TablaSolicitudes from "../../components/tablaSolicitudes";
 import { findClientes, duoFind } from "../../services/clienteService";
 import { findProveedores } from "../../services/proveedorService";
-import * as FaIcons from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { createTheme } from "@mui/material/styles";
 import AuthContext from "../../context/authContext";
 import { IoMenu } from "react-icons/io5";
 import ModalVistaTercero from "../../components/modalVistaTercero";
@@ -53,8 +51,6 @@ export default function Solicitudes() {
       });
     }
   }, []);
-
-  const theme = createTheme();
 
   const searchSolicitudes = (e) => {
     const { value } = e.target;

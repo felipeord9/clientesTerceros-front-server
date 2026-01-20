@@ -14,7 +14,7 @@ export default function InputPassword({ id, label, password, setPassword }) {
   });
 
   return (
-    <div className="d-flex flex-column" style={{fontSize: 13.5}}>
+    <div className="d-flex flex-column" style={{ fontSize: 13.5 }}>
       <label className="fw-bold">{label}</label>
       <div className="d-flex align-items-center position-relative">
         <input

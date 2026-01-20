@@ -1,30 +1,17 @@
-import React, { useState, useContext , useEffect } from "react"
+import React, { useState , useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import { Fade } from "react-awesome-reveal";
-import AuthContext from "../../context/authContext";
 import ModalCargos from "../../components/modalCargos";
 import ModalContrato from "../../components/modalContrato";
-import { Button } from "@mui/material";
 import './styles.css'
 
 export default function MenuPrincipalRRHH(){
-  const { user } = useContext(AuthContext);
 
   const [showModalCargo, setShowModalCargo] = useState(false);
   const [showModalContrato, setShowModalContrato] = useState(false);
   const [isMobile, setIsMobile] = useState(null);
 
   const navigate =useNavigate()
-    const handleClickInicio=(e)=>{
-      e = e.target.value
-      if(user.role==='cartera'){
-        return navigate('/inicio')
-      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
-        return navigate('/compras')
-      }else{
-        return navigate('/inicio/admin')
-      }
-    }
 
     useEffect(() => {
       const mediaQuery = window.matchMedia("(max-width: 900px)");
@@ -37,17 +24,6 @@ export default function MenuPrincipalRRHH(){
           setIsMobile(mediaQuery.matches)
         );
     }, []);
-
-    const handleClickBack=(e)=>{
-      e = e.target.value
-      /*if(user.role==='cartera'){
-        return navigate('/validar/tercero')
-      }else if(user.role==='compras' || user.role==='asistente agencia' || user.role==='comprasnv'){
-        return navigate('/validar/Proveedor')
-      }else{
-        return*/ navigate('/validacion/admin')
-      /*}*/
-    }
 
     const BotonColorCambiante = ({ children }) => {
       const [hover, setHover] = useState(false);

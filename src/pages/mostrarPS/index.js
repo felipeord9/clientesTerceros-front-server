@@ -1,11 +1,6 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { validarCliente } from "../../services/clienteService";
-import {
-  validarProveedor,
-  validarProveedorId,
-} from "../../services/proveedorService";
-import Swal from "sweetalert2";
+import { validarProveedorId } from "../../services/proveedorService";
 import AuthContext from "../../context/authContext";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Button from "@mui/material/Button";
@@ -31,7 +26,7 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 export default function MostrarPS() {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [search, setSearch] = useState({
+  const [search] = useState({
     cedula: "",
   });
   const [agencias, setAgencias] = useState([]);
@@ -98,145 +93,6 @@ export default function MostrarPS() {
     getAllTipoFormularios().then((data) => setFormularios(data));
   }, []);
   const [data, setData] = useState(null);
-  const handleSearch = (e) => {
-    e.preventDefault();
-
-    validarCliente(search.cedula)
-      .then(({ data }) => {
-        Swal.fire({
-          icon: "success",
-          title: `El Cliente ${data.razonSocial} si se encuentra registrado¡`,
-          text: "La información la vera en pantalla",
-          showConfirmButton: true,
-          confirmButtonColor: "green",
-          confirmButtonText: "Aceptar",
-        });
-        localStorage.setItem("cedula", JSON.stringify(data.cedula));
-        setInfo({
-          cedula: data.cedula,
-          razonSocial: data.razonSocial,
-          ciudad: data.ciudad,
-          direccion: data.direccion,
-          celular: data.celular,
-          correoNotificaciones: data.correoNotificaciones,
-          observations: data.observations,
-          createdAt: data.createdAt,
-          userName: data.userName,
-          agencia: data.agencia,
-          tipoFormulario: data.tipoFormulario,
-          solicitante: data.solicitante,
-          docVinculacion: data.docVinculacion,
-          docComprAntc: data.docComprAntc,
-          docCtalnst: data.docCtalnst,
-          docPagare: data.docPagare,
-          docRut: data.docRut,
-          docCcio: data.docCcio,
-          docCrepL: data.docCrepL,
-          docEf: data.docEf,
-          docRefcom: data.docRefcom,
-          docRefcom2: data.docRefcom2,
-          docRefcom3: data.docRefcom3,
-          docCvbo: data.docCvbo,
-          docFirdoc: data.docFirdoc,
-          docInfemp: data.docInfemp,
-          docInfrl: data.docInfrl,
-          docCerBan: data.docCerBan,
-          docValAnt: data.docValAnt,
-          docOtros: data.docOtros,
-        });
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "warning",
-          title: "!El cliente no esta en nuestra base de datos¡",
-          text: "¿Desea registrarlo?",
-          showConfirmButton: true,
-          confirmButtonColor: "green",
-          cancelButtonColor: "red",
-          confirmButtonText: "Sí",
-          cancelButtonText: "No",
-          showCancelButton: true,
-        }).then(({ isConfirmed }) => {
-          if (isConfirmed) {
-            handleClickInicio(e);
-          }
-        });
-      });
-  };
-  const searchProveedor = (e) => {
-    e.preventDefault();
-    validarProveedor(search.cedula)
-      .then(({ data }) => {
-        Swal.fire({
-          icon: "success",
-          title: `El Proveedor ${data.razonSocial} si se encuentra registrado¡`,
-          text: "La información la vera en pantalla",
-          showConfirmButton: true,
-          confirmButtonColor: "green",
-          confirmButtonText: "Aceptar",
-        });
-        setInfo({
-          cedula: data.cedula,
-          razonSocial: data.razonSocial,
-          ciudad: data.ciudad,
-          direccion: data.direccion,
-          celular: data.celular,
-          correoNotificaciones: data.correoNotificaciones,
-          observations: data.observations,
-          createdAt: data.createdAt,
-          userName: data.userName,
-          agencia: data.agencia,
-          tipoFormulario: data.tipoFormulario,
-          solicitante: data.solicitante,
-          docVinculacion: data.docVinculacion,
-          docComprAntc: data.docComprAntc,
-          docCtalnst: data.docCtalnst,
-          docPagare: data.docPagare,
-          docRut: data.docRut,
-          docCcio: data.docCcio,
-          docCrepL: data.docCrepL,
-          docEf: data.docEf,
-          docRefcom: data.docRefcom,
-          docRefcom2: data.docRefcom2,
-          docRefcom3: data.docRefcom3,
-          docCvbo: data.docCvbo,
-          docFirdoc: data.docFirdoc,
-          docInfemp: data.docInfemp,
-          docInfrl: data.docInfrl,
-          docCerBan: data.docCerBan,
-          docValAnt: data.docValAnt,
-          docOtros: data.docOtros,
-        });
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "warning",
-          title: "!El Proveedor no está en nuestra base de datos¡",
-          text: "¿Desea registrarlo?",
-          showConfirmButton: true,
-          confirmButtonColor: "green",
-          cancelButtonColor: "red",
-          confirmButtonText: "Sí",
-          cancelButtonText: "No",
-          showCancelButton: true,
-        }).then(({ isConfirmed }) => {
-          if (isConfirmed) {
-            handleClickInicio(e);
-          }
-        });
-      });
-  };
-
-  const handleClickInicio = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/inicio");
-    } else if (user.role === "compras") {
-      return navigate("/compras");
-    } else {
-      return navigate("/inicio/admin");
-    }
-  };
 
   const handleClickBack = (e) => {
     e = e.target.value;
@@ -277,27 +133,6 @@ export default function MostrarPS() {
         </strong>
       </label>
     );
-  };
-  const mostrarImagen = (valor) => {
-    if (valor === 1) {
-      return <img src={Logo_pdf} style={{ width: 100 }}></img>;
-    }
-  };
-  const [tipoForm, setTipoForm] = useState();
-  const handleEditClient = (e) => {
-    if (data.tipoFormulario === "PMN") {
-      return navigate("/editar/info/PMN");
-    } else if (data.tipoFormulario === "PMJ") {
-      return navigate("/editar/info/PMJ");
-    } else if (data.tipoFormulario === "PS") {
-      return navigate("/editar/info/PS");
-    } else if (data.tipoFormulario === "PVJ") {
-      return navigate("/editar/info/PVJ");
-    } else if (data.tipoFormulario === "PVN") {
-      return navigate("/editar/info/PVN");
-    } else if (data.tipoFormulario === "CCP") {
-      return navigate("/editar/info/CCP");
-    }
   };
 
   //logica para saber si es celular

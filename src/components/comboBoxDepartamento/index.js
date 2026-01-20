@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useContext } from "react";
 import DepartmentContext from "../../context/departamentoContext";
 import "./styles.css";
 
-
 function ComboBox({ id, options, item, setItem, invoiceType }) {
   const { departamento } = useContext(DepartmentContext);
   const [inputValue, setInputValue] = useState("");
@@ -75,7 +74,7 @@ function ComboBox({ id, options, item, setItem, invoiceType }) {
           ?.sort((a, b) => a.branch - b.branch)
           .map((elem, index) => (
             <option key={index} id={elem.id} value={JSON.stringify(elem)}>
-              {`${elem.id + ' - ' + elem.description} - ${elem.departamento}`}
+              {`${elem.id + " - " + elem.description} - ${elem.departamento}`}
             </option>
           ))}
       </select>

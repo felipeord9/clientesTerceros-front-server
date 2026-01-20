@@ -1,12 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Fade } from "react-awesome-reveal";
-import AuthContext from "../../context/authContext";
 import MobileStepper from "@mui/material/MobileStepper";
-import { FcNext } from "react-icons/fc";
 import { Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import ModalAgencia from "../../components/modalAgencia";
@@ -18,7 +14,6 @@ import ModalCargos from "../../components/modalCargos";
 import "./styles.css";
 
 export default function MenuPrincipalAdmin2() {
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(null);
 
@@ -33,28 +28,6 @@ export default function MenuPrincipalAdmin2() {
         setIsMobile(mediaQuery.matches)
       );
   }, []);
-
-  const handleClickInicio = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/inicio");
-    } else if (user.role === "compras") {
-      return navigate("/compras");
-    } else {
-      return navigate("/inicio/admin");
-    }
-  };
-
-  const handleClickBack = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/validar/tercero");
-    } else if (user.role === "compras") {
-      return navigate("/validar/Proveedor");
-    } else {
-      return navigate("/validacion/admin");
-    }
-  };
 
   const [inactivo, setInactivo] = useState(true);
 
@@ -91,15 +64,7 @@ export default function MenuPrincipalAdmin2() {
     );
   };
 
-  const [activeStep, setActiveStep] = React.useState(0);
   const theme = useTheme();
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   const cambiarEstadoBoton = () => {
     setInactivo(!inactivo);

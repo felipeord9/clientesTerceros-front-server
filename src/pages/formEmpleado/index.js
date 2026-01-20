@@ -5,9 +5,9 @@ import AuthContext from "../../context/authContext";
 import "./styles.css";
 import { FaEye } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
-import Checkbox from '@mui/material/Checkbox';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from "@mui/material/Checkbox";
+import "bootstrap/dist/css/bootstrap.min.css";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Tablestudies from "../../components/tableStudies";
 import { getAllDepartamentos } from "../../services/departamentoService";
 import { getAllCiudades } from "../../services/ciudadService";
@@ -23,14 +23,14 @@ import {
   findEmpleadoByCedula,
   findEmpleados,
   deleteEmpleado,
-  sendMail,
   sendMail2,
   updateEmpleado,
   updateEmployee,
   verifyTokenWhithId,
   updateAsCreated,
+  updateAsReturn,
 } from "../../services/empleadoService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { config } from "../../config";
 import { MdAssignmentAdd } from "react-icons/md";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
@@ -51,7 +51,6 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 export default function FormEmpleados() {
   /* instancias de contexto */
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   //constante para guardar el valor del parametro
   const { rowid } = useParams();
@@ -65,17 +64,16 @@ export default function FormEmpleados() {
   const [contratos, setContratos] = useState(null);
   const [exist, setExist] = useState(false);
   const [tipoContrato, setTipoContrato] = useState(null);
-  const [update, setUpdate] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
   /* variables de los estudios */
   const [infoStudy, setInfoStudy] = useState({
-    nivelEstudio:'',
-    currentStudy:'',
-    typeStudy:'',
-    establecimiento:'',
-    semestre:'',
-  })
+    nivelEstudio: "",
+    currentStudy: "",
+    typeStudy: "",
+    establecimiento: "",
+    semestre: "",
+  });
   const [nivelEstudio, setNivelEstudio] = useState(null);
 
   /* inicializar los documentos adjuntos */
@@ -133,24 +131,24 @@ export default function FormEmpleados() {
   });
   //logica del llenado de los checkbox
   const handleEstudia = (type) => {
-      setCurrentStudy({
-          si: type === 'si' ? true : false,
-          no: type === 'no' ? true : false,
-      });
-      setInfoStudy({
-        ...infoStudy,
-        currentStudy: type
-      })
+    setCurrentStudy({
+      si: type === "si" ? true : false,
+      no: type === "no" ? true : false,
+    });
+    setInfoStudy({
+      ...infoStudy,
+      currentStudy: type,
+    });
   };
 
   //lista donde se alojaran todos los productos que se agregen a la solicitud
   const [estudiosAgr, setEstudiosAgr] = useState({
     agregados: [],
-  }); 
+  });
 
   const [search, setSearch] = useState({
-    estado:'',
-    id:'',
+    estado: "",
+    id: "",
     cedula: "",
     primerApellido: "",
     segundoApellido: "",
@@ -189,21 +187,86 @@ export default function FormEmpleados() {
     getAllCargos().then((data) => setCargos(data));
     findEmpleados().then(({ data }) => setEmpleados(data));
     getAllContratos().then((data) => setContratos(data));
-    getAllDocuments()
-    .then((data) => {
-      setDocumentos(data) 
-      docs = data
-      getAllCiudades()
-        .then((data) => {
-          setCiudades(data)
-          munis = data
-          getAllDepartamentos()
-            .then((data) => {
-              setDepartamentos(data)
-              departs = data
-              if(rowid){
-                findEmpleadoByCedula(rowid)
-                .then((data)=>{
+    getAllDocuments().then((data) => {
+      setDocumentos(data);
+      docs = data;
+      getAllCiudades().then((data) => {
+        setCiudades(data);
+        munis = data;
+        getAllDepartamentos().then((data) => {
+          setDepartamentos(data);
+          departs = data;
+          if (rowid) {
+            findEmpleadoByCedula(rowid)
+              .then((data) => {
+                setActualizar("SI");
+                setSearch({
+                  ...search,
+                  estado: data.estado,
+                  id: data.id,
+                  cedula: data.rowId,
+                  primerApellido: data.primerApellido,
+                  segundoApellido: data.segundoApellido,
+                  primerNombre: data.primerNombre,
+                  otrosNombres: data.otrosNombres,
+                  celular: data.numeroCelular,
+                  telefono: data.numeroTelefono,
+                  correoElectronico: data.correo,
+                  direccion: data.direccion,
+                  genero: data.genero,
+                  fechaNacimiento: data.fechaNacimiento,
+                  fechaFinContrato: data.fechaFinal,
+                  fechaInicioContrato: data.fechaInicio,
+                  observations: data.observations,
+                  returnReason: data.returnReason,
+                  review: data.review,
+                });
+                //funcion para filtrar el tipo de documento por codigo para devolver el codigo
+                const [tipo] = docs.filter(
+                  (dato) => dato.codigo === data.tipoDocumento
+                );
+                setDocument(tipo?.codigo);
+
+                //funcion para filtrar el departamento por codigo y devolver el codigo
+                const [depa] = departs.filter(
+                  (dato) => dato.codigo === data.departamento
+                );
+                setDepartamento(depa);
+
+                //funcion para filtrar la ciudad por codigo y devolver el codigo
+                const [city] = munis.filter(
+                  (dato) => dato.codigo === data.ciudad
+                );
+                setCiudad(city?.codigo);
+
+                //guardar la agencia, el cargo y tipo de contrato
+                setAgencia(data.agencia);
+                setCargo(data.cargo);
+                setTipoContrato(data.tipoContrato);
+
+                //setear documentos
+                setDocCedula(data.docCedula);
+                setDocContrato(data.docContrato);
+                setDocInfemp(data.docInfemp);
+                setDocOtros(data.docOtros);
+                setDocHV(data.docHV);
+                setDocEps(data.docEps);
+                setDocCajaCompensacion(data.docCajaCompensacion);
+                setDocOtroSi(data.docOtroSi);
+                setDocExaIngreso(data.docExaIngreso);
+                setDocARL(data.docARL);
+                setDocEscolaridad(data.docEscolaridad);
+
+                //setear los estudios agregados
+                setEstudiosAgr({
+                  agregados: data.estudios,
+                });
+
+                //funcion para determinar si se encontro
+                setExist(true);
+              })
+              .catch(() => {
+                verifyTokenWhithId(rowid).then(({ data }) => {
                   setActualizar("SI");
                   setSearch({
                     ...search,
@@ -223,30 +286,32 @@ export default function FormEmpleados() {
                     fechaFinContrato: data.fechaFinal,
                     fechaInicioContrato: data.fechaInicio,
                     observations: data.observations,
+                    returnReason: data.returnReason,
+                    review: data.review,
                   });
                   //funcion para filtrar el tipo de documento por codigo para devolver el codigo
                   const [tipo] = docs.filter(
                     (dato) => dato.codigo === data.tipoDocumento
                   );
                   setDocument(tipo?.codigo);
-          
+
                   //funcion para filtrar el departamento por codigo y devolver el codigo
                   const [depa] = departs.filter(
                     (dato) => dato.codigo === data.departamento
                   );
                   setDepartamento(depa);
-          
+
                   //funcion para filtrar la ciudad por codigo y devolver el codigo
                   const [city] = munis.filter(
                     (dato) => dato.codigo === data.ciudad
                   );
                   setCiudad(city?.codigo);
-          
+
                   //guardar la agencia, el cargo y tipo de contrato
                   setAgencia(data.agencia);
                   setCargo(data.cargo);
-                  setTipoContrato(data.tipoContrato)
-          
+                  setTipoContrato(data.tipoContrato);
+
                   //setear documentos
                   setDocCedula(data.docCedula);
                   setDocContrato(data.docContrato);
@@ -259,86 +324,19 @@ export default function FormEmpleados() {
                   setDocExaIngreso(data.docExaIngreso);
                   setDocARL(data.docARL);
                   setDocEscolaridad(data.docEscolaridad);
-          
+
                   //setear los estudios agregados
                   setEstudiosAgr({
-                    agregados: data.estudios
-                  })
-          
+                    agregados: data.estudios,
+                  });
+
                   //funcion para determinar si se encontro
                   setExist(true);
-                })
-                .catch(()=>{
-                  verifyTokenWhithId(rowid)
-                  .then(({data})=>{
-                    setActualizar("SI");
-                    setSearch({
-                      ...search,
-                      estado: data.estado,
-                      id: data.id,
-                      cedula: data.rowId,
-                      primerApellido: data.primerApellido,
-                      segundoApellido: data.segundoApellido,
-                      primerNombre: data.primerNombre,
-                      otrosNombres: data.otrosNombres,
-                      celular: data.numeroCelular,
-                      telefono: data.numeroTelefono,
-                      correoElectronico: data.correo,
-                      direccion: data.direccion,
-                      genero: data.genero,
-                      fechaNacimiento: data.fechaNacimiento,
-                      fechaFinContrato: data.fechaFinal,
-                      fechaInicioContrato: data.fechaInicio,
-                      observations: data.observations,
-                    });
-                    //funcion para filtrar el tipo de documento por codigo para devolver el codigo
-                    const [tipo] = docs.filter(
-                      (dato) => dato.codigo === data.tipoDocumento
-                    );
-                    setDocument(tipo?.codigo);
-            
-                    //funcion para filtrar el departamento por codigo y devolver el codigo
-                    const [depa] = departs.filter(
-                      (dato) => dato.codigo === data.departamento
-                    );
-                    setDepartamento(depa);
-            
-                    //funcion para filtrar la ciudad por codigo y devolver el codigo
-                    const [city] = munis.filter(
-                      (dato) => dato.codigo === data.ciudad
-                    );
-                    setCiudad(city?.codigo);
-            
-                    //guardar la agencia, el cargo y tipo de contrato
-                    setAgencia(data.agencia);
-                    setCargo(data.cargo);
-                    setTipoContrato(data.tipoContrato)
-            
-                    //setear documentos
-                    setDocCedula(data.docCedula);
-                    setDocContrato(data.docContrato);
-                    setDocInfemp(data.docInfemp);
-                    setDocOtros(data.docOtros);
-                    setDocHV(data.docHV);
-                    setDocEps(data.docEps);
-                    setDocCajaCompensacion(data.docCajaCompensacion);
-                    setDocOtroSi(data.docOtroSi);
-                    setDocExaIngreso(data.docExaIngreso);
-                    setDocARL(data.docARL);
-                    setDocEscolaridad(data.docEscolaridad);
-            
-                    //setear los estudios agregados
-                    setEstudiosAgr({
-                      agregados: data.estudios
-                    })
-            
-                    //funcion para determinar si se encontro
-                    setExist(true);
-                  })
-                })
-              }
-            });
+                });
+              });
+          }
         });
+      });
     });
   }, []);
 
@@ -506,7 +504,7 @@ export default function FormEmpleados() {
               //guardar la agencia, el cargo y tipo de contrato
               setAgencia(item.agencia);
               setCargo(item.cargo);
-              setTipoContrato(item.tipoContrato)
+              setTipoContrato(item.tipoContrato);
 
               //setear documentos
               setDocCedula(item.docCedula);
@@ -523,8 +521,8 @@ export default function FormEmpleados() {
 
               //setear los estudios agregados
               setEstudiosAgr({
-                agregados: item.estudios
-              })
+                agregados: item.estudios,
+              });
 
               //funcion para determinar si se encontro
               setExist(true);
@@ -552,7 +550,9 @@ export default function FormEmpleados() {
     e.preventDefault();
     Swal.fire({
       title: "¿Está segur@?",
-      text: `Se realizará el registro del empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres !== '' ? search.otrosNombres.toUpperCase() : ''}", con número de identificación: ${search.cedula}.`,
+      text: `Se realizará el registro del empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${
+        search.otrosNombres !== "" ? search.otrosNombres.toUpperCase() : ""
+      }", con número de identificación: ${search.cedula}.`,
       icon: "question",
       confirmButtonText: "Aceptar",
       confirmButtonColor: "#198754",
@@ -570,21 +570,23 @@ export default function FormEmpleados() {
         }
         //creamos el cuerpo de nuestra instancia
         const body = {
-          estado: 'Generado',
+          estado: "Generado",
           rowId: search.cedula,
           numeroDocumento: search.cedula,
           tipoDocumento: document,
           primerApellido: search.primerApellido.toUpperCase(),
           segundoApellido: search.segundoApellido.toUpperCase(),
           primerNombre: search.primerNombre.toUpperCase(),
-          otrosNombres: search.otrosNombres !== "" ? search.otrosNombres.toUpperCase() : "",
+          otrosNombres:
+            search.otrosNombres !== "" ? search.otrosNombres.toUpperCase() : "",
           fechaNacimiento: new Date(search.fechaNacimiento),
           genero: search.genero,
           numeroCelular: search.celular,
           numeroTelefono: search.telefono,
           correo: search.correoElectronico.toLowerCase(),
           direccion: search.direccion.toUpperCase(),
-          departamento: departamento === "" ? "---" : departamento || departamento.codigo,
+          departamento:
+            departamento === "" ? "---" : departamento || departamento.codigo,
           ciudad: ciudad === "" ? "-----" : ciudad,
           agencia: agencia === "" ? "-----" : agencia,
           cargo: cargo,
@@ -654,7 +656,7 @@ export default function FormEmpleados() {
               tipoFormulario: "empleados",
               rowId: search.cedula,
               codigo: data.id,
-              type: 'creacion'
+              type: "creacion",
             };
             sendMail2(mail)
               .then(() => {
@@ -731,7 +733,9 @@ export default function FormEmpleados() {
     e.preventDefault();
     Swal.fire({
       title: "¿Está segur@?",
-      text: `Se realizará la actualización del empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres !== '' ? search.otrosNombres.toUpperCase() : ''}", con número de identificación: ${search.cedula}.`,
+      text: `Se realizará la actualización del empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${
+        search.otrosNombres !== "" ? search.otrosNombres.toUpperCase() : ""
+      }", con número de identificación: ${search.cedula}.`,
       icon: "question",
       confirmButtonText: "Aceptar",
       confirmButtonColor: "#198754",
@@ -751,7 +755,7 @@ export default function FormEmpleados() {
         const body = {
           /* rowId: search.cedula,
           numeroDocumento: search.cedula, */
-          estado: 'Actualizado',
+          estado: "Actualizado",
           tipoDocumento: document,
           /* primerApellido: search.primerApellido.toUpperCase(),
           segundoApellido: search.segundoApellido.toUpperCase(),
@@ -768,8 +772,15 @@ export default function FormEmpleados() {
           agencia: agencia === "" ? "-----" : agencia,
           cargo: cargo,
           tipoContrato: tipoContrato,
-          fechaInicioContrato: (search.fechaInicioContrato !== null || search.fechaInicioContrato !== '') ? new Date(search.fechaInicioContrato) : '',
-          fechaFinContrato: (search.fechaFinContrato !== null || search.fechaFinContrato !== '') ? new Date(search.fechaFinContrato) : '',
+          fechaInicioContrato:
+            search.fechaInicioContrato !== null ||
+            search.fechaInicioContrato !== ""
+              ? new Date(search.fechaInicioContrato)
+              : "",
+          fechaFinContrato:
+            search.fechaFinContrato !== null || search.fechaFinContrato !== ""
+              ? new Date(search.fechaFinContrato)
+              : "",
           observations: search.observations,
           docCedula: docCedula,
           docContrato: docContrato,
@@ -831,12 +842,15 @@ export default function FormEmpleados() {
               tipoFormulario: "empleados",
               rowId: search.cedula,
               codigo: search.id,
-              type: 'actualizacion',
+              type: "actualizacion",
             };
             /* const formData = new FormData(); */
-            formData.append('razonSocial', `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}` );
-            formData.append('agencia', `${agencia.description}` );
-            formData.append('tipoFormulario', `empleados` );
+            formData.append(
+              "razonSocial",
+              `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}`
+            );
+            formData.append("agencia", `${agencia.description}`);
+            formData.append("tipoFormulario", `empleados`);
             sendMail2(mail)
               .then(() => {
                 filesEmployee(formData)
@@ -910,84 +924,147 @@ export default function FormEmpleados() {
   const handleRevisado = (e) => {
     e.preventDefault();
     const body = {
-      estado: 'Revisado',
-    }
+      /* estado: 'Revisado', */
+      review: 1,
+    };
     updateEmployee(search.id, body)
-    .then(({data})=>{
-       Swal.fire({
-        title: "¡revisión exitosa!",
-        text: `El empleado: "${data.primerApellido} ${data.segundoApellido} ${data.primerNombre} ${data.otrosNombres}" con Número 
+      .then(({ data }) => {
+        Swal.fire({
+          title: "¡revisión exitosa!",
+          text: `El empleado: "${data.primerApellido} ${data.segundoApellido} ${data.primerNombre} ${data.otrosNombres}" con Número 
           de documento: "${data.rowId}", se ha revisado de manera exitosa`,
-        position: "center",
-        showConfirmButton: true,
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Aceptar",
-      }).then(() => {
-        window.location.reload();
-      });
-    })
-    .catch((err) => {
-      setLoading(false);
-      Swal.fire({
-        title: "¡Ha ocurrido un error!",
-        text: `
+          position: "center",
+          showConfirmButton: true,
+          confirmButtonColor: "#198754",
+          confirmButtonText: "Aceptar",
+        }).then(() => {
+          window.location.reload();
+        });
+      })
+      .catch((err) => {
+        setLoading(false);
+        Swal.fire({
+          title: "¡Ha ocurrido un error!",
+          text: `
           Hubo un error al momento de guardar la informacion del empleado, intente de nuevo.
           Si el problema persiste por favor comuniquese con el área de sistemas.`,
-        icon: "error",
-        confirmButtonText: "Aceptar",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
       });
+  };
+
+  const handleDevolver = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      input: "textarea",
+      inputLabel: "Razón",
+      inputPlaceholder: "Ingrese aquí la razón de devolución...",
+      inputAttributes: {
+        "aria-label": "Ingrese la nota acá.",
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return "¡En necesario escribir algo!";
+        }
+      },
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      confirmButtonColor: "#dc3545",
+      cancelButtonText: "Cancelar",
+    }).then(({ isConfirmed, value: input }) => {
+      if (isConfirmed && input) {
+        setLoading(true);
+        const body = {
+          id: search.id,
+          estado: "Devuelto",
+          rowId: search.cedula,
+          razonSocial: `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}`,
+          returnReason: input,
+        };
+        updateAsReturn(body)
+          .then(({ data }) => {
+            setLoading(false);
+            Swal.fire({
+              title: "¡Devolución exitosa!",
+              text: `La solicitud de creación del empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}" con Número 
+              de documento: "${
+                search.cedula
+              }", se ha devuelto de manera exitosa.`,
+              position: "center",
+              showConfirmButton: true,
+              confirmButtonColor: "#198754",
+              confirmButtonText: "Aceptar",
+            }).then(() => {
+              window.location.reload();
+            });
+          })
+          .catch((err) => {
+            setLoading(false);
+            Swal.fire({
+              title: "¡Ha ocurrido un error!",
+              text: `
+              Hubo un error al momento de guardar la informacion del empleado, intente de nuevo.
+              Si el problema persiste por favor comuniquese con el área de sistemas.`,
+              icon: "error",
+              confirmButtonText: "Aceptar",
+            });
+          });
+      }
     });
-  }
+  };
 
   const handleCreado = (e) => {
     e.preventDefault();
     Swal.fire({
-      title:'¿Estás segur@?',
-      text:'Se marca este empleado en estado creado en nuestro sistema',
-      confirmButtonColor:'green',
-      confirmButtonText:'Confirmo',
+      title: "¿Estás segur@?",
+      text: "Se marca este empleado en estado creado en nuestro sistema",
+      confirmButtonColor: "green",
+      confirmButtonText: "Confirmo",
       showCancelButton: true,
-      cancelButtonText: 'Regresar',
-      cancelButtonColor:'red'
-    }).then(({isConfirmed})=>{
-      if(isConfirmed){
+      cancelButtonText: "Regresar",
+      cancelButtonColor: "red",
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) {
         setLoading(true);
         const body = {
           id: search.id,
-          estado: 'Creado',
+          estado: "Creado",
           rowId: search.cedula,
           tipoDocumento: document,
           razonSocial: `${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}`,
-        }
+        };
         updateAsCreated(body)
-        .then(({data})=>{
-          setLoading(false);
-           Swal.fire({
-            title: "¡Excelente!",
-            text: `El empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}" con Número 
-              de documento: "${search.cedula}", se ha marcado como creado en el sistema.`,
-            position: "center",
-            showConfirmButton: true,
-            confirmButtonColor: "#198754",
-            confirmButtonText: "Aceptar",
-          }).then(() => {
-            window.location.reload();
-          });
-        })
-        .catch((err) => {
-          setLoading(false);
-          Swal.fire({
-            title: "¡Ha ocurrido un error!",
-            text: `
+          .then(({ data }) => {
+            setLoading(false);
+            Swal.fire({
+              title: "¡Excelente!",
+              text: `El empleado: "${search.primerApellido.toUpperCase()} ${search.segundoApellido.toUpperCase()} ${search.primerNombre.toUpperCase()} ${search.otrosNombres.toUpperCase()}" con Número 
+              de documento: "${
+                search.cedula
+              }", se ha marcado como creado en el sistema.`,
+              position: "center",
+              showConfirmButton: true,
+              confirmButtonColor: "#198754",
+              confirmButtonText: "Aceptar",
+            }).then(() => {
+              window.location.reload();
+            });
+          })
+          .catch((err) => {
+            setLoading(false);
+            Swal.fire({
+              title: "¡Ha ocurrido un error!",
+              text: `
               Hubo un error al momento de guardar la informacion del empleado, intente de nuevo.
               Si el problema persiste por favor comuniquese con el área de sistemas.`,
-            icon: "error",
-            confirmButtonText: "Aceptar",
+              icon: "error",
+              confirmButtonText: "Aceptar",
+            });
           });
-        });
       }
-    })
-  }
+    });
+  };
 
   const refreshForm = () => {
     Swal.fire({
@@ -1097,91 +1174,103 @@ export default function FormEmpleados() {
   const handleAddStudies = (e) => {
     e.preventDefault();
     if (editIndex === null) {
-      if(currentStudy.si){
-        if (infoStudy.nivelEstudio ==='' || infoStudy.currentStudy ==='' 
-          || infoStudy.typeStudy ==='' || infoStudy.establecimiento ===''
-          || infoStudy.semestre === ''
+      if (currentStudy.si) {
+        if (
+          infoStudy.nivelEstudio === "" ||
+          infoStudy.currentStudy === "" ||
+          infoStudy.typeStudy === "" ||
+          infoStudy.establecimiento === "" ||
+          infoStudy.semestre === ""
         ) {
           return 0;
         }
         const list = [...estudiosAgr.agregados];
         const newStudy = {
           nivel: infoStudy.nivelEstudio,
-          estado: 'En Curso',
+          estado: "En Curso",
           titulo: infoStudy.typeStudy.toUpperCase(),
           establecimiento: infoStudy.establecimiento.toUpperCase(),
           semestre: infoStudy.semestre,
         };
-    
+
         list.push(newStudy);
         setEstudiosAgr({
           agregados: list,
         });
         handleClearStudies();
-      }else if(currentStudy.no){
-        if (infoStudy.nivelEstudio ==='' || infoStudy.currentStudy ==='' 
-          || infoStudy.typeStudy ==='' || infoStudy.establecimiento ===''
+      } else if (currentStudy.no) {
+        if (
+          infoStudy.nivelEstudio === "" ||
+          infoStudy.currentStudy === "" ||
+          infoStudy.typeStudy === "" ||
+          infoStudy.establecimiento === ""
         ) {
           return 0;
         }
         const list = [...estudiosAgr.agregados];
         const newStudy = {
           nivel: infoStudy.nivelEstudio,
-          estado: 'Finalizado',
+          estado: "Finalizado",
           titulo: infoStudy.typeStudy.toUpperCase(),
           establecimiento: infoStudy.establecimiento.toUpperCase(),
           semestre: infoStudy.semestre,
         };
-    
+
         list.push(newStudy);
         setEstudiosAgr({
           agregados: list,
         });
         handleClearStudies();
       }
-    }else{
-      if(currentStudy.si){
-        if (infoStudy.nivelEstudio ==='' || infoStudy.currentStudy ==='' 
-          || infoStudy.typeStudy ==='' || infoStudy.establecimiento ===''
-          || infoStudy.semestre === ''
+    } else {
+      if (currentStudy.si) {
+        if (
+          infoStudy.nivelEstudio === "" ||
+          infoStudy.currentStudy === "" ||
+          infoStudy.typeStudy === "" ||
+          infoStudy.establecimiento === "" ||
+          infoStudy.semestre === ""
         ) {
           return 0;
         }
         const newStudy = {
           nivel: infoStudy.nivelEstudio,
-          estado: 'En Curso',
+          estado: "En Curso",
           titulo: infoStudy.typeStudy.toUpperCase(),
           establecimiento: infoStudy.establecimiento.toUpperCase(),
           semestre: infoStudy.semestre,
         };
         // Actualizar
         const newList = [...estudiosAgr.agregados];
-        newList[editIndex] = newStudy
+        newList[editIndex] = newStudy;
         setEstudiosAgr({
-          agregados: newList
-        })
+          agregados: newList,
+        });
         setEditIndex(null);
         handleClearStudies();
-      }else if(currentStudy.no){
-        if (infoStudy.nivelEstudio ==='' || infoStudy.currentStudy ==='' 
-          || infoStudy.typeStudy ==='' || infoStudy.establecimiento ===''
+      } else if (currentStudy.no) {
+        if (
+          infoStudy.nivelEstudio === "" ||
+          infoStudy.currentStudy === "" ||
+          infoStudy.typeStudy === "" ||
+          infoStudy.establecimiento === ""
         ) {
           return 0;
         }
         const newStudy = {
           nivel: infoStudy.nivelEstudio,
-          estado: 'Finalizado',
+          estado: "Finalizado",
           titulo: infoStudy.typeStudy.toUpperCase(),
           establecimiento: infoStudy.establecimiento.toUpperCase(),
-          semestre: '',
+          semestre: "",
         };
-    
+
         // Actualizar
         const newList = [...estudiosAgr.agregados];
-        newList[editIndex] = newStudy
+        newList[editIndex] = newStudy;
         setEstudiosAgr({
-          agregados: newList
-        })
+          agregados: newList,
+        });
         setEditIndex(null);
         handleClearStudies();
       }
@@ -1190,17 +1279,17 @@ export default function FormEmpleados() {
 
   const handleClearStudies = () => {
     setInfoStudy({
-      nivelEstudio:'',
-      currentStudy:'',
-      typeStudy:'',
-      establecimiento:'',
-      semestre:'',
+      nivelEstudio: "",
+      currentStudy: "",
+      typeStudy: "",
+      establecimiento: "",
+      semestre: "",
     });
     setCurrentStudy({
       si: false,
       no: false,
-    })
-  }
+    });
+  };
 
   const handleChangeStudies = (e) => {
     const { id, value } = e.target;
@@ -1208,35 +1297,35 @@ export default function FormEmpleados() {
       ...infoStudy,
       [id]: value,
     });
-  }
+  };
 
   const handleClickCancel = (e) => {
     setInfoStudy({
-      currentStudy:'',
-      establecimiento:'',
-      nivelEstudio:'',
-      semestre:'',
-      typeStudy:''
+      currentStudy: "",
+      establecimiento: "",
+      nivelEstudio: "",
+      semestre: "",
+      typeStudy: "",
     });
     setCurrentStudy({
       no: false,
-      si: false
+      si: false,
     });
     setEditIndex(null);
   };
 
-  const handleDisabledDate = () =>{
+  const handleDisabledDate = () => {
     /* (search.fechaInicioContrato === '' && (tipoContrato !== 'FIJO' || tipoContrato !== 'APRENDIZAJE')) ? true : false */
-    if(tipoContrato === 'FIJO' || tipoContrato === 'APRENDIZAJE'){
-      if(search.fechaInicioContrato !== ''){
-        return false
-      }else{
-        return true
+    if (tipoContrato === "FIJO" || tipoContrato === "APRENDIZAJE") {
+      if (search.fechaInicioContrato !== "") {
+        return false;
+      } else {
+        return true;
       }
-    }else{
-      return true
+    } else {
+      return true;
     }
-  }
+  };
 
   return (
     <div
@@ -1256,26 +1345,27 @@ export default function FormEmpleados() {
                     className="fs-3 fw-bold m-1 ms-4 me-4 text-danger mb-2"
                     style={{ fontSize: 90 }}
                   >
-                    {actualizar ?
+                    {actualizar ? (
                       <strong>CONSULTA DE EMPLEADO</strong>
-                      :
+                    ) : (
                       <strong>FORMULARIO DE EMPLEADO</strong>
-                    }
+                    )}
                   </label>
-                  {(actualizar && search.estado === 'Revisado') &&
-                    <label
-                      style={{fontSize:20}}
-                    >
-                        <strong style={{color:'green'}}>REVISADO</strong>
+                  {actualizar && search.estado === "Devuelto" && (
+                    <label style={{ fontSize: 20 }}>
+                      <strong className="text-danger">DEVUELTO</strong>
                     </label>
-                  }
-                  {(actualizar && search.estado === 'Creado') &&
-                    <label
-                      style={{fontSize:20}}
-                    >
-                        <strong className="text-warning" style={{color:'warning'}}>CREADO</strong>
+                  )}
+                  {actualizar && search.review && (
+                    <label style={{ fontSize: 20 }}>
+                      <strong className="text-warning">REVISADO</strong>
                     </label>
-                  }
+                  )}
+                  {actualizar && search.estado === "Creado" && (
+                    <label style={{ fontSize: 20 }}>
+                      <strong className="text-success">CREADO</strong>
+                    </label>
+                  )}
                 </Fade>
                 <hr className="my-1" />
                 {/* {actualizar === "SI" && (
@@ -1287,15 +1377,18 @@ export default function FormEmpleados() {
             </div>
           </section>
         </center>
-        <form className="" onSubmit={actualizar === '' ? handleSubmit : handleUpdate}>
+        <form
+          className=""
+          onSubmit={actualizar === "" ? handleSubmit : handleUpdate}
+        >
           <div className="bg-light rounded shadow-sm p-2 mb-3">
             <div className="d-flex flex-column gap-1 w-100">
-              <div style={{fontSize: 13}}>
+              <div style={{ fontSize: 13 }}>
                 <label className="fw-bold" style={{ fontSize: 15 }}>
                   INFORMACIÓN DEL EMPLEADO
                 </label>
 
-                <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+                <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                   <div className="d-flex flex-column align-items-start">
                     <label for="cedula" className="me-1">
                       No.Identificación:
@@ -1543,7 +1636,7 @@ export default function FormEmpleados() {
                     ></input>
                   </div>
                 </div>
-                        
+
                 {/* departamento y ciudad */}
                 <div className="row row-cols-sm-2 mt-2">
                   <div className="d-flex flex-column">
@@ -1601,9 +1694,7 @@ export default function FormEmpleados() {
                 {/* agencia y cargo */}
                 <div className="row row-cols-sm-2 mt-1 mb-1">
                   <div className="d-flex flex-column ">
-                    <label className="">
-                      Agencia:
-                    </label>
+                    <label className="">Agencia:</label>
                     <select
                       ref={selectBranchRef}
                       className="form-select form-select-sm w-100"
@@ -1624,9 +1715,7 @@ export default function FormEmpleados() {
                     </select>
                   </div>
                   <div className="d-flex flex-column">
-                    <label className="">
-                      Cargo:
-                    </label>
+                    <label className="">Cargo:</label>
                     <select
                       ref={selectCargoRef}
                       className="form-select form-select-sm w-100"
@@ -1638,7 +1727,9 @@ export default function FormEmpleados() {
                         -- Seleccione el cargo --
                       </option>
                       {cargos
-                        ?.sort((a, b) => a.description.localeCompare(b.description))
+                        ?.sort((a, b) =>
+                          a.description.localeCompare(b.description)
+                        )
                         ?.map((elem) => (
                           <option id={elem.id} value={elem.description}>
                             {elem.description}
@@ -1651,9 +1742,7 @@ export default function FormEmpleados() {
                 {/* Tipo de contrato, fecha inicio, fecha final, fecha final real */}
                 <div className="row row-cols-sm-3 mt-2">
                   <div className="d-flex flex-column ">
-                    <label className="">
-                      Tipo de Contrato:
-                    </label>
+                    <label className="">Tipo de Contrato:</label>
                     <select
                       ref={selectBranchRef}
                       className="form-select form-select-sm w-100"
@@ -1704,17 +1793,21 @@ export default function FormEmpleados() {
                       type="date"
                       className="form-control form-control-sm "
                       min={search.fechaInicioContrato}
-                      required = {handleDisabledDate()}
-                      disabled = {handleDisabledDate()}
+                      required={handleDisabledDate()}
+                      disabled={handleDisabledDate()}
                       style={{ textTransform: "uppercase" }}
                       placeholder="Campo obligatorio"
                       value={
-                        (actualizar && (search.fechaFinContrato !== null || search.fechaFinContrato !== '' ))
+                        actualizar &&
+                        (search.fechaFinContrato !== null ||
+                          search.fechaFinContrato !== "")
                           ? new Date(search.fechaFinContrato)
                               .toISOString()
-                              .split("T")[0]  
-                          : (actualizar && (search.fechaFinContrato === null || search.fechaFinContrato === '' )) ?
-                          ''
+                              .split("T")[0]
+                          : actualizar &&
+                            (search.fechaFinContrato === null ||
+                              search.fechaFinContrato === "")
+                          ? ""
                           : search.fechaFinContrato
                       }
                       /* value={search.fechaFinContrato} */
@@ -1730,7 +1823,7 @@ export default function FormEmpleados() {
               <hr className="my-1 mt-2" />
 
               {/* Formación educativa */}
-              <div style={{fontSize: 13}}>
+              <div style={{ fontSize: 13 }}>
                 <label className="fw-bold" style={{ fontSize: 15 }}>
                   FORMACIÓN EDUCATIVA
                 </label>
@@ -1747,15 +1840,39 @@ export default function FormEmpleados() {
                       <option selected value="" disabled>
                         -- Seleccione el nivel de estudio --
                       </option>
-                      <option id="BASICA SECUNDARIA" value="BASICA SECUNDARIA">BASICA SECUNDARIA</option>
-                      <option id="ACADÉMICA TECNICA" value="ACADÉMICA TECNICA">ACADÉMICA TECNICA</option>
-                      <option id="TÉCNICO PROFESIONAL" value="TÉCNICO PROFESIONAL">TÉCNICO PROFESIONAL</option>
-                      <option id="TECNOLÓGICO" value="TECNOLÓGICO">TECNOLÓGICO</option>
-                      <option id="PROFESIONAL UNIVERSITARIO" value="PROFESIONAL UNIVERSITARIO">PROFESIONAL UNIVERSITARIO</option>
-                      <option id="ESPECIALIZACIÓN" value="ESPECIALIZACIÓN">ESPECIALIZACIÓN</option>
-                      <option id="MAESTRÍA" value="MAESTRÍA">MAESTRÍA</option>
-                      <option id="DOCTORADO" value="DOCTORADO">DOCTORADO</option>
-                      <option id="POS DOCTORADO" value="POS DOCTORADO">POS DOCTORADO</option>
+                      <option id="BASICA SECUNDARIA" value="BASICA SECUNDARIA">
+                        BASICA SECUNDARIA
+                      </option>
+                      <option id="ACADÉMICA TECNICA" value="ACADÉMICA TECNICA">
+                        ACADÉMICA TECNICA
+                      </option>
+                      <option
+                        id="TÉCNICO PROFESIONAL"
+                        value="TÉCNICO PROFESIONAL"
+                      >
+                        TÉCNICO PROFESIONAL
+                      </option>
+                      <option id="TECNOLÓGICO" value="TECNOLÓGICO">
+                        TECNOLÓGICO
+                      </option>
+                      <option
+                        id="PROFESIONAL UNIVERSITARIO"
+                        value="PROFESIONAL UNIVERSITARIO"
+                      >
+                        PROFESIONAL UNIVERSITARIO
+                      </option>
+                      <option id="ESPECIALIZACIÓN" value="ESPECIALIZACIÓN">
+                        ESPECIALIZACIÓN
+                      </option>
+                      <option id="MAESTRÍA" value="MAESTRÍA">
+                        MAESTRÍA
+                      </option>
+                      <option id="DOCTORADO" value="DOCTORADO">
+                        DOCTORADO
+                      </option>
+                      <option id="POS DOCTORADO" value="POS DOCTORADO">
+                        POS DOCTORADO
+                      </option>
                     </select>
                   </div>
                   <div className="d-flex flex-column align-items-start">
@@ -1814,7 +1931,7 @@ export default function FormEmpleados() {
                         style={{ textTransform: "uppercase" }}
                         placeholder="Campo obligatorio"
                         value={infoStudy.typeStudy}
-                        onChange={(e)=>handleChangeStudies(e)}
+                        onChange={(e) => handleChangeStudies(e)}
                         autoComplete="off"
                       />
                     </div>
@@ -1828,7 +1945,7 @@ export default function FormEmpleados() {
                         style={{ textTransform: "uppercase" }}
                         placeholder="Campo obligatorio"
                         value={infoStudy.establecimiento}
-                        onChange={(e)=>handleChangeStudies(e)}
+                        onChange={(e) => handleChangeStudies(e)}
                         autoComplete="off"
                       />
                     </div>
@@ -1839,7 +1956,10 @@ export default function FormEmpleados() {
                         type="number"
                         className="form-control form-control-sm w-100"
                         min={0}
-                        style={{ textTransform: "uppercase" , textDecoration:'none' }}
+                        style={{
+                          textTransform: "uppercase",
+                          textDecoration: "none",
+                        }}
                         value={infoStudy.semestre}
                         placeholder="Campo obligatorio"
                         onChange={(e) => handleChangeStudies(e)}
@@ -1847,7 +1967,7 @@ export default function FormEmpleados() {
                       />
                     </div>
                   </div>
-                ):(
+                ) : (
                   <div className="row row-cols-sm-2 mt-1">
                     <div className="d-flex flex-column ">
                       <label className="me-1 w-100">Que estudió:</label>
@@ -1859,7 +1979,7 @@ export default function FormEmpleados() {
                         style={{ textTransform: "uppercase" }}
                         placeholder="Campo obligatorio"
                         value={infoStudy.typeStudy}
-                        onChange={(e)=>handleChangeStudies(e)}
+                        onChange={(e) => handleChangeStudies(e)}
                         autoComplete="off"
                       />
                     </div>
@@ -1873,45 +1993,54 @@ export default function FormEmpleados() {
                         style={{ textTransform: "uppercase" }}
                         placeholder="Campo obligatorio"
                         value={infoStudy.establecimiento}
-                        onChange={(e)=>handleChangeStudies(e)}
+                        onChange={(e) => handleChangeStudies(e)}
                         autoComplete="off"
                       />
                     </div>
                   </div>
                 )}
-                        {/* {JSON.stringify(infoStudy)} */}
+                {/* {JSON.stringify(infoStudy)} */}
                 {editIndex !== null ? (
                   <div className="link-files gap-3">
                     <Button
                       type="submit"
                       className="d-flex align-items-center justify-content-center btn btn-sm btn-primary w-100 mt-3"
-                      onClick={(e)=>handleAddStudies(e)}
+                      onClick={(e) => handleAddStudies(e)}
                     >
                       ACTUALIZAR ESTUDIO
-                      <VscGitPullRequestGoToChanges className="ms-1" style={{ width: 20, height: 20 }} />
+                      <VscGitPullRequestGoToChanges
+                        className="ms-1"
+                        style={{ width: 20, height: 20 }}
+                      />
                     </Button>
                     <Button
                       type="submit"
                       className="d-flex align-items-center justify-content-center btn btn-sm btn-danger w-100 mt-3"
-                      onClick={(e)=>handleClickCancel(e)}
+                      onClick={(e) => handleClickCancel(e)}
                     >
                       CANCELAR
-                      <MdOutlineCancel className="ms-1" style={{ width: 20, height: 20 }} />
+                      <MdOutlineCancel
+                        className="ms-1"
+                        style={{ width: 20, height: 20 }}
+                      />
                     </Button>
                   </div>
-                ):(
+                ) : (
                   <Button
                     type="submit"
                     className="d-flex align-items-center justify-content-center btn btn-sm btn-primary w-100 mt-3"
-                    onClick={(e)=>handleAddStudies(e)}
+                    onClick={(e) => handleAddStudies(e)}
                   >
                     AGREGAR ESTUDIO
-                    <MdAssignmentAdd className="ms-1" style={{ width: 20, height: 20 }} />
+                    <MdAssignmentAdd
+                      className="ms-1"
+                      style={{ width: 20, height: 20 }}
+                    />
                   </Button>
                 )}
               </div>
               <div /* className="d-flex" */ className="ancho-tabla">
-                <Tablestudies 
+                <Tablestudies
                   formData={infoStudy}
                   setFormData={setInfoStudy}
                   currentStudy={currentStudy}
@@ -1924,7 +2053,7 @@ export default function FormEmpleados() {
                 />
               </div>
               <hr className="my-1" />
-              <div className="w-100 mt-1" style={{fontSize: 13}}>
+              <div className="w-100 mt-1" style={{ fontSize: 13 }}>
                 <label className="fw-bold" style={{ fontSize: 15 }}>
                   DOCUMENTOS OBLIGATORIOS
                 </label>
@@ -2033,7 +2162,7 @@ export default function FormEmpleados() {
               </div>
 
               {/* infolaft y hoja de vida */}
-              <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+              <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                 <div className="">
                   <div>
                     <label className="fw-bold mt-1 ">INFOLAFT: </label>
@@ -2132,7 +2261,7 @@ export default function FormEmpleados() {
               </div>
 
               {/* eps y caja de compensacion */}
-              <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+              <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                 <div className="">
                   <div>
                     <label className="fw-bold mt-1 ">AFILIACION EPS: </label>
@@ -2183,10 +2312,14 @@ export default function FormEmpleados() {
                 <div className="d-flex flex-row">
                   <div className="d-flex flex-column mt-1 w-100">
                     <div>
-                      <label className="fw-bold me-2">CAJA DE COMPENSACION: </label>
+                      <label className="fw-bold me-2">
+                        CAJA DE COMPENSACION:{" "}
+                      </label>
                       {exist && (
                         <div className="link-files">
-                          <TextOfBinary valor={docCajaCompensacion}></TextOfBinary>
+                          <TextOfBinary
+                            valor={docCajaCompensacion}
+                          ></TextOfBinary>
                           {docCajaCompensacion === 1 && (
                             <CarpetaArchivoLink
                               carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`}
@@ -2231,7 +2364,7 @@ export default function FormEmpleados() {
               </div>
 
               {/* otrosi y examen ingreso */}
-              <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+              <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                 <div className="">
                   <div>
                     <label className="fw-bold mt-1 ">OTRO SI: </label>
@@ -2282,7 +2415,9 @@ export default function FormEmpleados() {
                 <div className="d-flex flex-row">
                   <div className="d-flex flex-column mt-1 w-100">
                     <div>
-                      <label className="fw-bold me-2">EXAMEN DE INGRESO: </label>
+                      <label className="fw-bold me-2">
+                        EXAMEN DE INGRESO:{" "}
+                      </label>
                       {exist && (
                         <div className="link-files">
                           <TextOfBinary valor={docExaIngreso}></TextOfBinary>
@@ -2330,7 +2465,7 @@ export default function FormEmpleados() {
               </div>
 
               {/* escolaridad y ARL */}
-              <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+              <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                 <div className="">
                   <div>
                     <label className="fw-bold mt-1 ">ESCOLARIDAD: </label>
@@ -2429,7 +2564,7 @@ export default function FormEmpleados() {
               </div>
 
               {/* otros */}
-              <div className="row row-cols-sm-2" style={{fontSize: 13}}>
+              <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
                 <div className="d-flex flex-row">
                   <div className="d-flex flex-column mt-1 w-100">
                     <div>
@@ -2493,6 +2628,20 @@ export default function FormEmpleados() {
               style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
             ></textarea>
           </div>
+          {search.estado === "Devuelto" && (
+            <div className="d-flex flex-column mb-3 w-100">
+              <label className="fw-bold" style={{ fontSize: 15 }}>
+                Razón de devolución
+              </label>
+              <textarea
+                value={search.returnReason}
+                id="returnReason"
+                disabled
+                className="form-control border border-3"
+                style={{ minHeight: 70, maxHeight: 100, fontSize: 12 }}
+              ></textarea>
+            </div>
+          )}
           <Modal show={loading} centered>
             <Modal.Body>
               <div className="d-flex align-items-center">
@@ -2506,69 +2655,101 @@ export default function FormEmpleados() {
           {isMobile ? (
             <div className="d-flex flex-column mb-2 justify-content-center align-items-center gap-2">
               {/* <div className="d-flex flex-column gap-2"> */}
-                <button
-                  type="submit"
-                  className="fw-bold p-2 d-flex w-100 justify-content-center"
-                  onSubmit={actualizar === '' ? handleSubmit : handleUpdate}
-                >
-                  {actualizar === "" ? "REGISTRAR" : "ACTUALIZAR"}
-                </button>
-                {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
+              {actualizar !== "" &&
+                user.role === "admin" &&
+                search.estado !== "Creado" && (
                   <Button
-                  variant="success"
-                  className="d-flex w-100 justify-content-center fw-bold"
-                  onClick={(e)=>handleRevisado(e)}
+                    variant="danger"
+                    className="d-flex w-100 justify-content-center fw-bold"
+                    onClick={(e) => handleDevolver(e)}
                   >
-                    REVISADO
+                    DEVOLVER
                   </Button>
-                }
-                {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
+                )}
+              <Button
+                type="submit"
+                className="fw-bold p-2 d-flex w-100 justify-content-center"
+                onSubmit={actualizar === "" ? handleSubmit : handleUpdate}
+              >
+                {actualizar === "" ? "REGISTRAR" : "ACTUALIZAR"}
+              </Button>
+              {actualizar !== "" &&
+                user.role === "admin" &&
+                search.estado !== "Revisado" &&
+                search.estado !== "Creado" && (
                   <Button
                     variant="warning"
                     className="d-flex w-100 justify-content-center fw-bold"
-                    onClick={(e)=>handleCreado(e)}
+                    onClick={(e) => handleRevisado(e)}
+                  >
+                    REVISADO
+                  </Button>
+                )}
+              {actualizar !== "" &&
+                user.role === "admin" &&
+                search.estado !== "Revisado" &&
+                search.estado !== "Creado" && (
+                  <Button
+                    variant="success"
+                    className="d-flex w-100 justify-content-center fw-bold"
+                    onClick={(e) => handleCreado(e)}
                   >
                     CREADO
                   </Button>
-                }
-                <Button 
-                  variant="secondary" 
-                  className="d-flex w-100 justify-content-center" 
-                  onClick={refreshForm}
-                >
-                  CANCELAR
-                </Button>
+                )}
+              <Button
+                variant="secondary"
+                className="d-flex w-100 justify-content-center"
+                onClick={refreshForm}
+              >
+                CANCELAR
+              </Button>
               {/* </div> */}
             </div>
           ) : (
             <div className="d-flex flex-row mb-2 justify-content-end align-items-end">
               <Fade cascade direction="right">
                 <div className="d-flex flex-row ">
-                  <button
+                  {actualizar !== "" &&
+                    user.role === "admin" &&
+                    search.estado !== "Creado" && (
+                      <Button
+                        variant="danger"
+                        className="me-3 fw-bold"
+                        onClick={(e) => handleDevolver(e)}
+                      >
+                        DEVOLVER
+                      </Button>
+                    )}
+                  <Button
                     type="submit"
-                    className="fw-bold "
-                    onSubmit={actualizar === '' ? handleSubmit : handleUpdate}
+                    className="fw-bold pt-3 pb-3"
+                    onSubmit={actualizar === "" ? handleSubmit : handleUpdate}
                   >
                     {actualizar === "" ? "REGISTRAR" : "ACTUALIZAR"}
-                  </button>
-                  {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
-                    <Button
-                    variant="success"
-                    className="ms-3 fw-bold"
-                    onClick={(e)=>handleRevisado(e)}
-                    >
-                      REVISADO
-                    </Button>
-                  }
-                  {(actualizar !== '' && user.role === 'admin' && search.estado !== 'Revisado' && search.estado !== 'Creado') &&
-                    <Button
-                      variant="warning"
-                      className="ms-3 fw-bold"
-                      onClick={(e)=>handleCreado(e)}
-                    >
-                      CREADO
-                    </Button>
-                  }
+                  </Button>
+                  {actualizar !== "" &&
+                    user.role === "admin" &&
+                    search.estado !== "Revisado" && (
+                      <Button
+                        variant="warning"
+                        className="ms-3 fw-bold"
+                        onClick={(e) => handleRevisado(e)}
+                      >
+                        REVISADO
+                      </Button>
+                    )}
+                  {actualizar !== "" &&
+                    user.role === "admin" &&
+                    search.estado !== "Creado" && (
+                      <Button
+                        variant="success"
+                        className="ms-3 fw-bold"
+                        onClick={(e) => handleCreado(e)}
+                      >
+                        CREADO
+                      </Button>
+                    )}
                   <Button
                     variant="secondary"
                     className="ms-3"

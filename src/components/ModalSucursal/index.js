@@ -1,16 +1,12 @@
 import { useState, useEffect , useContext , useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
-import Swal from 'sweetalert2'
-import { createUser, updateUser } from "../../services/userService";
 import { createSucursal, updateSucursal } from "../../services/sucursalService";
 import TextField from '@mui/material/TextField';
 import { getAllCiudades } from "../../services/ciudadService";
-import AuthContext from "../../context/authContext";
 import { GrFormSubtract } from "react-icons/gr";
 import { getAllDepartamentos } from "../../services/departamentoService";
+import Swal from 'sweetalert2'
 
-/* import bcrypt from 'bcrypt';
- */
 export default function ModalSucursal({
   user,
   setUser,
@@ -84,20 +80,6 @@ export default function ModalSucursal({
       [id]: value,
     });
   };
-  const handleData = (e) => {
-    const { id, value } = e.target;
-    setData({
-      ...data,
-      [id]: value,
-    });
-  };
-  const handleInfo = (e) => {
-    const { id, value } = e.target;
-    setInfoSucursal({
-      ...infoSucursal,
-      [id]: value,
-    });
-  };
 
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
@@ -107,11 +89,10 @@ export default function ModalSucursal({
       [id]: value,
     });
   };
+
   const [ciudades,setCiudades] = useState([]);
-  const [ciudad, setCiudad] = useState(null);
   const [departamentos,setDepartamentos]=useState([]);
 
-  const selectCiudadRef=useRef();
   useEffect(()=>{
     getAllDepartamentos().then((data) => setDepartamentos(data));
     getAllCiudades().then((data) => setCiudades(data));
@@ -224,8 +205,6 @@ export default function ModalSucursal({
       correoContacto: "",
     })
   }
-  const [shown,setShown]=useState("");
-  const switchShown =()=>setShown(!shown);
   
   return (
     <div className="wrapper d-flex justify-content-center align-content-center" style={{userSelect:'none'}}>

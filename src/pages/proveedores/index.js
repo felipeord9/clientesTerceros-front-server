@@ -132,7 +132,7 @@ export default function Proveedores() {
             />
             <button
               title="Nuevo Cliente"
-            className="d-flex justify-content-center align-text-center text-nowrap btn btn-sm  text-light gap-1" 
+              className="d-flex justify-content-center align-text-center text-nowrap btn btn-sm  text-light gap-1"
               style={{
                 fontSize: 18,
                 backgroundColor: "#D92121",

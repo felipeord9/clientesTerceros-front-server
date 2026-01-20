@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef, Suspense } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import Swal from "sweetalert2";
 import { Modal } from "react-bootstrap";
 import { Button } from "@mui/material";
@@ -8,7 +8,7 @@ import { config } from "../../config";
 import { FaEye } from "react-icons/fa";
 import DepartmentContext from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAllPrecios } from "../../services/precioService";
 import { getAllResponsabilidad } from "../../services/responsabilidadService";
 import { getAllDetalles } from "../../services/detalleService";
@@ -18,11 +18,7 @@ import { getAllCiudades } from "../../services/ciudadService";
 import { getAllAgencies } from "../../services/agencyService";
 import { getAllClasificaciones } from "../../services/clasificacionService";
 import { getAllDocuments } from "../../services/documentService";
-import {
-  createCliente,
-  deleteCliente,
-  updateCliente,
-} from "../../services/clienteService";
+import { updateCliente } from "../../services/clienteService";
 import { fileSend, deleteFile } from "../../services/fileService";
 import { updateBitacora } from "../../services/bitacoraService";
 import Logo_pdf from "../../assest/logo_pdf.jpg";
@@ -45,21 +41,8 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 
 export default function EditarPJC() {
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
-  const { department, setDepartment } = useContext(DepartmentContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [clasificacion, setClasificacion] = useState(null);
-  const [document, setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [regimen, setRegimen] = useState(null);
-  const [detalle, setDetalle] = useState(null);
-  const [departamento, setDepartamento] = useState("");
-  const [city, setCity] = useState(null);
-  const [responsabilidad, setResponsabilidad] = useState(null);
-  const [depart, setDepart] = useState("");
-  const [precio, setPrecio] = useState(null);
 
   /* inicializar para hacer la busqueda (es necesario inicializar en array vacio)*/
   const [clasificaciones, setClasificaciones] = useState([]);
@@ -74,21 +57,10 @@ export default function EditarPJC() {
 
   /* Inicializar los documentos adjuntos */
   const [docVinculacion, setDocVinculacion] = useState(0);
-  const [docComprAntc, setDocComprAntc] = useState(0);
-  const [docCtaInst, setDocCtaInst] = useState(0);
-  const [docPagare, setDocPagare] = useState(0);
   const [docRut, setDocRut] = useState(0);
-  const [docCcio, setDocCcio] = useState(0);
-  const [docCrepL, setDocCrepL] = useState(0);
-  const [docEf, setDocEf] = useState(0);
-  const [docRefcom, setDocRefcom] = useState(0);
-  const [docCvbo, setDocCvbo] = useState(0);
-  const [docFirdoc, setDocFirdoc] = useState(0);
   const [docInfemp, setDocInfemp] = useState(0);
   const [docInfrl, setDocInfrl] = useState(0);
   const [docOtros, setDocOtros] = useState(0);
-  const [docCerBan, setDocCerBan] = useState(0);
-  const [docValAnt, setDocValAnt] = useState(0);
 
   //------------------------------------------
   /* Variable de todos los pdf y el nombre de la carpeta*/
@@ -173,17 +145,9 @@ export default function EditarPJC() {
     }
   }, []);
   const [loading, setLoading] = useState(false);
-  const [invoiceType, setInvoiceType] = useState(false);
 
   /* rama seleccionada de cada variable */
   const selectBranchRef = useRef();
-  const selectClasificacionRef = useRef();
-  const selectDocumentoRef = useRef();
-  const selectDepartamentoRef = useRef();
-  const selectCiudadRef = useRef();
-  const selectRegimenRef = useRef();
-  const selectPrecioRef = useRef();
-  const selectResponsabilidadRef = useRef();
 
   const limitDeliveryDateField = new Date();
   limitDeliveryDateField.setHours(2);
@@ -199,17 +163,6 @@ export default function EditarPJC() {
     getAllCiudades().then((data) => setCiudades(data));
     getAllPrecios().then((data) => setPrecios(data));
   }, []);
-
-  const findById = (id, array, setItem) => {
-    const item = array.find((elem) => elem.nit === id);
-    if (item) {
-      setItem(item);
-    } else {
-      setItem(null);
-      /* setSucursal(null); */
-      selectBranchRef.current.selectedIndex = 0;
-    }
-  };
 
   const handlerChangeSearch = (e) => {
     const { id, value } = e.target;
@@ -479,18 +432,7 @@ export default function EditarPJC() {
       return navigate("/validar/Proveedor");
     }
   };
-  const handleClickBack = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/validar/tercero");
-    } else if (user.role === "compras") {
-      return navigate("/validar/Proveedor");
-    } else {
-      return navigate("/validacion/admin");
-    }
-  };
 
-  const [mostrarEnlace, setMostrarEnlace] = useState(false);
   const TextOfBinary = ({ valor }) => {
     const [labelColor, setLabelColor] = useState("");
     const [nuevoTexto, setNuevoTexto] = useState("");
@@ -501,17 +443,14 @@ export default function EditarPJC() {
       if (valor === 1) {
         setLabelColor("#008F39");
         setNuevoTexto("Cargado");
-        setMostrarEnlace(true);
         /* setLogo({Logo_pdf}) */
       } else if (valor === 0) {
         setLabelColor("#CB3234");
         setNuevoTexto("No fue cargado");
-        setMostrarEnlace(false);
         setLogo(null);
       } else {
         setLabelColor(null);
         setNuevoTexto("");
-        setMostrarEnlace(false);
       }
     }, [valor]);
 
@@ -523,11 +462,6 @@ export default function EditarPJC() {
         </strong>
       </label>
     );
-  };
-  const mostrarImagen = (valor) => {
-    if (valor === 1) {
-      return <img src={Logo_pdf} style={{ width: 100 }}></img>;
-    }
   };
 
   const [nombreArchivo, setNombreArchivo] = useState([search.razonSocial]);
@@ -562,21 +496,21 @@ export default function EditarPJC() {
   };
 
   //logica para saber si es celular
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 900); // Establecer a true si la ventana es menor o igual a 768px
-      };
-  
-      // Llama a handleResize al cargar y al cambiar el tamaño de la ventana
-      window.addEventListener("resize", handleResize);
-      handleResize(); // Llama a handleResize inicialmente para establecer el estado correcto
-  
-      // Elimina el event listener cuando el componente se desmonta
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 900); // Establecer a true si la ventana es menor o igual a 768px
+    };
+
+    // Llama a handleResize al cargar y al cambiar el tamaño de la ventana
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Llama a handleResize inicialmente para establecer el estado correcto
+
+    // Elimina el event listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
@@ -601,14 +535,15 @@ export default function EditarPJC() {
             <RiArrowGoBackFill className="me-1" />
             back
           </Button>
-          {isMobile ?
+          {isMobile ? (
             <h3 className="mb-3">
               <strong>Actualizar Información Del Cliente</strong>
-            </h3> :
+            </h3>
+          ) : (
             <h1 className="mb-2">
               <strong>Actualizar Información Del Cliente</strong>
             </h1>
-          }
+          )}
         </div>
         <form className="d-flex w-100 flex-column" onSubmit={handleSubmit}>
           <div
@@ -638,7 +573,7 @@ export default function EditarPJC() {
                           <option id={elem.id} value={elem.description}>
                             {elem.id + " - " + elem.description}
                           </option>
-                      ))}
+                        ))}
                     </select>
                   </div>
                   <div className="d-flex flex-column ">
@@ -692,7 +627,7 @@ export default function EditarPJC() {
                     <input
                       id="razonSocial"
                       type="text"
-                      style={{ textTransform: "uppercase"}}
+                      style={{ textTransform: "uppercase" }}
                       className="form-control form-control-sm d-flex w-100"
                       value={search.razonSocial}
                       onChange={handlerChangeSearch}
@@ -745,7 +680,7 @@ export default function EditarPJC() {
                     placeholder="campo obligatorio"
                     type="text"
                     id="direccion"
-                    style={{ textTransform: "uppercase"}}
+                    style={{ textTransform: "uppercase" }}
                     value={search.direccion}
                     onChange={handlerChangeSearch}
                     className="form-control form-control-sm d-flex w-100"
@@ -846,9 +781,11 @@ export default function EditarPJC() {
                       className="form-control form-control-sm "
                       min={0}
                       value={search.correoNotificaciones}
-                      onChange={(e) => (handlerChangeSearch(e), manejarCambio(e))}
+                      onChange={(e) => (
+                        handlerChangeSearch(e), manejarCambio(e)
+                      )}
                       required
-                      style={{ textTransform: "lowercase"}}
+                      style={{ textTransform: "lowercase" }}
                       placeholder="Campo obligatorio"
                     ></input>
                     <p className="ps-3" style={{ color: Span }}>
@@ -873,7 +810,7 @@ export default function EditarPJC() {
                       value={search.nombreSucursal}
                       onChange={handlerChangeSearch}
                       required
-                      style={{ textTransform: "uppercase"}}
+                      style={{ textTransform: "uppercase" }}
                       placeholder="Campo obligatorio"
                     ></input>
                   </div>
@@ -887,7 +824,7 @@ export default function EditarPJC() {
                       className="form-control form-control-sm "
                       min={0}
                       required
-                      style={{ textTransform: "uppercase"}}
+                      style={{ textTransform: "uppercase" }}
                       placeholder="Campo obligatorio"
                     ></input>
                   </div>
@@ -1025,7 +962,7 @@ export default function EditarPJC() {
                   </div>
                 </div>
                 <div className="row row-cols-sm-3 mb-4">
-                  <div className="" >
+                  <div className="">
                     <label className="fw-bold" style={{ fontSize: 18 }}>
                       Régimen fiscal:
                     </label>
@@ -1050,7 +987,7 @@ export default function EditarPJC() {
                         ))}
                     </select>
                   </div>
-                  <div className="" >
+                  <div className="">
                     <label className="fw-bold" style={{ fontSize: 18 }}>
                       Responsabilidad fiscal:
                     </label>
@@ -1075,7 +1012,7 @@ export default function EditarPJC() {
                         ))}
                     </select>
                   </div>
-                  <div className="" >
+                  <div className="">
                     <label className="fw-bold" style={{ fontSize: 18 }}>
                       Detalle tributario:
                     </label>
@@ -1160,7 +1097,7 @@ export default function EditarPJC() {
                     </div>
                     <div className="d-flex flex-column align-items-start">
                       <label className="me-1">No.Identificacion:</label>
-                      <div className="d-flex w-100"> 
+                      <div className="d-flex w-100">
                         <input
                           id="numeroDocRepLegal"
                           value={search.numeroDocRepLegal}
@@ -1232,9 +1169,7 @@ export default function EditarPJC() {
 
                 <div className="row row-cols-sm-2">
                   <div className="">
-                    <div
-                      className="d-flex flex-column"
-                    >
+                    <div className="d-flex flex-column">
                       <div className="div-botons">
                         <label className="fw-bold mt-1 ">
                           FORMATO DE VINCULACION:{" "}
@@ -1266,7 +1201,7 @@ export default function EditarPJC() {
                         <input
                           id="docVinculacion"
                           type="file"
-                          style={{ backgroundColor: "#f3f3f3"}}
+                          style={{ backgroundColor: "#f3f3f3" }}
                           className="form-control form-control-sm border border-5 rounded-3"
                           accept=".pdf"
                           onChange={(e) => (
@@ -1295,9 +1230,7 @@ export default function EditarPJC() {
                     </div>
                   </div>
                   <div className="">
-                    <div
-                      className="d-flex flex-column"
-                    >
+                    <div className="d-flex flex-column">
                       <label className="fw-bold mt-1 me-2">INFOLAFT: </label>
                       <div className="d-flex flex-column">
                         <TextOfBinary valor={search.docInfemp}></TextOfBinary>
@@ -1345,9 +1278,7 @@ export default function EditarPJC() {
                 </div>
                 <div className="row row-cols-sm-2">
                   <div className="">
-                    <div
-                      className="d-flex flex-column"
-                    >
+                    <div className="d-flex flex-column">
                       <div className="d-flex flex-row">
                         <label className="fw-bold mt-1 ">RUT: </label>
                         <label className="ms-2 mt-1 ">(AÑO 2024) </label>
@@ -1367,7 +1298,7 @@ export default function EditarPJC() {
                         <input
                           id="docRut"
                           type="file"
-                          style={{ backgroundColor: "#f3f3f3"}}
+                          style={{ backgroundColor: "#f3f3f3" }}
                           className="form-control form-control-sm border border-5 rounded-3"
                           accept=".pdf"
                           onChange={(e) => (
@@ -1463,7 +1394,7 @@ export default function EditarPJC() {
                     <div className="d-flex flex-row">
                       <input
                         id="docOtros"
-                        style={{ backgroundColor: "#f3f3f3"}}
+                        style={{ backgroundColor: "#f3f3f3" }}
                         type="file"
                         onChange={(e) => (
                           handleFileChange("Otros", e),
@@ -1523,7 +1454,11 @@ export default function EditarPJC() {
           </Modal>
           <end>
             <div className="d-flex flex-row mb-2 justify-content-end align-items-end w-100">
-              <Fade cascade direction="right" className={`${isMobile && 'd-flex w-100'}`}>
+              <Fade
+                cascade
+                direction="right"
+                className={`${isMobile && "d-flex w-100"}`}
+              >
                 <div className="div-botons justify-content-between gap-3 w-100">
                   <button
                     type="submit"

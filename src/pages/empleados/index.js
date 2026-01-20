@@ -114,9 +114,7 @@ export default function Empleados() {
     >
       {/* <div className='rounder-4'> */}
       <div className="container d-flex flex-column pt-5 h-100 contenedor1 gap-1 pb-4">
-        {isMobile &&
-          <div style={{height: isMobile && '25px'}}></div>
-        }
+        {isMobile && <div style={{ height: isMobile && "25px" }}></div>}
         <h1 className="titulo text-danger fw-bold pt-2 w-100 justify-content-center text-align-center">
           Listado de empleados registrados
         </h1>

@@ -1,46 +1,39 @@
-import { useState, useEffect , useContext , useRef } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
-import Swal from 'sweetalert2'
-import { createUser, updateUser } from "../../services/userService";
-import { createSucursal, updateSucursal } from "../../services/sucursalService";
-import TextField from '@mui/material/TextField';
+import { createSucursal } from "../../services/sucursalService";
 import { getAllCiudades } from "../../services/ciudadService";
-import AuthContext from "../../context/authContext";
-import { GrFormSubtract } from "react-icons/gr";
-/* import bcrypt from 'bcrypt';
- */
-export default function ModalSucursal({
-  showModal,
-  setShowModal,
-}) {
-  const [usuario,setUsuario] = useState([]);
-  const[infoSucursal,setInfoSucursal] = useState({
-    razonSocial:'',
-  })
-  useEffect(()=>{
-    const data = localStorage.getItem('user');
-    const info = localStorage.getItem('infoSucursal');
-    if(data){
+import TextField from "@mui/material/TextField";
+import Swal from "sweetalert2";
+
+export default function ModalSucursal({ showModal, setShowModal }) {
+  const [usuario, setUsuario] = useState([]);
+  const [infoSucursal, setInfoSucursal] = useState({
+    razonSocial: "",
+  });
+  useEffect(() => {
+    const data = localStorage.getItem("user");
+    const info = localStorage.getItem("infoSucursal");
+    if (data) {
       setUsuario(JSON.parse(data));
     }
-    if(info){
+    if (info) {
       setInfoSucursal(JSON.parse(info));
     }
-  })
+  });
 
-  const [data,setData] = useState({
-    ultimo:'',
-    search:''
-  })
-  useEffect(()=>{
-    const datos=localStorage.getItem('length');
-    if(datos){
+  const [data, setData] = useState({
+    ultimo: "",
+    search: "",
+  });
+  useEffect(() => {
+    const datos = localStorage.getItem("length");
+    if (datos) {
       setData(JSON.parse(datos));
     }
-  })
+  });
   const [info, setInfo] = useState({
-    cedula: '',
-    codigoSucursal: '',
+    cedula: "",
+    codigoSucursal: "",
     nombreSucursal: "".toUpperCase(),
     direccion: "".toUpperCase(),
     ciudad: "".toUpperCase(),
@@ -50,8 +43,8 @@ export default function ModalSucursal({
     celularContacto: "",
     correoContacto: "",
   });
-  const [error, setError] = useState('')
-  
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setInfo({
@@ -59,93 +52,72 @@ export default function ModalSucursal({
       [id]: value,
     });
   };
-  const handleData = (e) => {
-    const { id, value } = e.target;
-    setData({
-      ...data,
-      [id]: value,
-    });
-  };
-  const handleInfo = (e) => {
-    const { id, value } = e.target;
-    setInfoSucursal({
-      ...infoSucursal,
-      [id]: value,
-    });
-  };
 
-  const handlerChangeSearch = (e) => {
-    const { id, value } = e.target;
-    console.log(value);
-    setInfo({
-      ...info,
-      [id]: value,
-    });
-  };
-  const [ciudades,setCiudades] = useState([]);
-  const [ciudad, setCiudad] = useState(null);
-
-  const selectCiudadRef=useRef();
-  useEffect(()=>{
-    getAllCiudades().then((data) => setCiudades(data));
-  },[]);
+  const [ciudades, setCiudades] = useState([]);
 
   const handleCreateNewSucursal = (e) => {
     e.preventDefault();
     Swal.fire({
-      title: '¿Está segur@ de querer agregar esta sucursal?',
-          showDenyButton: true,
-          confirmButtonText: 'Confirmar',
-          confirmButtonColor: '#D92121',
-          denyButtonText: `Cancelar`,
-          denyButtonColor:'blue',
-          icon:'question'
-    }).then((result)=>{
-      if(result.isConfirmed){
-        const body={
-          cedula: data.search,
-          codigoSucursal:  data.ultimo+1,
-          nombreSucursal: infoSucursal.razonSocial.toUpperCase() + ' - ' + info.nombreSucursal.toUpperCase(),
-          direccion: info.direccion.toUpperCase(),
-          ciudad: info.ciudad.toUpperCase(),
-          celular: info.celular,
-          correoFacturaElectronica: info.correoFacturaElectronica.toLowerCase(),
-          nombreContacto: info.nombreContacto.toUpperCase(),
-          celularContacto: info.celularContacto,
-          correoContacto: info.correoContacto.toLowerCase(),
-          createdAt:new Date(),
-          userName:usuario.name
-        }
-        createSucursal(body)
-          .then(() => {
-            setShowModal(!showModal)
-            
-            Swal.fire(
-              '¡Correcto!', 'La sucursal se ha creado de manera exitosa', 'success'
-              
-            )
-            
-          })
-        }else if(result.isDenied){
-          Swal.fire('Oops', 'La información suministrada se ha descartado', 'info')
-          setShowModal(!showModal)
-        }
-        cleanForm()
+      title: "¿Está segur@ de querer agregar esta sucursal?",
+      showDenyButton: true,
+      confirmButtonText: "Confirmar",
+      confirmButtonColor: "#D92121",
+      denyButtonText: `Cancelar`,
+      denyButtonColor: "blue",
+      icon: "question",
     })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const body = {
+            cedula: data.search,
+            codigoSucursal: data.ultimo + 1,
+            nombreSucursal:
+              infoSucursal.razonSocial.toUpperCase() +
+              " - " +
+              info.nombreSucursal.toUpperCase(),
+            direccion: info.direccion.toUpperCase(),
+            ciudad: info.ciudad.toUpperCase(),
+            celular: info.celular,
+            correoFacturaElectronica:
+              info.correoFacturaElectronica.toLowerCase(),
+            nombreContacto: info.nombreContacto.toUpperCase(),
+            celularContacto: info.celularContacto,
+            correoContacto: info.correoContacto.toLowerCase(),
+            createdAt: new Date(),
+            userName: usuario.name,
+          };
+          createSucursal(body).then(() => {
+            setShowModal(!showModal);
+
+            Swal.fire(
+              "¡Correcto!",
+              "La sucursal se ha creado de manera exitosa",
+              "success"
+            );
+          });
+        } else if (result.isDenied) {
+          Swal.fire(
+            "Oops",
+            "La información suministrada se ha descartado",
+            "info"
+          );
+          setShowModal(!showModal);
+        }
+        cleanForm();
+      })
       .catch((error) => {
         /* setError(error.response.data.errors.original.detail)
         setTimeout(() => setError(''), 2500) */
         Swal.fire({
-         title:'¡Uops!',
-         /* text:`${error}`, */
-         text:'Ha ocurrido un error a la hora de crear la sucursal, intentelo mas tarde y si el problema persiste, comuniquese con el área de sistemas.',
-         showConfirmButton:true,
-         confirmButtonColor:'#D92121',
-         confirmButtonText:'OK'
-        })
+          title: "¡Uops!",
+          /* text:`${error}`, */
+          text: "Ha ocurrido un error a la hora de crear la sucursal, intentelo mas tarde y si el problema persiste, comuniquese con el área de sistemas.",
+          showConfirmButton: true,
+          confirmButtonColor: "#D92121",
+          confirmButtonText: "OK",
+        });
       });
   };
-
 
   const cleanForm = () => {
     setInfo({
@@ -159,44 +131,51 @@ export default function ModalSucursal({
       nombreContacto: "",
       celularContacto: "",
       correoContacto: "",
-    })
-  }
-  const [shown,setShown]=useState("");
-  const switchShown =()=>setShown(!shown);
-  
+    });
+  };
+  const [shown, setShown] = useState("");
+  const switchShown = () => setShown(!shown);
+
   return (
-    <div className="wrapper d-flex justify-content-center align-content-center" style={{userSelect:'none'}}>
-    <Modal show={showModal} style={{ fontSize: 18, userSelect:'none' }} centered>
-      <Modal.Header>
-        <center>
-        <Modal.Title className="text-danger" style={{fontSize:40}}>
-          <strong>Informe Detallado de credito:</strong>
-        </Modal.Title>
-        </center>
-      </Modal.Header>
-      <Modal.Body className="p-2">
-        <div className="m-2 h-100">
-          <form onSubmit={handleCreateNewSucursal}>
-          <div>
-              <h4 className="mb-2">Información sSucursal</h4>
-              <div className="d-flex flex-row w-100">
-              <div className="d-flex flex-column w-50 pe-4">
-              <TextField  
-                id="cedula" 
-                /* value={user ? info.cedula : data.search}  */
-                label="Código Siesa" 
-                type="number" 
-                onChange={handleChange} 
-                disabled
-                className="rounded rounded-2"
-                style={{backgroundColor:'whitesmoke', color:'black'}}
-                variant="outlined" 
-                size="small"
-                color="error"
-              />
-              </div>
-              </div>
-              {/* {!user && (
+    <div
+      className="wrapper d-flex justify-content-center align-content-center"
+      style={{ userSelect: "none" }}
+    >
+      <Modal
+        show={showModal}
+        style={{ fontSize: 18, userSelect: "none" }}
+        centered
+      >
+        <Modal.Header>
+          <center>
+            <Modal.Title className="text-danger" style={{ fontSize: 40 }}>
+              <strong>Informe Detallado de credito:</strong>
+            </Modal.Title>
+          </center>
+        </Modal.Header>
+        <Modal.Body className="p-2">
+          <div className="m-2 h-100">
+            <form onSubmit={handleCreateNewSucursal}>
+              <div>
+                <h4 className="mb-2">Información sSucursal</h4>
+                <div className="d-flex flex-row w-100">
+                  <div className="d-flex flex-column w-50 pe-4">
+                    <TextField
+                      id="cedula"
+                      /* value={user ? info.cedula : data.search}  */
+                      label="Código Siesa"
+                      type="number"
+                      onChange={handleChange}
+                      disabled
+                      className="rounded rounded-2"
+                      style={{ backgroundColor: "whitesmoke", color: "black" }}
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                    />
+                  </div>
+                </div>
+                {/* {!user && (
                 <div className="d-flex flex-row w-100 mt-2">
                 <div className="d-flex w-50">
                 <TextField
@@ -250,139 +229,140 @@ export default function ModalSucursal({
                 />
               </div>
               )} */}
-              <div className="d-flex flex-column w-100 mt-2">
-                <TextField
-                  id="celular"
-                  type="number"
-                  value={info.celular}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Celular Sucursal"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                />
-              </div>
-              <div className="d-flex flex-row w-100 mt-2">
-              <div className="d-flex flex-column w-100">
-                <TextField
-                  id="direccion"
-                  type="text"
-                  value={info.direccion.toUpperCase()}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Dirección Sucursal"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                />
-              </div>
-              </div>
+                <div className="d-flex flex-column w-100 mt-2">
+                  <TextField
+                    id="celular"
+                    type="number"
+                    value={info.celular}
+                    className="form-control form-control-sm"
+                    onChange={handleChange}
+                    autoComplete="off"
+                    required
+                    label="Celular Sucursal"
+                    variant="outlined"
+                    size="small"
+                    color="error"
+                  />
+                </div>
+                <div className="d-flex flex-row w-100 mt-2">
+                  <div className="d-flex flex-column w-100">
+                    <TextField
+                      id="direccion"
+                      type="text"
+                      value={info.direccion.toUpperCase()}
+                      className="form-control form-control-sm"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      label="Dirección Sucursal"
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                    />
+                  </div>
+                </div>
 
-              <div className="d-flex flex-row w-100 mt-2">
-              
-              <div className="d-flex flex-column w-100">
-                <TextField
-                  id="correoFacturaElectronica"
-                  type="email"
-                  value={info.correoFacturaElectronica.toLowerCase()}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Correo Factura Electrónica"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                />
-              </div>
-              </div>
-              <hr></hr>
-              <h4>Información de contacto</h4>
-              <div className="d-flex flex-row w-100 mt-2">
-              <div className="d-flex flex-column w-50 pe-4">                
-              <TextField
-                  id="nombreContacto"
-                  type="text"
-                  value={info.nombreContacto.toUpperCase()}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Nombre Contacto"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                />
-              </div>
-              <div className="d-flex flex-column w-50 ms-2">
-                <TextField
-                  id="celularContacto"
-                  type="number"
-                  value={info.celularContacto}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Celular Contacto"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                />
-              </div>
-              </div>
+                <div className="d-flex flex-row w-100 mt-2">
+                  <div className="d-flex flex-column w-100">
+                    <TextField
+                      id="correoFacturaElectronica"
+                      type="email"
+                      value={info.correoFacturaElectronica.toLowerCase()}
+                      className="form-control form-control-sm"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      label="Correo Factura Electrónica"
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                    />
+                  </div>
+                </div>
+                <hr></hr>
+                <h4>Información de contacto</h4>
+                <div className="d-flex flex-row w-100 mt-2">
+                  <div className="d-flex flex-column w-50 pe-4">
+                    <TextField
+                      id="nombreContacto"
+                      type="text"
+                      value={info.nombreContacto.toUpperCase()}
+                      className="form-control form-control-sm"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      label="Nombre Contacto"
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                    />
+                  </div>
+                  <div className="d-flex flex-column w-50 ms-2">
+                    <TextField
+                      id="celularContacto"
+                      type="number"
+                      value={info.celularContacto}
+                      className="form-control form-control-sm"
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      label="Celular Contacto"
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                    />
+                  </div>
+                </div>
 
-              
-              <div className="mt-2">
-                <TextField
-                  id="correoContacto"
-                  type="email"
-                  value={info.correoContacto.toLowerCase()}
-                  className="form-control form-control-sm"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                  label="Correo Contacto"
-                  variant="outlined"
-                  size="small"
-                  color="error"
-                  
-                />
+                <div className="mt-2">
+                  <TextField
+                    id="correoContacto"
+                    type="email"
+                    value={info.correoContacto.toLowerCase()}
+                    className="form-control form-control-sm"
+                    onChange={handleChange}
+                    autoComplete="off"
+                    required
+                    label="Correo Contacto"
+                    variant="outlined"
+                    size="small"
+                    color="error"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="d-flex w-100 mt-2">
-              <span 
-                className="text-center text-danger w-100 m-0"
-                style={{height: 15}}
-              >
-                {error}
-              </span>
-            </div>
-            <div className="d-flex justify-content-center gap-2 mt-2 ">
-              {/* <Button type="submit" variant="success">
+              <div className="d-flex w-100 mt-2">
+                <span
+                  className="text-center text-danger w-100 m-0"
+                  style={{ height: 15 }}
+                >
+                  {error}
+                </span>
+              </div>
+              <div className="d-flex justify-content-center gap-2 mt-2 ">
+                {/* <Button type="submit" variant="success">
                 {user ? "Guardar Cambios" : "Guardar"}
               </Button> */}
-              <button className="me-5" type="submit">Done</button>
-              <Button variant="secondary" onClick={(e) => {
-                setShowModal(false)
-                cleanForm()
-              }}>
-                Cancelar
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Modal.Body>
-      {<Modal.Footer></Modal.Footer>}
-    </Modal>
+                <button className="me-5" type="submit">
+                  Done
+                </button>
+                <Button
+                  variant="secondary"
+                  onClick={(e) => {
+                    setShowModal(false);
+                    cleanForm();
+                  }}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+        {<Modal.Footer></Modal.Footer>}
+      </Modal>
     </div>
   );
 }
-
 
 /* import { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";

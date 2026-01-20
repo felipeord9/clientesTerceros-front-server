@@ -62,6 +62,19 @@ const updateAsCreated = async (body)=>{
   }
 }
 
+const updateAsReturn = async (body)=>{
+  try{
+    const { data } = await axios.post(`${url}/update/as/return`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch(error){
+    throw error
+  }
+}
+
 
 export const verifyTokenWhithId = async (token) => {
   const localToken = JSON.parse(localStorage.getItem("token"))
@@ -133,4 +146,5 @@ export {
     sendMail,
     sendMail2,
     updateAsCreated,
+    updateAsReturn,
 }

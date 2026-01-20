@@ -1,12 +1,9 @@
-import * as FiIcons from "react-icons/fi";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import { MdDeleteOutline } from "react-icons/md";
 import { deleteByCedula } from "../../services/clienteService";
-import { useState } from "react";
 
 export default function TableTerceros({ terceros, loading, customStyles }) {
-  const [selectedCliente, setSelectedTercero] = useState();
   const columns = [
     {
       id: "delete",

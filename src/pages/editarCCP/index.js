@@ -4,15 +4,10 @@ import { Button } from "@mui/material";
 import { Modal } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import DepartmentContext from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
-import {
-  createProveedor,
-  deleteProveedor,
-  updateProveedor,
-} from "../../services/proveedorService";
 import { updateCliente, deleteCliente } from "../../services/clienteService";
 import { getAllDepartamentos } from "../../services/departamentoService";
 import { getAllCiudades } from "../../services/ciudadService";
@@ -24,7 +19,6 @@ import { updateBitacora } from "../../services/bitacoraService";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Logo_pdf from "../../assest/logo_pdf.jpg";
 import { config } from "../../config";
-import { FaEyeSlash } from "react-icons/fa";
 
 const CarpetaArchivoLink = ({ carpeta, archivo }) => {
   const [vacio, setVacio] = useState(false);
@@ -49,29 +43,13 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 };
 export default function EditarCCP() {
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
-  const { department, setDepartment } = useContext(DepartmentContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [document, setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [departamento, setDepartamento] = useState("");
-  const [actividad, setActividad] = useState(null);
 
   /* inicializar los documentos adjuntos */
-  const [docVinculacion, setDocVinculacion] = useState(0);
-  const [docComprAntc, setDocComprAntc] = useState(0);
   const [docRut, setDocRut] = useState(0);
-  const [docCcio, setDocCcio] = useState(0);
-  const [docCrepL, setDocCrepL] = useState(0);
-  const [docEf, setDocEf] = useState(0);
-  const [docRefcom, setDocRefcom] = useState(0);
   const [docInfemp, setDocInfemp] = useState(0);
-  const [docInfrl, setDocInfrl] = useState(0);
   const [docOtros, setDocOtros] = useState(0);
-  const [docCerBan, setDocCerBan] = useState(0);
-  const [docValAnt, setDocValAnt] = useState(0);
 
   //------------------------------------------
   /* Variable de todos los pdf y el nombre de la carpeta*/
@@ -91,10 +69,8 @@ export default function EditarCCP() {
 
   /* inicializar para hacer la busqueda (es necesario inicializar en array vacio)*/
   const [agencias, setAgencias] = useState([]);
-  const [documentos, setDocumentos] = useState([]);
   const [ciudades, setCiudades] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
-  const [actividades, setActividades] = useState([]);
 
   const [search, setSearch] = useState({
     cedula: "",
@@ -170,14 +146,6 @@ export default function EditarCCP() {
     }
   }, []);
   const [loading, setLoading] = useState(false);
-  const [invoiceType, setInvoiceType] = useState(false);
-
-  /* rama seleccionada de cada variable */
-  const selectBranchRef = useRef();
-  const selectDocumentoRef = useRef();
-  const selectDepartamentoRef = useRef();
-  const selectCiudadRef = useRef();
-  const selectActividadRef = useRef();
 
   const limitDeliveryDateField = new Date();
   limitDeliveryDateField.setHours(2);
@@ -185,10 +153,8 @@ export default function EditarCCP() {
   /* asignacion de valores a las variables */
   useEffect(() => {
     getAllAgencies().then((data) => setAgencias(data));
-    getAllDocuments().then((data) => setDocumentos(data));
     getAllDepartamentos().then((data) => setDepartamentos(data));
     getAllCiudades().then((data) => setCiudades(data));
-    getAllActividad().then((data) => setActividades(data));
   }, []);
 
   const handlerChangeSearch = (e) => {
@@ -380,29 +346,6 @@ export default function EditarCCP() {
     }
   };
 
-  const [vality, setVality] = useState("");
-  const [colorVality, setColorVality] = useState("red");
-  const handleInputChange = (event) => {
-    // Obtén el valor actual del input
-    let value = event.target.value;
-
-    // Remueve cualquier carácter que no sea un número
-    value = value.replace(/[^0-9]/g, "");
-    if (value.replace(/[^0-9]/g, "")) {
-      setVality("✓");
-      setColorVality("green");
-    } else if (
-      value.includes("e") ||
-      value.includes("E") ||
-      value.includes(",")
-    ) {
-      setVality("X");
-      setColorVality("red");
-    } else {
-      setVality("X");
-      setColorVality("red");
-    }
-  };
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const FileChange = (event, index) => {
@@ -411,6 +354,7 @@ export default function EditarCCP() {
     newFiles[index] = file;
     setSelectedFiles(newFiles);
   };
+
   const TextOfBinary = ({ valor }) => {
     const [labelColor, setLabelColor] = useState("");
     const [nuevoTexto, setNuevoTexto] = useState("");
@@ -440,11 +384,7 @@ export default function EditarCCP() {
       </label>
     );
   };
-  const mostrarImagen = (valor) => {
-    if (valor === 1) {
-      return <img src={Logo_pdf} style={{ width: 100 }}></img>;
-    }
-  };
+
   const handleValidacion = (e) => {
     e = e.target.value;
     if (user.role === "admin") {
@@ -455,6 +395,7 @@ export default function EditarCCP() {
       return navigate("/validar/Proveedor");
     }
   };
+
   const changeSearch = (e) => {
     const file = e.target.files[0];
     const { id, value } = e.target;
@@ -513,14 +454,15 @@ export default function EditarCCP() {
             <RiArrowGoBackFill className="me-1" />
             back
           </Button>
-          {isMobile ? 
+          {isMobile ? (
             <h3 className="mb-2">
               <strong>Actualizar Info. Del C.C o parqueadero</strong>
-            </h3> :
+            </h3>
+          ) : (
             <h1 className="mb-3">
               <strong>Actualizar Info. Del C.C o parqueadero</strong>
             </h1>
-          }
+          )}
         </div>
         <form className="d-flex w-100 flex-column" onSubmit={handleSubmit}>
           <div
@@ -569,7 +511,7 @@ export default function EditarCCP() {
                 </div>
               </div>
               <hr className="my-1" />
-              
+
               <div>
                 <label className="fw-bold mb-1" style={{ fontSize: 22 }}>
                   OFICINA PRINCIPAL
@@ -614,7 +556,7 @@ export default function EditarCCP() {
                     placeholder="campo obligatorio"
                     type="text"
                     id="direccion"
-                    style={{ textTransform: "uppercase"}}
+                    style={{ textTransform: "uppercase" }}
                     value={search.direccion}
                     onChange={handlerChangeSearch}
                     className="form-control form-control-sm w-100"
@@ -715,9 +657,11 @@ export default function EditarCCP() {
                       className="form-control form-control-sm d-flex w-100"
                       min={0}
                       value={search.correoNotificaciones}
-                      onChange={(e) => (handlerChangeSearch(e), manejarCambio(e))}
+                      onChange={(e) => (
+                        handlerChangeSearch(e), manejarCambio(e)
+                      )}
                       required
-                      style={{ textTransform: "lowercase"}}
+                      style={{ textTransform: "lowercase" }}
                       placeholder="Campo obligatorio"
                     ></input>
                     <p className="ps-3" style={{ color: Span }}>
@@ -783,7 +727,7 @@ export default function EditarCCP() {
                         placeholder="docRut"
                         className="form-control form-control-sm border border-5 rounded-3"
                         accept=".pdf"
-                        style={{ backgroundColor: "#f3f3f3"}}
+                        style={{ backgroundColor: "#f3f3f3" }}
                         onChange={(e) => (
                           handleFileChange("Rut", e),
                           setDocRut(1),
@@ -878,7 +822,7 @@ export default function EditarCCP() {
                   <input
                     id="docOtros"
                     type="file"
-                    style={{ backgroundColor: "#f3f3f3"}}
+                    style={{ backgroundColor: "#f3f3f3" }}
                     /* onChange={(e)=>(handleFileChange(e, 12),setDocOtros(1))} */
                     onChange={(e) => (
                       handleFileChange("Otros", e),
@@ -937,7 +881,11 @@ export default function EditarCCP() {
           </Modal>
           <end>
             <div className="d-flex flex-row mb-2 justify-content-end align-items-end w-100">
-              <Fade cascade direction="right" className={`${isMobile && 'd-flex w-100'}`}>
+              <Fade
+                cascade
+                direction="right"
+                className={`${isMobile && "d-flex w-100"}`}
+              >
                 <div className="div-botons justify-content-between gap-3 w-100">
                   <button
                     type="submit"

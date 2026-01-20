@@ -1,17 +1,10 @@
-import * as FiIcons from 'react-icons/fi';
 import DataTable from 'react-data-table-component'
-import { useEffect, useState, useContext, useRef, Suspense } from "react";
-import { Navigate, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { MdDeleteOutline } from "react-icons/md";
-import { deleteByCedula } from '../../services/clienteService';
+import { useEffect, useState, useContext } from "react";
 import { Box, Button, Modal } from '@mui/material';
 import { RiArrowGoBackFill } from "react-icons/ri";
-import AuthContext from "../../context/authContext";
-import { sendMail } from "../../services/mailService";
 import { sendCertificado , sendCertiIVA , sendCertifiRFTE , updateCertificado } from "../../services/certificadoService";
-import numberToWords from 'number-to-words';
-import numeral from 'numeral';
+import AuthContext from "../../context/authContext";
+import Swal from 'sweetalert2';
 
 const style = {
   position: 'absolute',
@@ -28,9 +21,7 @@ const style = {
 };
 
 export default function TableCertificados({ terceros, loading, ciudad }) {
-  const { user, setUser } = useContext(AuthContext);
-  const [selectedCliente, setSelectedTercero] = useState();
-  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [info,setInfo]=useState({
     nombreTercero:'',
     tercero:'',
@@ -418,268 +409,12 @@ export default function TableCertificados({ terceros, loading, ciudad }) {
     }
   }
 
-  const handlerFiltroRica=(e)=>{
-    e.preventDefault();
-    const filtroTipo = terceros.filter((elem)=>{
-      if(elem.tipoCertificado.includes('RICA')){
-        return elem
-      }
-    })
-    setFiltroRICA(filtroTipo);
-    /* hallar el total de la base */
-    const filtrar = terceros.filter((item)=>item.tipoCertificado.includes('RICA'));
-    const suma = filtrar.reduce((acumular, item)=>{
-      const numeroNormal = parseFloat((item.base).replace(/'/g, '').replace(/,/g, ''))
-      return acumular + numeroNormal;
-    },0);    
-    const totalBase = suma.toLocaleString(undefined,{
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });    
-    setBase(suma);
-    /* hallar el total retenido */
-    const suma2 = filtrar.reduce((acumular, item)=>{
-      const numeroNormal = parseFloat((item.valorRetenido).replace(/'/g, '').replace(/,/g, ''))
-      return acumular + numeroNormal;
-    },0);    
-    const totalRetenido = suma2.toLocaleString(undefined,{
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-    setRetenido(suma2);
-    setOpenRICA(false);
-      Swal.fire({
-        title:'¡Lee atentamente!',
-        text:`Se le enviara un correo con el certificado RETEICA a ${info.nombreTercero} a la direccion ${update.correoEnvio}. Si es correcto de click en "ENVIAR", sino de click en "CANCELAR"`,
-        showCancelButton:true,
-        showConfirmButton:true,
-        confirmButtonColor:'#D92121',
-        confirmButtonText:'ENVIAR',
-        cancelButtonColor:'grey',
-        cancelButtonText:'CANCELAR',
-        icon:'question'
-      }).then(({isConfirmed})=>{
-        if(isConfirmed){
-          const body={
-            filtro: filtroTipo,
-            correoEnvio: update.correoEnvio,
-            nombreTercero: info.nombreTercero,
-            cedula: info.tercero,
-            direccion: info.direccion,
-            fechaFormateada: fechaFormateada,
-            fechaExpedicion: new Date(),
-            ciudad: info.codCiudad,
-            baseFinal: totalBase,
-            retenidoFinal: totalRetenido, 
-            correoEmisor: user.email,
-          }
-          sendCertificado(body)
-          .then(()=>{
-            const actualizar ={
-              correoEnvio: update.correoEnvio,
-              usuarioEnvio: user.rowId,
-              nombreSolicitante: update.nombreSolicitante,
-              fechaEnvio:new Date(),
-            }
-            const id = `${info.tercero}${filtrar[0].cuenta}`
-            updateCertificado(id,actualizar)
-            Swal.fire({
-              icon:'success',
-              title:'¡Felicidades!',
-              text:'Se ha enviado el correo de manera satisfactoria. revisa tu correo para verificar la información',
-              timer:4000,
-              showConfirmButton:true,
-              confirmButtonColor:'green'
-            })
-            cleanForm();
-          }).catch((err)=>{
-            Swal.fire({
-              icon:'warning',
-              title:'¡ERROR',
-              showConfirmButton:true,
-              confirmButtonColor:'red',
-              text:'Ha ocurrido un error a la hora de generar y enviar el certificado, intenta nuevamente, si el problema persiste comunicate con el área de sistemas.'
-            })
-            cleanForm();
-            console.log(err)
-          })
-        }else{
-          cleanForm();
-        }
-      })
-  }
   /* boton para RIVA */
   const [filtroRIVA,setFiltroRIVA]=useState([]);
-  const handlerFiltroRiva=(e)=>{
-    e.preventDefault();
-    const filtroTipo = terceros.filter((elem)=>{
-      if(elem.tipoCertificado.includes('RIVA')){
-        return elem
-      }
-    })
-    setFiltroRIVA(filtroTipo);
-    const filtrar = terceros.filter((item)=>item.tipoCertificado.includes('RIVA'));
-    const suma = filtrar.reduce((acumular, item)=>{
-      const numeroNormal = parseFloat((item.base).replace(/'/g, '').replace(/,/g, ''))
-      return acumular + numeroNormal;
-    },0);    
-    const totalBase = suma.toLocaleString(undefined,{
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });    
-    setBase(suma);
-    /* hallar el total retenido */
-    const suma2 = filtrar.reduce((acumular, item)=>{
-      const numeroNormal = parseFloat((item.valorRetenido).replace(/'/g, '').replace(/,/g, ''))
-      return acumular + numeroNormal;
-    },0);    
-    const totalRetenido = suma2.toLocaleString(undefined,{
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-    const sumaRetenido = filtrar.reduce((acumular,item)=>parseFloat(acumular) + parseFloat(item.valorRetenido),0);
-    setRetenido(suma2);
-    setOpenRIVA(false);
-    Swal.fire({
-      title:'¡Lee atentamente!',
-      text:`Se le enviara un correo con el certificado RETEIVA a ${info.nombreTercero} a la direccion ${update.correoEnvio}. Si es correcto de click en "ENVIAR", si no de click en "CANCELAR"`,
-      showCancelButton:true,
-      showConfirmButton:true,
-      confirmButtonColor:'#D92121',
-      confirmButtonText:'ENVIAR',
-      cancelButtonColor:'grey',
-      cancelButtonText:'CANCELAR',
-      icon:'question'
-    }).then(({isConfirmed})=>{
-      if(isConfirmed){
-        const body={
-          filtro: filtroTipo,
-          correoEnvio: update.correoEnvio,
-          nombreTercero: info.nombreTercero,
-          cedula: info.tercero,
-          direccion: info.direccion,
-          fechaFormateada: fechaFormateada,
-          fechaExpedicion: new Date(),
-          ciudad: info.codCiudad,
-          baseFinal: totalBase,
-          retenidoFinal: totalRetenido, 
-          correoEmisor: user.email,
-        }
-        sendCertiIVA(body)
-        .then(()=>{
-          const actualizar ={
-            correoEnvio: update.correoEnvio,
-            usuarioEnvio: user.rowId,
-            nombreSolicitante: update.nombreSolicitante,
-            fechaEnvio:new Date(),
-          }
-          const id = `${info.tercero}${filtrar[0].cuenta}`
-          updateCertificado(id,actualizar)
-          Swal.fire({
-            icon:'success',
-            title:'¡Felicidades!',
-            text:'Se ha enviado el correo de manera satisfactoria. revisa tu correo para verificar la información',
-            timer:4000,
-            showConfirmButton:true,
-            confirmButtonColor:'green'
-          })
-          cleanForm();
-        }).catch((err)=>{
-          Swal.fire({
-            icon:'warning',
-            title:'¡ERROR',
-            showConfirmButton:true,
-            confirmButtonColor:'red',
-            text:'Ha ocurrido un error a la hora de generar y enviar el certificado, intenta nuevamente, si el problema persiste comunicate con el área de sistemas.'
-          })
-          cleanForm();
-          console.log(err)
-        })
-      }else{
-        cleanForm();
-      }
-    })
-  }
+
   /* boton para RFTE */
   const [filtroRFTE,setFiltroRFTE]=useState([]);
-  const handlerFiltroRfte=(e)=>{
-    e.preventDefault();
-    const filtroTipo = terceros.filter((elem)=>{
-      if(elem.tipoCertificado.includes('RFTE')){
-        return elem
-      }
-    })
-    setFiltroRFTE(filtroTipo);
-    const filtrar = terceros.filter((item)=>item.tipoCertificado.includes('RFTE'));
-    const suma = filtrar.reduce((acumular,item)=>parseFloat(acumular) + parseFloat(item.base),0);
-    setBase(suma);
-    /* hallar el total retenido */
-    const sumaRetenido = filtrar.reduce((acumular,item)=>parseFloat(acumular) + parseFloat(item.valorRetenido),0);
-    setRetenido(sumaRetenido);
-    setOpenRFTE(false);
-    Swal.fire({
-      title:'¡Lee atentamente!',
-      text:`Se le enviara un correo con el certificado RETEFUENTE a ${info.nombreTercero} a la direccion ${update.correoEnvio}. Si es correcto de click en "ENVIAR", de lo contrario de click en "CANCELAR"`,
-      showCancelButton:true,
-      showConfirmButton:true,
-      confirmButtonColor:'#D92121',
-      confirmButtonText:'ENVIAR',
-      cancelButtonColor:'grey',
-      cancelButtonText:'CANCELAR',
-      icon:'question'
-    }).then(({isConfirmed})=>{
-      if(isConfirmed){
-        const body={
-          filtro: filtroTipo,
-          correoEnvio: update.correoEnvio,
-          nombreTercero: info.nombreTercero,
-          cedula: info.tercero,
-          direccion: info.direccion,
-          fechaFormateada: fechaFormateada,
-          fechaExpedicion: new Date(),
-          ciudad: info.codCiudad,
-          baseFinal: suma,
-          retenidoFinal: sumaRetenido, 
-          correoEmisor: user.email,
 
-        }
-        sendCertifiRFTE(body)
-        .then(()=>{
-          const actualizar ={
-            correoEnvio: update.correoEnvio,
-            usuarioEnvio: user.rowId,
-            nombreSolicitante: update.nombreSolicitante,
-            fechaEnvio:new Date(),
-          }
-          const id = `${info.tercero}${filtrar[0].cuenta}`
-          updateCertificado(id,actualizar)
-          Swal.fire({
-            icon:'success',
-            title:'¡Felicidades!',
-            text:'Se ha enviado el correo de manera satisfactoria. revisa tu correo para verificar la información',
-            timer:4000,
-            showConfirmButton:true,
-            confirmButtonColor:'green'
-          })
-          cleanForm();
-        }).catch((err)=>{
-          Swal.fire({
-            icon:'warning',
-            title:'¡ERROR',
-            showConfirmButton:true,
-            confirmButtonColor:'red',
-            text:'Ha ocurrido un error a la hora de generar y enviar el certificado, intenta nuevamente, si el problema persiste comunicate con el área de sistemas.'
-          })
-          cleanForm();
-          console.log(err)
-        })
-      }else{
-        cleanForm();
-      }
-    })
-
-  }
-  /*  */
   const [openRIVA,setOpenRIVA]=useState(false);
   const handleOpenModalRIVA=(e)=>{
     e.preventDefault();
@@ -705,59 +440,7 @@ export default function TableCertificados({ terceros, loading, ciudad }) {
     cleanForm();
     setOpenRIVA(false);
   }
-/*  */
-  const [openRICA,setOpenRICA]=useState(false);
-  const handleOpenModalRICA=(e)=>{
-    e.preventDefault();
-    /* const filtro = terceros.filter((elem)=>{
-      if(elem.tipoCertificado.includes('RICA')){
-        return elem
-      }
-    })
-    if(filtro.length>0){ */
-       setOpenRICA(true)
-    /* }else{
-      Swal.fire({
-        icon:'warning',
-        title:'¡Oups...!',
-        text:'Al parecer no hay movimientos en este tipo de formulario, Elige uno diferente',
-        confirmButtonText:'OK',
-        confirmButtonColor:'red',
-        showConfirmButton:true
-      })
-    } */
-  }
-  const handleCloseModalRICA=()=>{
-    cleanForm();
-    setOpenRICA(false);
-  }
-/*  */
-  const [openRFTE,setOpenRFTE]=useState(false);
-  const handleOpenModalRFTE=(e)=>{
-    e.preventDefault();
-    const filtro = terceros.filter((elem)=>{
-      if(elem.tipoCertificado.includes('RFTE')){
-        return elem
-      }
-    })
-    if(filtro.length>0){
-      setOpenRFTE(true)
-    }else{
-      Swal.fire({
-        icon:'warning',
-        title:'¡Oups...!',
-        text:'Al parecer no hay movimientos en este tipo de formulario, Elige uno diferente',
-        confirmButtonText:'OK',
-        confirmButtonColor:'red',
-        showConfirmButton:true
-      })
-    }
-  }
 
-  const handleCloseModalRFTE=()=>{
-    cleanForm();
-    setOpenRFTE(false);
-  }
   const handlerUpdate=(e)=>{
     const { id, value } = e.target;
     console.log(value);
@@ -784,14 +467,7 @@ export default function TableCertificados({ terceros, loading, ciudad }) {
       })
     }
   }
-  const handlerInfo=(e)=>{
-    const { id, value } = e.target;
-    console.log(value);
-    setInfo({
-      ...info,
-      [id]: value,
-    });
-  }
+
   const [Validacion, setValidacion] = useState('');
   const [Span,setSpan]=useState('red')
   const manejarCambio = (event) => {
@@ -812,15 +488,8 @@ export default function TableCertificados({ terceros, loading, ciudad }) {
     month: 'numeric',
     year: 'numeric',
   };
+  
   const fechaFormateada = fechaActual.toLocaleDateString(undefined, formatoFecha);
-
-  const formatearNumero = (numero) => {
-    return numero.toLocaleString('es-ES', {
-      style: 'decimal',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    });
-  };
 
   return (
     <div

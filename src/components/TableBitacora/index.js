@@ -1,4 +1,3 @@
-import * as FiIcons from "react-icons/fi";
 import DataTable from "react-data-table-component";
 
 export default function TableBitacora({ bitacoras, loading, customStyles }) {

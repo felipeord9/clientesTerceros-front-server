@@ -7,12 +7,8 @@ import { FaEye } from "react-icons/fa";
 import Button from "@mui/material/Button";
 import DepartmentContext from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
-import {
-  createCliente,
-  deleteCliente,
-  updateCliente,
-} from "../../services/clienteService";
-import { Navigate, useNavigate } from "react-router-dom";
+import { updateCliente } from "../../services/clienteService";
+import { useNavigate } from "react-router-dom";
 import { getAllPrecios } from "../../services/precioService";
 import { getAllResponsabilidad } from "../../services/responsabilidadService";
 import { getAllDetalles } from "../../services/detalleService";
@@ -22,14 +18,13 @@ import { getAllCiudades } from "../../services/ciudadService";
 import { getAllAgencies } from "../../services/agencyService";
 import { getAllClasificaciones } from "../../services/clasificacionService";
 import { getAllDocuments } from "../../services/documentService";
-import { fileSend, deleteFile } from "../../services/fileService";
+import { fileSend } from "../../services/fileService";
 import { updateBitacora } from "../../services/bitacoraService";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Logo_pdf from "../../assest/logo_pdf.jpg";
 import { FaFileDownload } from "react-icons/fa";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import { MdNoteAdd } from "react-icons/md";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import VinculacionCliente from "../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf";
 import Compromiso from "../../pdfs/COMPROMISO ANTICORRUPCION.pdf";
@@ -60,19 +55,8 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 
 export default function EditarPNCR() {
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
-  const { department, setDepartment } = useContext(DepartmentContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [regimen, setRegimen] = useState(null);
-  const [detalle, setDetalle] = useState(null);
-  const [clasificacion, setClasificacion] = useState(null);
-  const [document, setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [responsabilidad, setResponsabilidad] = useState(null);
-  const [departamento, setDepartamento] = useState("");
-  const [precio, setPrecio] = useState(null);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion, setDocVinculacion] = useState(0);
@@ -135,7 +119,6 @@ export default function EditarPNCR() {
   const [departamentos, setDepartamentos] = useState([]);
   const [precios, setPrecios] = useState([]);
 
-  const [data, setData] = useState(null);
   const [search, setSearch] = useState({
     id: "",
     cedula: "",
@@ -216,17 +199,6 @@ export default function EditarPNCR() {
     }
   }, []);
   const [loading, setLoading] = useState(false);
-  const [invoiceType, setInvoiceType] = useState(false);
-
-  /* rama seleccionada de cada variable */
-  const selectBranchRef = useRef();
-  const selectClasificacionRef = useRef();
-  const selectDocumentoRef = useRef();
-  const selectDepartamentoRef = useRef();
-  const selectCiudadRef = useRef();
-  const selectRegimenRef = useRef();
-  const selectPrecioRef = useRef();
-  const selectResponsabilidadRef = useRef();
 
   const limitDeliveryDateField = new Date();
   limitDeliveryDateField.setHours(2);
@@ -513,29 +485,6 @@ export default function EditarPNCR() {
     }
   };
 
-  const [vality, setVality] = useState("");
-  const [colorVality, setColorVality] = useState("red");
-  const handleInputChange = (event) => {
-    // Obtén el valor actual del input
-    let value = event.target.value;
-
-    // Remueve cualquier carácter que no sea un número
-    value = value.replace(/[^0-9]/g, "");
-    if (value.replace(/[^0-9]/g, "")) {
-      setVality("✓");
-      setColorVality("green");
-    } else if (
-      value.includes("e") ||
-      value.includes("E") ||
-      value.includes(",")
-    ) {
-      setVality("X");
-      setColorVality("red");
-    } else {
-      setVality("X");
-      setColorVality("red");
-    }
-  };
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const FileChange = (event, index) => {
@@ -545,16 +494,6 @@ export default function EditarPNCR() {
     setSelectedFiles(newFiles);
   };
 
-  const handleClickBack = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/validar/tercero");
-    } else if (user.role === "compras") {
-      return navigate("/validar/Proveedor");
-    } else {
-      return navigate("/validacion/admin");
-    }
-  };
   const TextOfBinary = ({ valor }) => {
     const [labelColor, setLabelColor] = useState("");
     const [nuevoTexto, setNuevoTexto] = useState("");
@@ -585,11 +524,7 @@ export default function EditarPNCR() {
       </label>
     );
   };
-  const mostrarImagen = (valor) => {
-    if (valor === 1) {
-      return <img src={Logo_pdf} style={{ width: 100 }}></img>;
-    }
-  };
+
   const handleValidacion = (e) => {
     e = e.target.value;
     if (user.role === "admin") {
@@ -856,9 +791,7 @@ export default function EditarPNCR() {
                         name="cedula"
                         pattern="[0-9]"
                         value={search.cedula}
-                        onChange={(e) => (
-                          handlerChangeSearch(e), handleInputChange(e)
-                        )}
+                        onChange={(e) => handlerChangeSearch(e)}
                         required
                         max={9999999999}
                         minLength={0}

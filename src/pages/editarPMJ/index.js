@@ -4,15 +4,11 @@ import { Button } from "@mui/material";
 import { Modal } from "react-bootstrap";
 import AuthContext from "../../context/authContext";
 import "./styles.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import DepartmentContext from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
-import {
-  createProveedor,
-  deleteProveedor,
-  updateProveedor,
-} from "../../services/proveedorService";
+import { updateProveedor } from "../../services/proveedorService";
 import { getAllDepartamentos } from "../../services/departamentoService";
 import { getAllCiudades } from "../../services/ciudadService";
 import { getAllActividad } from "../../services/actividadService";
@@ -21,7 +17,6 @@ import { getAllDocuments } from "../../services/documentService";
 import { fileSend, deleteFile } from "../../services/fileService";
 import { FaFileDownload } from "react-icons/fa";
 import VinculacionProveedor from "../../pdfs/FORMATO  VINCULACION DE PROVEEDORES.pdf";
-import VinculacionCliente from "../../pdfs/FORMATO  VINCULACION CLIENTES CON SOLICITUD DE CREDITO.pdf";
 import Compromiso from "../../pdfs/COMPROMISO ANTICORRUPCION.pdf";
 import { updateBitacora } from "../../services/bitacoraService";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -55,15 +50,8 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 
 export default function EditarPMJ() {
   /* instancias de contexto */
-  const { user, setUser } = useContext(AuthContext);
-  const { department, setDepartment } = useContext(DepartmentContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [document, setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [departamento, setDepartamento] = useState("");
-  const [actividad, setActividad] = useState(null);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion, setDocVinculacion] = useState(0);
@@ -183,14 +171,6 @@ export default function EditarPMJ() {
     }
   }, []);
   const [loading, setLoading] = useState(false);
-  const [invoiceType, setInvoiceType] = useState(false);
-
-  /* rama seleccionada de cada variable */
-  const selectBranchRef = useRef();
-  const selectDocumentoRef = useRef();
-  const selectDepartamentoRef = useRef();
-  const selectCiudadRef = useRef();
-  const selectActividadRef = useRef();
 
   const limitDeliveryDateField = new Date();
   limitDeliveryDateField.setHours(2);
@@ -426,29 +406,6 @@ export default function EditarPMJ() {
     }
   };
 
-  const [vality, setVality] = useState("");
-  const [colorVality, setColorVality] = useState("red");
-  const handleInputChange = (event) => {
-    // Obtén el valor actual del input
-    let value = event.target.value;
-
-    // Remueve cualquier carácter que no sea un número
-    value = value.replace(/[^0-9]/g, "");
-    if (value.replace(/[^0-9]/g, "")) {
-      setVality("✓");
-      setColorVality("green");
-    } else if (
-      value.includes("e") ||
-      value.includes("E") ||
-      value.includes(",")
-    ) {
-      setVality("X");
-      setColorVality("red");
-    } else {
-      setVality("X");
-      setColorVality("red");
-    }
-  };
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const FileChange = (event, index) => {
@@ -486,11 +443,7 @@ export default function EditarPMJ() {
       </label>
     );
   };
-  const mostrarImagen = (valor) => {
-    if (valor === 1) {
-      return <img src={Logo_pdf} style={{ width: 100 }}></img>;
-    }
-  };
+
   const handleValidacion = (e) => {
     e = e.target.value;
     if (user.role === "admin") {
@@ -560,8 +513,8 @@ export default function EditarPMJ() {
           className={`w-100 mb-2 div-botons ${
             isMobile ? "" : "justify-content-between"
           }`}
-        >          
-        <Button
+        >
+          <Button
             style={{ height: 35 }}
             onClick={(e) => window.history.back(e)}
             variant="contained"
@@ -570,14 +523,15 @@ export default function EditarPMJ() {
             <RiArrowGoBackFill className="me-1" />
             back
           </Button>
-          {isMobile ?
+          {isMobile ? (
             <h3 className="mb-2">
               <strong>Actualizar Información Del Proveedor</strong>
-            </h3> :
+            </h3>
+          ) : (
             <h1 className="mb-2">
               <strong>Actualizar Información Del Proveedor</strong>
             </h1>
-          }
+          )}
         </div>
         <form className="d-flex w-100 flex-column" onSubmit={handleSubmit}>
           <div
@@ -587,9 +541,7 @@ export default function EditarPMJ() {
             <div className="d-flex flex-column gap-1">
               <div>
                 <div className="row row-cols-sm-2">
-                  <div
-                    className="d-flex flex-column"
-                  >
+                  <div className="d-flex flex-column">
                     <label className="fw-bold" style={{ fontSize: 18 }}>
                       AGENCIA
                     </label>
@@ -780,7 +732,9 @@ export default function EditarPMJ() {
                         className="form-control form-control-sm "
                         min={0}
                         value={search.correoElectronico}
-                        onChange={(e) => (handlerChangeSearch(e), manejarCambio(e))}
+                        onChange={(e) => (
+                          handlerChangeSearch(e), manejarCambio(e)
+                        )}
                         required
                         style={{ textTransform: "lowercase" }}
                         placeholder="Campo obligatorio"
@@ -790,14 +744,15 @@ export default function EditarPMJ() {
                       </p>
                     </div>
                   </div>
-                  <div
-                    className="d-flex flex-column"
-                  >
+                  <div className="d-flex flex-column">
                     <label className="me-1">Actividad Económica:</label>
                     <select
                       className="form-select form-select-sm"
                       required
-                      style={{ width: "100%", maxWidth: isMobile ? '100%' : "380px" }}
+                      style={{
+                        width: "100%",
+                        maxWidth: isMobile ? "100%" : "380px",
+                      }}
                       value={search.actividadEconomica}
                       onChange={handlerChangeSearch}
                       id="actividadEconomica"
@@ -840,7 +795,7 @@ export default function EditarPMJ() {
                     <p className="ps-3" style={{ color: color }}>
                       <strong>{mensaje}</strong>
                     </p>
-                  </div> 
+                  </div>
                 </div>
               </div>
               <hr className="my-1" />
@@ -1603,7 +1558,11 @@ export default function EditarPMJ() {
           </Modal>
           <end>
             <div className="d-flex flex-row mb-2 justify-content-end align-items-end w-100">
-              <Fade cascade direction="right" className={`${isMobile && 'd-flex w-100'}`}>
+              <Fade
+                cascade
+                direction="right"
+                className={`${isMobile && "d-flex w-100"}`}
+              >
                 <div className="div-botons justify-content-between gap-3 w-100">
                   <button
                     type="submit"

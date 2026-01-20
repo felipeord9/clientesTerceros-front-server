@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import * as GoIcons from "react-icons/go";
 import TableBitacora from "../../components/TableBitacora";
 import { findBitacoras } from "../../services/bitacoraService";
 import "./styles.css";
 
 export default function Bitacora() {
-  const [bitacoras, setBitacoras] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,32 +15,12 @@ export default function Bitacora() {
     setLoading(true);
     findBitacoras()
       .then(({ data }) => {
-        setBitacoras(data);
         setSuggestions(data);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
       });
-  };
-
-  const searchBitacoras = (e) => {
-    const { value } = e.target;
-    if (value !== "") {
-      const filteredBitacoras = bitacoras.filter((elem) => {
-        if (elem.usuario.includes(value)) {
-          return elem;
-        }
-      });
-      if (filteredBitacoras.length > 0) {
-        setSuggestions(filteredBitacoras);
-      } else {
-        setSuggestions(bitacoras);
-      }
-    } else {
-      setSuggestions(bitacoras);
-    }
-    setSearch(value);
   };
 
   /* diseño de la tabla bitacora */

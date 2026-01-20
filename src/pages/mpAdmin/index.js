@@ -1,15 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Fade } from "react-awesome-reveal";
 import AuthContext from "../../context/authContext";
 import MobileStepper from "@mui/material/MobileStepper";
-import { FcNext } from "react-icons/fc";
 import { Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import './styles.css'
+import "./styles.css";
 
 export default function MenuPrincipalAdmin() {
   const { user } = useContext(AuthContext);
@@ -64,7 +61,7 @@ export default function MenuPrincipalAdmin() {
       padding: "10px",
       cursor: "pointer",
       height: isMobile ? 60 : 120,
-      width: isMobile ? '80vw' : 220,
+      width: isMobile ? "80vw" : 220,
       fontSize: isMobile ? 17 : 21,
       border: hover ? "solid #D92121" : "solid #B9B9B9",
       transform: hover ? "scale(1.1)" : "scale(1)",
@@ -94,113 +91,114 @@ export default function MenuPrincipalAdmin() {
   };
 
   return (
-    <div className="fondo d-flex justify-content-center align-items-center vh-100 w-100 m-auto "style={{userSelect:'none'}}>
-      <div className='d-flex flex-column justify-content-center align-items-center h-100 gap-1' >
+    <div
+      className="fondo d-flex justify-content-center align-items-center vh-100 w-100 m-auto "
+      style={{ userSelect: "none" }}
+    >
+      <div className="d-flex flex-column justify-content-center align-items-center h-100 gap-1">
         <div
           className="login-wrapper p-2 mb-2 pb-1 mt-5 shadow-lg border-light rounded-4 border border-5 bg-gradient d-flexjustify-content-between "
           style={{ backgroundColor: "white" }}
         >
-        {/* <div className='p-2 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
+          {/* <div className='p-2 shadow-lg border-light rounded-4 border border-3 bg-gradient d-flexjustify-content-between ' style={{backgroundColor:'white'}}>
           <div className='d-flex flex-row '> */}
-          {isMobile &&
-            <div style={{height:'110px'}}></div>
-          }
-              <center>
-                <div
-                  className="ms-4 mt-4 mb-0 me-0"
-                  style={{ border: 10, borderColor: "#D92121" }}
-                >
-                  <div className={`div-bottons ${isMobile ? 'mb-2' : 'mb-4'} ${isMobile && 'gap-2'}`}>
-                    <a onClick={(e) => handleClickInicio(e)}>
-                      <BotonColorCambiante>
-                        Creación Tercero
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => handleClickBack(e)}>
-                      <BotonColorCambiante>
-                        Consulta Tercero
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => navigate("/sucursales")}>
-                      <BotonColorCambiante>
-                        Creación sucursal
-                      </BotonColorCambiante>
-                    </a>
-                  </div>
-                  <div className={`div-bottons ${isMobile ? 'mb-2' : 'mb-4'} ${isMobile && 'gap-2'}`}>
-                    <a onClick={(e) => navigate("/solicitudes")}>
-                      <BotonColorCambiante>
-                        Consultar solicitudes
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => navigate("/consultar/certificado")}>
-                      <BotonColorCambiante>
-                        Generar Certificados
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => navigate("/bitacora")}>
-                      <BotonColorCambiante>Bitácora</BotonColorCambiante>
-                    </a>
-                  </div>
-                  <div className={`div-bottons ${isMobile ? 'mb-2' : 'mb-0'} ${isMobile && 'gap-2'}`}>
-                    <a onClick={(e) => navigate("/usuarios")}>
-                      <BotonColorCambiante>
-                        Gestionar usuarios
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => navigate("/terceros")}>
-                      <BotonColorCambiante>
-                        Gestionar clientes
-                      </BotonColorCambiante>
-                    </a>
-                    <a onClick={(e) => navigate("/Proveedores")}>
-                      <BotonColorCambiante>
-                        Gestionar proveedor
-                      </BotonColorCambiante>
-                    </a>
-                  </div>
-                  <div className="w-100 d-flex flex-row mt-2">
-                    <div className="w-100 justify-content-end text-align-center">
-                      <MobileStepper
-                        steps={2}
-                        className="w-100 justify-content-center text-align-center"
-                        position="static"
-                        nextButton={
-                          <Button
-                            className=""
-                            size="small"
-                            onClick={(e) => (
-                              handleNext(e), navigate("/menu/principal/adminis")
-                            )}
-                          >
-                            Next
-                            {theme.direction === "rtl" ? (
-                              <KeyboardArrowLeft />
-                            ) : (
-                              <KeyboardArrowRight />
-                            )}
-                          </Button>
-                        }
-                        backButton={
-                          <Button
-                            size="small"
-                            onClick={(e) => handleBack(e)}
-                            disabled
-                          >
-                            {theme.direction === "rtl" ? (
-                              <KeyboardArrowRight />
-                            ) : (
-                              <KeyboardArrowLeft />
-                            )}
-                            Back
-                          </Button>
-                        }
-                      />
-                    </div>
-                  </div>
+          {isMobile && <div style={{ height: "110px" }}></div>}
+          <center>
+            <div
+              className="ms-4 mt-4 mb-0 me-0"
+              style={{ border: 10, borderColor: "#D92121" }}
+            >
+              <div
+                className={`div-bottons ${isMobile ? "mb-2" : "mb-4"} ${
+                  isMobile && "gap-2"
+                }`}
+              >
+                <a onClick={(e) => handleClickInicio(e)}>
+                  <BotonColorCambiante>Creación Tercero</BotonColorCambiante>
+                </a>
+                <a onClick={(e) => handleClickBack(e)}>
+                  <BotonColorCambiante>Consulta Tercero</BotonColorCambiante>
+                </a>
+                <a onClick={(e) => navigate("/sucursales")}>
+                  <BotonColorCambiante>Creación sucursal</BotonColorCambiante>
+                </a>
+              </div>
+              <div
+                className={`div-bottons ${isMobile ? "mb-2" : "mb-4"} ${
+                  isMobile && "gap-2"
+                }`}
+              >
+                <a onClick={(e) => navigate("/solicitudes")}>
+                  <BotonColorCambiante>
+                    Consultar solicitudes
+                  </BotonColorCambiante>
+                </a>
+                <a onClick={(e) => navigate("/consultar/certificado")}>
+                  <BotonColorCambiante>
+                    Generar Certificados
+                  </BotonColorCambiante>
+                </a>
+                <a onClick={(e) => navigate("/bitacora")}>
+                  <BotonColorCambiante>Bitácora</BotonColorCambiante>
+                </a>
+              </div>
+              <div
+                className={`div-bottons ${isMobile ? "mb-2" : "mb-0"} ${
+                  isMobile && "gap-2"
+                }`}
+              >
+                <a onClick={(e) => navigate("/usuarios")}>
+                  <BotonColorCambiante>Gestionar usuarios</BotonColorCambiante>
+                </a>
+                <a onClick={(e) => navigate("/terceros")}>
+                  <BotonColorCambiante>Gestionar clientes</BotonColorCambiante>
+                </a>
+                <a onClick={(e) => navigate("/Proveedores")}>
+                  <BotonColorCambiante>Gestionar proveedor</BotonColorCambiante>
+                </a>
+              </div>
+              <div className="w-100 d-flex flex-row mt-2">
+                <div className="w-100 justify-content-end text-align-center">
+                  <MobileStepper
+                    steps={2}
+                    className="w-100 justify-content-center text-align-center"
+                    position="static"
+                    nextButton={
+                      <Button
+                        className=""
+                        size="small"
+                        onClick={(e) => (
+                          handleNext(e), navigate("/menu/principal/adminis")
+                        )}
+                      >
+                        Next
+                        {theme.direction === "rtl" ? (
+                          <KeyboardArrowLeft />
+                        ) : (
+                          <KeyboardArrowRight />
+                        )}
+                      </Button>
+                    }
+                    backButton={
+                      <Button
+                        size="small"
+                        onClick={(e) => handleBack(e)}
+                        disabled
+                      >
+                        {theme.direction === "rtl" ? (
+                          <KeyboardArrowRight />
+                        ) : (
+                          <KeyboardArrowLeft />
+                        )}
+                        Back
+                      </Button>
+                    }
+                  />
                 </div>
-              </center>
-            {/* </div>
+              </div>
+            </div>
+          </center>
+          {/* </div>
           </div> */}
         </div>
       </div>

@@ -8,11 +8,9 @@ import Button from "@mui/material/Button";
 import DepartmentContext from "../../context/departamentoContext";
 import { Fade } from "react-awesome-reveal";
 import {
-  createCliente,
-  deleteCliente,
   updateCliente,
 } from "../../services/clienteService";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAllPrecios } from "../../services/precioService";
 import { getAllResponsabilidad } from "../../services/responsabilidadService";
 import { getAllDetalles } from "../../services/detalleService";
@@ -44,18 +42,7 @@ const CarpetaArchivoLink = ({ carpeta, archivo }) => {
 export default function EditPNC() {
   /* instancias de contexto */
   const { user, setUser } = useContext(AuthContext);
-  const { department, setDepartment } = useContext(DepartmentContext);
   const navigate = useNavigate();
-  /* inicializar variables */
-  const [agencia, setAgencia] = useState(null);
-  const [regimen, setRegimen] = useState(null);
-  const [detalle, setDetalle] = useState(null);
-  const [clasificacion, setClasificacion] = useState(null);
-  const [document, setDocument] = useState(null);
-  const [ciudad, setCiudad] = useState(null);
-  const [responsabilidad, setResponsabilidad] = useState(null);
-  const [departamento, setDepartamento] = useState("");
-  const [precio, setPrecio] = useState(null);
 
   /* inicializar los documentos adjuntos */
   const [docVinculacion, setDocVinculacion] = useState(0);
@@ -102,7 +89,6 @@ export default function EditPNC() {
   const [departamentos, setDepartamentos] = useState([]);
   const [precios, setPrecios] = useState([]);
 
-  const [data, setData] = useState(null);
   const [search, setSearch] = useState({
     id: "",
     cedula: "",
@@ -642,7 +628,7 @@ export default function EditPNC() {
                           <option id={elem.id} value={elem.description}>
                             {elem.id + " - " + elem.description}
                           </option>
-                      ))}
+                        ))}
                     </select>
                   </div>
                   <div className="d-flex flex-column">
@@ -776,7 +762,7 @@ export default function EditPNC() {
                     <label for="cedula" className="me-1">
                       No.Identificación:
                     </label>
-                    <div className="d-flex flex-row w-100"> 
+                    <div className="d-flex flex-row w-100">
                       <input
                         id="cedula"
                         type="number"
@@ -902,14 +888,16 @@ export default function EditPNC() {
                 <div className="row row-cols-sm-2">
                   <div className="d-flex flex-column align-items-start ">
                     <label className="me-1">Correo notificaciones:</label>
-                    <div className="d-flex flex-row w-100"> 
+                    <div className="d-flex flex-row w-100">
                       <input
                         id="correoNotificaciones"
                         type="email"
                         className="form-control form-control-sm "
                         min={0}
                         value={search.correoNotificaciones}
-                        onChange={(e) => (handlerChangeSearch(e), manejarCambio(e))}
+                        onChange={(e) => (
+                          handlerChangeSearch(e), manejarCambio(e)
+                        )}
                         required
                         style={{ textTransform: "lowercase" }}
                         placeholder="Campo obligatorio"
@@ -1244,9 +1232,7 @@ export default function EditPNC() {
                   <div className="d-flex flex-column">
                     <div className="d-flex flex-column">
                       <label className="fw-bold mt-1 me-2">OTROS: </label>
-                      <div
-                        className="d-flex flex-column"
-                      >
+                      <div className="d-flex flex-column">
                         <TextOfBinary valor={search.docOtros}></TextOfBinary>
                         {search.docOtros === 1 && (
                           <CarpetaArchivoLink
@@ -1321,7 +1307,11 @@ export default function EditPNC() {
           </Modal>
           <end>
             <div className="d-flex flex-row mb-2 justify-content-end align-items-end w-100">
-              <Fade cascade direction="right" className={`${isMobile && 'd-flex w-100'}`}>
+              <Fade
+                cascade
+                direction="right"
+                className={`${isMobile && "d-flex w-100"}`}
+              >
                 <div className="div-botons justify-content-between gap-3 w-100">
                   <button
                     type="submit"

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { config } from "../config";
 import Cookies from 'js-cookie';
 const url = `${config.apiUrl2}/aprobacion`;

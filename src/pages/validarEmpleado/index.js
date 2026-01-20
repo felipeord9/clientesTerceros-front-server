@@ -1,19 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../assest/logo-gran-langostino.png";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { Fade } from "react-awesome-reveal";
-import { validarCliente } from "../../services/clienteService";
-import { validarProveedor } from "../../services/proveedorService";
-import { findEmpleadoByCedula } from '../../services/empleadoService'
+import { findEmpleadoByCedula } from "../../services/empleadoService";
 import Swal from "sweetalert2";
-import AuthContext from "../../context/authContext";
 import Button from "@mui/material/Button";
 import { IoMdPersonAdd } from "react-icons/io";
-import './styles.css'
+import "./styles.css";
 
 export default function ValidarEmpleado() {
-  const { user } = useContext(AuthContext);
   const [isMobile, setIsMobile] = useState(null);
   const navigate = useNavigate();
 
@@ -41,36 +37,6 @@ export default function ValidarEmpleado() {
     });
   };
 
-  const [info, setInfo] = useState({
-    cedula: "",
-    razonSocial: "",
-    ciudad: "",
-    direccion: "",
-    celular: "",
-    correoNotificaciones: "",
-    observations: "",
-    createdAt: "",
-    userName: "",
-    agencia: "",
-    tipoFormulario: "",
-    solicitante: "",
-    docVinculacion: "",
-    docComprAntc: "",
-    docCtalnst: "",
-    docPagare: "",
-    docRut: "",
-    docCcio: "",
-    docCrepL: "",
-    docEf: "",
-    docRefcom: "",
-    docCvbo: "",
-    docFirdoc: "",
-    docInfemp: "",
-    docInfrl: "",
-    docCerBan: "",
-    docValAnt: "",
-    docOtros: "",
-  });
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -88,9 +54,9 @@ export default function ValidarEmpleado() {
           showCancelButton: true,
         }).then(({ isConfirmed }) => {
           if (isConfirmed) {
-            navigate(`/registrar/empleado/${search.cedula}`)
+            navigate(`/registrar/empleado/${search.cedula}`);
           }
-        })
+        });
       })
       .catch((error) => {
         Swal.fire({
@@ -105,25 +71,10 @@ export default function ValidarEmpleado() {
           showCancelButton: true,
         }).then(({ isConfirmed }) => {
           if (isConfirmed) {
-            navigate('/registrar/empleado');
+            navigate("/registrar/empleado");
           }
         });
       });
-  };
-
-  const handleClickInicio = (e) => {
-    e = e.target.value;
-    if (user.role === "agencias" || user.role === "cartera") {
-      return navigate("/inicio");
-    } else if (
-      user.role === "compras" ||
-      user.role === "comprasnv" ||
-      user.role === "asistente agencia"
-    ) {
-      return navigate("/compras");
-    } else {
-      return navigate("/inicio/admin");
-    }
   };
 
   return (
@@ -143,7 +94,7 @@ export default function ValidarEmpleado() {
                   <div className="w-100">
                     <Button
                       style={{ height: 35 }}
-                      onClick={(e) => navigate('/registrar/empleado')}
+                      onClick={(e) => navigate("/registrar/empleado")}
                       variant="contained"
                       className="text-val-emp"
                     >
@@ -155,7 +106,10 @@ export default function ValidarEmpleado() {
                     /* onClick={handleClickImagen} */
                     className="text-val-emp"
                     src={Logo}
-                    style={{ width: 450, height: 200/* , cursor: "pointer" */ }}
+                    style={{
+                      width: 450,
+                      height: 200 /* , cursor: "pointer" */,
+                    }}
                   />
                 </div>
 
@@ -172,10 +126,18 @@ export default function ValidarEmpleado() {
                     >
                       <strong>¿Ya existe el empleado?</strong>
                     </label>
-                    <hr className="text-val-emp" style={{ width: 550, color: "black" }} />
+                    <hr
+                      className="text-val-emp"
+                      style={{ width: 550, color: "black" }}
+                    />
                   </center>
                   <div className="div-bottons justify-content-center aling-items-center">
-                    <h2 style={{fontSize: isMobile ? 16 : 22}} className="me-3 mt-3">Validación de empleado por cédula: </h2>
+                    <h2
+                      style={{ fontSize: isMobile ? 16 : 22 }}
+                      className="me-3 mt-3"
+                    >
+                      Validación de empleado por cédula:{" "}
+                    </h2>
                     <div className="d-flex flex-row justify-content-center">
                       <TextField
                         min={10000000}

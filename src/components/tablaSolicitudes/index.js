@@ -1,32 +1,9 @@
-import * as FiIcons from "react-icons/fi";
 import DataTable from "react-data-table-component";
 import { useState, useEffect } from "react";
-import * as React from "react";
 import { getAllAgencies } from "../../services/agencyService";
 import { FaEye } from "react-icons/fa6";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { getAllTipoFormularios } from "../../services/tipoFormularioService";
-
-const styleStatus = {
-  Pendiente: "warning",
-  Rechazado: "danger",
-  Aprobado: "success",
-};
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  justifyContent: "center",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 5,
-};
+import Button from "@mui/material/Button";
 
 export default function TablaSolicitudes({
   solicitudes,
@@ -36,14 +13,6 @@ export default function TablaSolicitudes({
   setShowModal,
 }) {
   const [agencias, setAgencias] = useState([]);
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const [formularios, setFormularios] = useState([]);
 
@@ -154,15 +123,6 @@ export default function TablaSolicitudes({
       },
     },
   ];
-
-  const updateState = (e, order) => {
-    const { value } = e.target;
-    console.log(value);
-    const optionId = e.target.selectedOptions[0].id;
-    /* return updateOrder(order.id, {
-        state: value,
-      }) */
-  };
 
   return (
     <div
