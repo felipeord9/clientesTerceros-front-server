@@ -575,7 +575,7 @@ export default function FormEmpleados() {
           numeroDocumento: search.cedula,
           tipoDocumento: document,
           primerApellido: search.primerApellido.toUpperCase(),
-          segundoApellido: search.segundoApellido.toUpperCase(),
+          segundoApellido: search.segundoApellido !== '' ? search.segundoApellido.toUpperCase() : "",
           primerNombre: search.primerNombre.toUpperCase(),
           otrosNombres:
             search.otrosNombres !== "" ? search.otrosNombres.toUpperCase() : "",
@@ -1468,7 +1468,6 @@ export default function FormEmpleados() {
                       type="text"
                       className="form-control form-control-sm "
                       min={0}
-                      required
                       disabled={exist ? true : false}
                       style={{ textTransform: "uppercase" }}
                       placeholder="Campo obligatorio"
