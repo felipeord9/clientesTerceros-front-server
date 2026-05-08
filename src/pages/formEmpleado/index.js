@@ -1470,7 +1470,7 @@ export default function FormEmpleados() {
                       min={0}
                       disabled={exist ? true : false}
                       style={{ textTransform: "uppercase" }}
-                      placeholder="Campo obligatorio"
+                      placeholder="(Campo Opcional)"
                       value={search.segundoApellido}
                       onChange={handlerChangeSearch}
                       autoComplete="off"
