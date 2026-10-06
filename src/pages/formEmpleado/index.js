@@ -88,6 +88,7 @@ export default function FormEmpleados() {
   const [docOtroSi, setDocOtroSi] = useState(0);
   const [docExaIngreso, setDocExaIngreso] = useState(0);
   const [docARL, setDocARL] = useState(0);
+  const [docLicenciaConduccion, setDocLicenciaConduccion] = useState(0);
 
   //------------------------------------------
   /* Variable de todos los pdf y el nombre de la carpeta*/
@@ -256,6 +257,7 @@ export default function FormEmpleados() {
                 setDocExaIngreso(data.docExaIngreso);
                 setDocARL(data.docARL);
                 setDocEscolaridad(data.docEscolaridad);
+                setDocLicenciaConduccion(data.docLicenciaConduccion);
 
                 //setear los estudios agregados
                 setEstudiosAgr({
@@ -324,6 +326,7 @@ export default function FormEmpleados() {
                   setDocExaIngreso(data.docExaIngreso);
                   setDocARL(data.docARL);
                   setDocEscolaridad(data.docEscolaridad);
+                  setDocLicenciaConduccion(data.docLicenciaConduccion);
 
                   //setear los estudios agregados
                   setEstudiosAgr({
@@ -518,6 +521,7 @@ export default function FormEmpleados() {
               setDocExaIngreso(item.docExaIngreso);
               setDocARL(item.docARL);
               setDocEscolaridad(item.docEscolaridad);
+              setDocLicenciaConduccion(item.docLicenciaConduccion);
 
               //setear los estudios agregados
               setEstudiosAgr({
@@ -606,6 +610,7 @@ export default function FormEmpleados() {
           docExaIngreso: docExaIngreso,
           docARL: docARL,
           docEscolaridad: docEscolaridad,
+          docLicenciaConduccion: docLicenciaConduccion,
           docOtros: docOtros,
           fechaActualizacion: actualizar === "" ? null : new Date(),
           estudios: estudiosAgr.agregados,
@@ -792,6 +797,7 @@ export default function FormEmpleados() {
           docExaIngreso: docExaIngreso,
           docARL: docARL,
           docEscolaridad: docEscolaridad,
+          docLicenciaConduccion: docLicenciaConduccion,
           docOtros: docOtros,
           fechaActualizacion: actualizar === "" ? null : new Date(),
           estudios: estudiosAgr.agregados,
@@ -2564,6 +2570,53 @@ export default function FormEmpleados() {
 
               {/* otros */}
               <div className="row row-cols-sm-2" style={{ fontSize: 13 }}>
+                <div className="">
+                  <div>
+                    <label className="fw-bold mt-1 ">LICENCIA DE CONDUCCION: </label>
+                    {exist && (
+                      <div className="link-files">
+                        <TextOfBinary valor={docLicenciaConduccion}></TextOfBinary>
+                        {docLicenciaConduccion === 1 && (
+                          <CarpetaArchivoLink
+                            carpeta={`${search.cedula}-${search.primerApellido}-${search.segundoApellido}-${search.primerNombre}-${search.otrosNombres}`}
+                            archivo={`LicenciaConduccion-${search.primerApellido} ${search.segundoApellido} ${search.primerNombre} ${search.otrosNombres}.pdf`}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="d-flex flex-row rounded-2 w-100">
+                    <input
+                      id="docLicenciaConduccion"
+                      type="file"
+                      placeholder="docLicenciaConduccion"
+                      className="form-control form-control-sm border border-5 rounded-3 w-100"
+                      accept=".pdf"
+                      style={{ backgroundColor: "#f3f3f3" }}
+                      /* disabled={exist === true ? true : false} */
+                      onChange={(e) => (
+                        handleFileChange("LicenciaConduccion", e),
+                        setDocLicenciaConduccion(1),
+                        FileChange(e, 11)
+                      )}
+                    />
+                    {selectedFiles[11] && (
+                      <div
+                        className="d-flex justify-content-start ps-1 pt-1"
+                        style={{ width: 50 }}
+                      >
+                        <a
+                          href={URL.createObjectURL(selectedFiles[11])}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaEye />
+                          Ver
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="d-flex flex-row">
                   <div className="d-flex flex-column mt-1 w-100">
                     <div>
@@ -2589,18 +2642,18 @@ export default function FormEmpleados() {
                         onChange={(e) => (
                           handleFileChange("Otros", e),
                           setDocOtros(1),
-                          FileChange(e, 11)
+                          FileChange(e, 12)
                         )}
                         className="form-control form-control-sm border border-5 rounded-3"
                         accept=".pdf"
                       />
-                      {selectedFiles[11] && (
+                      {selectedFiles[12] && (
                         <div
                           className="d-flex justify-content-start ps-2 pt-1"
                           style={{ width: 60 }}
                         >
                           <a
-                            href={URL.createObjectURL(selectedFiles[11])}
+                            href={URL.createObjectURL(selectedFiles[12])}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
